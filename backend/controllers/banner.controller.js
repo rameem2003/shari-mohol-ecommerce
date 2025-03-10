@@ -27,7 +27,7 @@ const allBanner = async (req, res) => {
  * Add New Banner
  */
 const addNewBanner = async (req, res) => {
-  const { description } = req.body;
+  const { description, advertisementLink } = req.body;
   const { filename } = req.file;
 
   if (filename) {
@@ -35,6 +35,7 @@ const addNewBanner = async (req, res) => {
       let banner = new bannerModel({
         banner: `${process.env.HOST_URL}${process.env.PORT}/${filename}`,
         description,
+        advertisementLink,
       });
 
       await banner.save();
@@ -71,20 +72,17 @@ const deleteBanner = async (req, res) => {
     let imagePath = banner.banner.split("/");
     let oldImagePath = imagePath[imagePath.length - 1];
 
-    let fileDeleteErr = deleteFile(
-      `${path.join(__dirname, "../temp")}/${oldImagePath}`
-    );
-
-    if (fileDeleteErr) {
+    try {
+      await deleteFile(`${path.join(__dirname, "../temp")}/${oldImagePath}`);
+      res.status(200).send({
+        success: true,
+        msg: "Banner Delete Success",
+      });
+    } catch (fileDeleteErr) {
       return res.status(500).send({
         success: false,
         msg: "Internal Server Error",
         fileDeleteErr,
-      });
-    } else {
-      res.status(200).send({
-        success: true,
-        msg: "Banner Delete Success",
       });
     }
   } catch (error) {
