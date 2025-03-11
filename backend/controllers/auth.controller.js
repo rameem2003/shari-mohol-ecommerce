@@ -1,12 +1,12 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
+const path = require("path");
 const checkEmailValid = require("../helpers/checkEmailValid");
 const sendOtpEmail = require("../helpers/sendOtpEmail");
 const generateOTP = require("../helpers/generateOTP");
 const deleteFile = require("../helpers/deleteFile");
-const path = require("path");
 const authModel = require("../model/auth.model");
+const otpModel = require("../model/otp.model");
 
 /**
  * user register
@@ -49,6 +49,7 @@ const registerUser = async (req, res) => {
 
   // new user create and send response
   try {
+    await otpModel.deleteOne({ email });
     let otp = generateOTP(); // generate an otp
 
     // hashing the password
@@ -72,13 +73,9 @@ const registerUser = async (req, res) => {
         });
         await user.save();
 
-        sendOtpEmail(email, otp); // send an otp email
+        await otpModel.create({ email, otp });
 
-        // remove otp after 1 minute
-        setTimeout(async () => {
-          user.otp = null;
-          await user.save();
-        }, 60000);
+        sendOtpEmail(email, otp); // send an otp email
         return res.status(201).send({
           success: true,
           msg: "New User Account Created",
@@ -155,36 +152,46 @@ const loginUser = async (req, res) => {
 
         // if admin
         if (existUser.role === "admin") {
-          let token = jwt.sign(existUser, process.env.JWT_SECRET, {
-            expiresIn: "1h",
+          let sessionToken = jwt.sign(existUser, process.env.JWT_SECRET, {
+            expiresIn: "7d",
+          });
+          let accessToken = jwt.sign(existUser, process.env.JWT_SECRET, {
+            expiresIn: "15m",
           });
 
-          res.cookie("token", token, {
+          res.cookie("sessionToken", sessionToken, {
             // httpOnly: true,
             secure: false,
+            sameSite: "Strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
           });
           return res.status(200).send({
             success: true,
             msg: "Admin Login Successfully",
             user: existUser,
-            token,
+            accessToken,
           });
         }
         // if user
         else if (existUser.role === "user") {
-          let token = jwt.sign(existUser, process.env.JWT_SECRET, {
-            expiresIn: "1d",
+          let sessionToken = jwt.sign(existUser, process.env.JWT_SECRET, {
+            expiresIn: "3d",
+          });
+          let accessToken = jwt.sign(existUser, process.env.JWT_SECRET, {
+            expiresIn: "15m",
           });
 
-          res.cookie("token", token, {
+          res.cookie("sessionToken", sessionToken, {
             // httpOnly: true,
             secure: false,
+            sameSite: "Strict",
+            maxAge: 3 * 24 * 60 * 60 * 1000,
           });
           return res.status(200).send({
             success: true,
             msg: "User Login Successfully",
             user: existUser,
-            token,
+            accessToken,
           });
         }
       } // if password not matched
@@ -214,8 +221,10 @@ const verifyOTP = async (req, res) => {
 
   // if email is found
   if (existingUser) {
+    let userOTP = await otpModel.findOne({ email });
+
     // if otp is matched
-    if (existingUser.otp == otp) {
+    if (userOTP.otp == otp) {
       existingUser.isVarify = true; // change the verify state to true
       await existingUser.save();
 
@@ -249,18 +258,15 @@ const resendOTP = async (req, res) => {
 
   // if email is found
   if (existingUser) {
+    await otpModel.deleteOne({ email });
     let otp = generateOTP(); // generate otp
 
     existingUser.otp = otp;
     await existingUser.save();
 
-    sendOtpEmail(email, otp, (resend = true)); // send an otp email
+    await otpModel.create({ email, otp });
 
-    // remove otp after 1 minute
-    setTimeout(async () => {
-      existingUser.otp = null;
-      await existingUser.save();
-    }, 30000);
+    sendOtpEmail(email, otp, (resend = true)); // send an otp email
     return res.status(201).send({
       success: true,
       msg: "OTP Resend Successful",

@@ -37,6 +37,9 @@ const authSchema = new mongoose.Schema(
     photo: {
       type: String,
     },
+    sessionToken: {
+      type: String,
+    },
   },
   {
     timestamps: true,
