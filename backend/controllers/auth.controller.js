@@ -152,46 +152,71 @@ const loginUser = async (req, res) => {
 
         // if admin
         if (existUser.role === "admin") {
-          let sessionToken = jwt.sign(existUser, process.env.JWT_SECRET, {
-            expiresIn: "7d",
-          });
+          let sessionToken = jwt.sign(
+            { email: existUser.email },
+            process.env.JWT_SECRET,
+            {
+              expiresIn: "1d",
+            }
+          );
           let accessToken = jwt.sign(existUser, process.env.JWT_SECRET, {
             expiresIn: "15m",
           });
 
+          user.sessionToken = sessionToken;
+          await user.save();
+
           res.cookie("sessionToken", sessionToken, {
             // httpOnly: true,
             secure: false,
-            sameSite: "Strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
+            maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
+          });
+          res.cookie("accessToken", accessToken, {
+            // httpOnly: true,
+            secure: false,
+            maxAge: 9000000, // 15 min
           });
           return res.status(200).send({
             success: true,
             msg: "Admin Login Successfully",
             user: existUser,
             accessToken,
+            sessionToken,
           });
         }
         // if user
         else if (existUser.role === "user") {
-          let sessionToken = jwt.sign(existUser, process.env.JWT_SECRET, {
-            expiresIn: "3d",
-          });
+          let sessionToken = jwt.sign(
+            { email: existUser.email },
+            process.env.JWT_SECRET,
+            {
+              expiresIn: "7d",
+            }
+          );
           let accessToken = jwt.sign(existUser, process.env.JWT_SECRET, {
             expiresIn: "15m",
           });
 
+          user.sessionToken = sessionToken;
+          await user.save();
+
           res.cookie("sessionToken", sessionToken, {
             // httpOnly: true,
             secure: false,
-            sameSite: "Strict",
-            maxAge: 3 * 24 * 60 * 60 * 1000,
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+          });
+
+          res.cookie("accessToken", accessToken, {
+            // httpOnly: true,
+            secure: false,
+            maxAge: 9000000, // 15 min
           });
           return res.status(200).send({
             success: true,
             msg: "User Login Successfully",
             user: existUser,
             accessToken,
+            sessionToken,
           });
         }
       } // if password not matched
@@ -208,6 +233,166 @@ const loginUser = async (req, res) => {
       msg: "Something Went Wrong Please Try Again",
       error,
     });
+  }
+};
+
+/**
+ * user logout
+ */
+const logoutUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    res.clearCookie("accessToken");
+    res.clearCookie("sessionToken");
+    await authModel.findOneAndUpdate({ _id: id }, { sessionToken: null });
+    return res.status(200).send({
+      success: true,
+      msg: "User Logout success",
+    });
+  } catch (error) {
+    return res.status(500).send({
+      success: false,
+      msg: "Something Went Wrong Please Try Again",
+      error,
+    });
+  }
+};
+
+/**
+ * Change Password
+ */
+const changePassword = async (req, res) => {
+  const { id } = req.params;
+  const { oldPassword, newPassword, conFirmPassword } = req.body;
+
+  try {
+    let user = await authModel.findOne({ _id: id });
+
+    // if no user
+    if (!user) {
+      return res.status(400).send({
+        success: false,
+        msg: "User Not Found",
+      });
+    }
+
+    if (newPassword == conFirmPassword) {
+      // password compare
+      bcrypt.compare(oldPassword, user.password, async function (err, result) {
+        // if password not matched
+        if (err) {
+          console.log(err);
+          return res.status(500).send({
+            success: false,
+            msg: "Something Went Wrong Please Try Again",
+            error: err,
+          });
+        }
+        // if password matched
+        if (result) {
+          bcrypt.hash(
+            newPassword,
+            parseInt(process.env.SALT),
+            async function (err, hash) {
+              if (err) {
+                return res.status(500).send({
+                  success: false,
+                  msg: "Something Went Wrong Please Try Again",
+                  error: err,
+                });
+              }
+              user.password = hash;
+              await user.save();
+
+              return res
+                .status(200)
+                .send({ success: true, msg: "Password is changed" });
+            }
+          );
+        } // if password not matched
+        else {
+          return res.status(400).send({
+            success: false,
+            msg: "Wrong Password",
+          });
+        }
+      });
+    } else {
+      res.status(400).send({
+        success: false,
+        msg: "New Password and confirm password not matched",
+      });
+    }
+  } catch (error) {
+    return res.status(500).send({
+      success: false,
+      msg: "Something Went Wrong Please Try Again",
+      error,
+    });
+  }
+};
+
+/**
+ * refresh token
+ */
+const accessToken = async (req, res) => {
+  try {
+    const { sessionToken } = req.body;
+    if (!sessionToken)
+      return res
+        .status(401)
+        .send({ success: false, msg: "Session Token Required" });
+
+    jwt.verify(sessionToken, process.env.JWT_SECRET, async (err, decoded) => {
+      if (err)
+        return res
+          .status(403)
+          .json({ success: false, msg: "Invalid Session Token" });
+
+      const user = await authModel.findOne(decoded.email);
+      if (!user || user.sessionToken !== sessionToken) {
+        return res
+          .status(403)
+          .json({ success: false, msg: "Invalid Session Token" });
+      }
+
+      let existUser = {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        phone: user.phone,
+        address: user.address,
+        photo: user.photo,
+        verified: user.isVarify,
+      };
+
+      // Create Access Token (Short-lived)
+      const accessToken = jwt.sign(
+        existUser,
+        process.env.JWT_SECRET,
+        { expiresIn: "15m" } // Expires in 15 minutes
+      );
+
+      // Create Session Token (Long-lived)
+      const newSessionToken = jwt.sign(
+        { email: existUser.email },
+        process.env.SESSION_SECRET,
+        { expiresIn: "7d" } // Expires in 7 days
+      );
+
+      user.sessionToken = newSessionToken;
+      await user.save();
+      res.cookie("accessToken", accessToken, {
+        // httpOnly: true,
+        secure: false,
+        sameSite: "Strict",
+        maxAge: 900000, //  15 min
+      });
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, msg: err.message });
   }
 };
 
@@ -308,7 +493,7 @@ const updateUser = async (req, res) => {
 
   const updateFields = {};
 
-  const allFields = ["name", "email", "password", "phone", "address", "photo"];
+  const allFields = ["name", "phone", "address", "photo"];
 
   allFields.forEach((field) => {
     if (req.body[field] !== undefined) {
@@ -398,7 +583,10 @@ module.exports = {
   singleUser,
   updateUser,
   loginUser,
+  accessToken,
   registerUser,
+  changePassword,
+  logoutUser,
   verifyOTP,
   resendOTP,
   verifyAdmin,

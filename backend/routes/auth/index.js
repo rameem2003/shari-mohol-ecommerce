@@ -8,6 +8,8 @@ const {
   verifyAdmin,
   verifyUser,
   allusers,
+  logoutUser,
+  changePassword,
 } = require("../../controllers/auth.controller");
 const checkAdminMiddleware = require("../../middlewares/checkAdminMiddleware");
 const checkUserMiddleware = require("../../middlewares/checkUserMiddleware");
@@ -29,6 +31,12 @@ router.post("/auth/register", registerUser);
 router.post("/auth/login", loginUser);
 
 /**
+ * Login Route
+ * http://localhost:5000/api/v1/auth/logout/:id
+ */
+router.post("/auth/logout/:id", logoutUser);
+
+/**
  * Single User Info
  * http://localhost:5000/api/v1/auth/user/:id
  */
@@ -45,6 +53,11 @@ router.patch(
   errorHandleMiddleware,
   updateUser
 );
+/**
+ * Change Password Route
+ * http://localhost:5000/api/v1/auth/changepassword/:id
+ */
+router.patch("/auth/changepassword/:id", checkUserMiddleware, changePassword);
 
 /**
  * OTP Verification Route
