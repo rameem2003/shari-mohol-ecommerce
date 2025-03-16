@@ -5,36 +5,26 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { MdDeleteOutline, MdOutlineEdit } from "react-icons/md";
 import { IoEyeOutline } from "react-icons/io5";
 import { MdDone } from "react-icons/md";
+import axios from "axios";
+import { FaTimes } from "react-icons/fa";
+import { Link } from "react-router";
 
 const LastOrders = () => {
-  const initialData = [
-    {
-      id: 1,
-      name: "John Doe",
-      email: "john@example.com",
-      role: "Admin",
-      status: "Active",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      email: "jane@example.com",
-      role: "User",
-      status: "Inactive",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      email: "jane@example.com",
-      role: "User",
-      status: "Inactive",
-    },
-  ];
-
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [search, setSearch] = useState("");
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   const [openActionMenuId, setOpenActionMenuId] = useState(null);
+
+  // fetch orders
+  const fetchOrders = async () => {
+    let res = await axios.get(`${import.meta.env.VITE_API}/order/all`);
+    setOrders(
+      res.data.data.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      )
+    );
+  };
 
   const toggleActionMenu = (id) => {
     setOpenActionMenuId(openActionMenuId === id ? null : id);
@@ -85,6 +75,10 @@ const LastOrders = () => {
     return () => document.removeEventListener("click", handleCLick);
   }, []);
 
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
   return (
     <div className="customTable p-2 rounded-md min-h-full mb-4 w-full bg-gray-100 dark:bg-slate-800 flex items-center flex-col gap-5 justify-center lg:w-8/12">
       <div className="w-full mx-auto">
@@ -127,55 +121,74 @@ const LastOrders = () => {
               </tr>
             </thead>
             <tbody className="">
-              {initialData.map((item, index) => (
-                <tr className="border-t border-gray-200 ">
-                  <td className=" p-3 text-black dark:text-white">54546465</td>
-                  <td className=" p-3 text-black dark:text-white">Name</td>
-                  <td className=" p-3 text-black dark:text-white">41564646</td>
+              {orders.slice(0, 4).map((item, index) => (
+                <tr className="border-t border-gray-200 " key={item._id}>
                   <td className=" p-3 text-black dark:text-white">
-                    <div className=" py-1.5 bg-[#18c964] text-white rounded-full text-[0.9rem] font-[500] flex items-center justify-center gap-2">
-                      <MdDone className="p-0.5 text-[1.4rem] rounded-full bg-[#18c964] text-[#fff]" />
-                      Paid
-                    </div>
+                    {item._id}
                   </td>
                   <td className=" p-3 text-black dark:text-white">
-                    <div className=" py-1.5 bg-[#18c964] text-white rounded-full text-[0.9rem] font-[500] flex items-center justify-center gap-2">
-                      <MdDone className="p-0.5 text-[1.4rem] rounded-full bg-[#18c964] text-[#fff]" />
-                      Delivered
-                    </div>
+                    {item.name}
+                  </td>
+                  <td className=" p-3 text-black dark:text-white">
+                    {item.phone}
+                  </td>
+                  <td className=" p-3 text-black dark:text-white">
+                    {item.paymentStatus == "paid" ? (
+                      <div className=" py-1.5 bg-[#18c964] text-white rounded-full text-[0.9rem] font-[500] flex items-center justify-center gap-2">
+                        <MdDone className="p-0.5 text-[1.4rem] rounded-full bg-[#18c964] text-[#fff]" />
+                        Paid
+                      </div>
+                    ) : (
+                      <div className=" py-1.5 bg-red-500 text-white rounded-full text-[0.9rem] font-[500] flex items-center justify-center gap-2">
+                        <FaTimes className="p-0.5 text-[1.4rem] rounded-full bg-red-500 text-[#fff]" />
+                        Unpaid
+                      </div>
+                    )}
+                  </td>
+                  <td className=" p-3 text-black dark:text-white">
+                    {item.deliveryStatus == "delivered" ? (
+                      <div className=" py-1.5 bg-[#18c964] text-white rounded-full text-[0.9rem] font-[500] flex items-center justify-center gap-2">
+                        <MdDone className="p-0.5 text-[1.4rem] rounded-full bg-[#18c964] text-[#fff]" />
+                        Delivered
+                      </div>
+                    ) : (
+                      <div className=" py-1.5 bg-red-500 text-white rounded-full text-[0.9rem] font-[500] flex items-center justify-center gap-2">
+                        <FaTimes className="p-0.5 text-[1.4rem] rounded-full bg-red-500 text-[#fff]" />
+                        Pending
+                      </div>
+                    )}
                   </td>
 
                   <td className="p-3 relative">
                     <BsThreeDotsVertical
-                      onClick={() => toggleActionMenu(index)}
-                      className="action-btn text-gray-600 cursor-pointer"
+                      onClick={() => toggleActionMenu(item._id)}
+                      className="action-btn text-gray-600 dark:text-white cursor-pointer"
                     />
 
                     <div
                       className={`${
-                        openActionMenuId === index
+                        openActionMenuId === item._id
                           ? "opacity-100 scale-[1] z-30"
                           : "opacity-0 scale-[0.8] z-[-1]"
                       }
-                                         ${
-                                           index > 1
-                                             ? "bottom-[90%]"
-                                             : "top-[90%]"
-                                         }
-                                         zenui-table absolute right-[80%] p-1.5 rounded-md bg-white shadow-md min-w-[160px] transition-all duration-100`}
+                                               ${
+                                                 item._id > 1
+                                                   ? "bottom-[90%]"
+                                                   : "top-[90%]"
+                                               }
+                                               zenui-table absolute right-[80%] p-1.5 rounded-md bg-white shadow-md min-w-[160px] transition-all duration-100`}
                     >
-                      <p className="flex items-center gap-[8px] text-[0.9rem] py-1.5 px-2 w-full rounded-md text-gray-700 cursor-pointer hover:bg-gray-50 transition-all duration-200">
-                        <MdOutlineEdit />
-                        Edit
-                      </p>
-                      <p className="flex items-center gap-[8px] text-[0.9rem] py-1.5 px-2 w-full rounded-md text-gray-700 cursor-pointer hover:bg-gray-50 transition-all duration-200">
+                      <Link className="flex items-center gap-[8px] text-[0.9rem] py-1.5 px-2 w-full rounded-md text-gray-700 cursor-pointer hover:bg-gray-50 transition-all duration-200">
                         <MdDeleteOutline />
                         Delete
-                      </p>
-                      <p className="flex items-center gap-[8px] text-[0.9rem] py-1.5 px-2 w-full rounded-md text-gray-700 cursor-pointer hover:bg-gray-50 transition-all duration-200">
+                      </Link>
+                      <Link
+                        to={`/view/${item._id}`}
+                        className="flex items-center gap-[8px] text-[0.9rem] py-1.5 px-2 w-full rounded-md text-gray-700 cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                      >
                         <IoEyeOutline />
                         View Details
-                      </p>
+                      </Link>
                     </div>
                   </td>
                 </tr>
@@ -231,7 +244,7 @@ const LastOrders = () => {
             </tbody>
           </table>
 
-          {!sortedData?.length && (
+          {!orders?.length && (
             <p className="text-[0.9rem] text-gray-500 py-6 text-center w-full">
               No data found!
             </p>

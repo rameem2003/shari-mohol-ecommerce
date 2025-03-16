@@ -13,7 +13,7 @@ connectDB(); // mongodb connect
 // apply middlewares
 app.use(
   cors({
-    origin: ["*"],
+    origin: "*",
     credentials: true,
   })
 );

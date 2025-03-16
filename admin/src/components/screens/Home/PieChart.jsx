@@ -1,6 +1,26 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const PieChart = () => {
+  const [orders, setOrders] = useState([]); // set the initial state of orders
+
+  // fetch the orders from the backend
+  const fetchOrders = async () => {
+    try {
+      let res = await axios.get(`${import.meta.env.VITE_API}/order/all`);
+      setOrders(res.data.data);
+      console.log(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  let completeOrder = orders.filter(
+    (item) => item.deliveryStatus == "delivered"
+  );
+  let pendingOrder = orders.filter((item) => item.deliveryStatus == "pending");
+  let cancelOrder = orders.filter((item) => item.deliveryStatus == "cancel");
+
   const [windowSize, setWindowSize] = useState({
     width: undefined,
   });
@@ -18,10 +38,14 @@ const PieChart = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
   const data = [
-    { name: "Order Complete", value: 50 },
-    { name: "Order Pending", value: 50 },
-    { name: "Order Cancel", value: 50 },
+    { name: "Order Complete", value: completeOrder.length },
+    { name: "Order Pending", value: pendingOrder.length },
+    { name: "Order Cancel", value: cancelOrder.length },
   ];
 
   const width = windowSize.width < 376 ? 250 : 400;
