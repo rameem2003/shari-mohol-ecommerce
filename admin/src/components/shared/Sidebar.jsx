@@ -8,6 +8,9 @@ import { FiBarChart, FiPieChart } from "react-icons/fi";
 import { IoNotificationsOutline, IoSettingsOutline } from "react-icons/io5";
 import { BsThreeDots } from "react-icons/bs";
 import { RiAccountCircleLine } from "react-icons/ri";
+import { TbCategoryFilled } from "react-icons/tb";
+import { MdCategory } from "react-icons/md";
+import { FaShoppingCart, FaUsers } from "react-icons/fa";
 import { Link } from "react-router";
 
 const ResponsiveSidebar = () => {
@@ -36,7 +39,7 @@ const ResponsiveSidebar = () => {
               />
               <div className="relative group">
                 <GoSidebarCollapse
-                  className="text-[1.5rem] text-gray-600 cursor-pointer"
+                  className="text-[1.5rem] text-gray-600 dark:text-white cursor-pointer"
                   onClick={() => setIsCollapse1(false)}
                 />
 
@@ -104,7 +107,7 @@ const ResponsiveSidebar = () => {
                 } flex items-center w-full p-[5px] rounded-md cursor-pointer transition-all duration-200 relative group`}
               >
                 <div className="flex items-center gap-[8px]">
-                  <CiCalendar className="text-[1.3rem] text-gray-500 dark:text-white" />
+                  <FaShoppingCart className="text-[1.3rem] text-gray-500 dark:text-white" />
                   <p
                     className={`${
                       isCollapse1 ? "inline" : "hidden"
@@ -118,15 +121,16 @@ const ResponsiveSidebar = () => {
                 <div
                   className={`${
                     isCollapse1 ? "hidden" : "inline"
-                  } absolute top-0 right-[-99px] translate-x-[20px] opacity-0 z-[-1] group-hover:translate-x-0 group-hover:opacity-100 group-hover:z-[1] transition-all duration-500`}
+                  } absolute top-0 right-[-99px] translate-x-[20px] opacity-0 z-[-1] group-hover:translate-x-[-20px] group-hover:opacity-100 group-hover:z-[1] transition-all duration-500`}
                 >
-                  <p className="text-[0.9rem] w-max bg-gray-600 text-secondary rounded px-3 py-[5px]">
-                    Calendar
+                  <p className="text-[0.9rem] w-max bg-slate-900 text-white text-secondary rounded px-3 py-[5px]">
+                    Order's
                   </p>
                 </div>
               </div>
             </Link>
 
+            {/* dropdown 1 product */}
             <div
               className={`${
                 isCollapse1 && "justify-center"
@@ -139,13 +143,13 @@ const ResponsiveSidebar = () => {
                 } flex items-center gap-[8px  w-full`}
               >
                 <div className="flex items-center gap-[8px]">
-                  <GoProjectSymlink className="text-[1.3rem] text-gray-500 dark:text-white" />
+                  <MdCategory className="text-[1.3rem] text-gray-500 dark:text-white" />
                   <p
                     className={`${
                       isCollapse1 ? "inline" : "hidden"
                     } text-[1rem] font-bold text-gray-500 dark:text-white`}
                   >
-                    Product and Category
+                    Product
                   </p>
                 </div>
 
@@ -162,16 +166,18 @@ const ResponsiveSidebar = () => {
                 <>
                   {/* hover projects dropdown */}
                   <ul className="translate-y-[20px] list-none opacity-0 z-[-1] dark:bg-slate-900 group-hover:translate-y-0 group-hover:opacity-100 group-hover:z-30 absolute top-0 left-[70px] bg-white boxShadow transition-all duration-300 p-[8px] rounded-md flex flex-col gap-[3px] text-[1rem] text-gray-500 dark:text-white">
-                    <li className="px-[20px] py-[5px] rounded-md">Google</li>
-                    <li className="px-[20px] py-[5px] rounded-md">Facebook</li>
-                    <li className="px-[20px] py-[5px] rounded-md">Twitter</li>
-                    <li className="px-[20px] py-[5px] rounded-md">Linkedin</li>
+                    <li className="px-[20px] py-[5px] rounded-md">
+                      <Link to="/add-product">Add Product</Link>
+                    </li>
+                    <li className="px-[20px] py-[5px] rounded-md">
+                      <Link to="/all-products">All Products</Link>
+                    </li>
                   </ul>
                 </>
               )}
             </div>
 
-            {/* active projects dropdown */}
+            {/* active projects dropdown product */}
             <ul
               className={`${
                 isDropdownOpen
@@ -181,41 +187,113 @@ const ResponsiveSidebar = () => {
                 isCollapse1 ? "inline" : "hidden"
               } transition-all duration-300 marker:text-blue-400 ml-[35px] flex flex-col gap-[3px] text-[1rem] text-gray-500 dark:text-white`}
             >
-              <li className="px-[10px] py-[5px] rounded-md">Google</li>
-              <li className="px-[10px] py-[5px] rounded-md">Facebook</li>
-              <li className="px-[10px] py-[5px] rounded-md">Twitter</li>
-              <li className="px-[10px] py-[5px] rounded-md">Linkedin</li>
+              <li className="px-[10px] py-1 rounded-md">
+                <Link to="/add-product">Add Product</Link>
+              </li>
+              <li className="px-[10px] py-1 rounded-md">
+                <Link to="/all-products">All Products</Link>
+              </li>
             </ul>
 
+            {/* dropdown 2 category */}
             <div
               className={`${
-                isCollapse1 ? "justify-between" : "justify-center"
-              } flex items-center w-full hover:bg-gray-50 p-[5px] rounded-md cursor-pointer transition-all duration-200 relative group`}
+                isCollapse1 && "justify-center"
+              } ${null}  flex w-full  p-[5px] rounded-md cursor-pointer transition-all duration-200 relative group flex-col bg-white dark:bg-slate-900`}
+              onClick={() => setIsDropdownOpen1(!isDropdownOpen1)}
             >
-              <div className="flex items-center gap-[8px]">
-                <FiBarChart className="text-[1.3rem] text-gray-500" />
-                <p
-                  className={`${
-                    isCollapse1 ? "inline" : "hidden"
-                  } text-[1rem] font-[400] text-gray-500`}
-                ></p>
-              </div>
-
-              {/* tooltip */}
               <div
                 className={`${
-                  isCollapse1 ? "hidden" : "inline"
-                } absolute top-0 right-[-100px] translate-x-[20px] opacity-0 z-[-1] group-hover:translate-x-0 group-hover:opacity-100 group-hover:z-[1] transition-all duration-500`}
+                  isCollapse1 ? " justify-between" : "justify-center"
+                } flex items-center gap-[8px  w-full`}
               >
-                <p className="text-[0.9rem] w-max bg-gray-600 text-secondary rounded px-3 py-[5px]">
-                  Progress
-                </p>
+                <div className="flex items-center gap-[8px]">
+                  <TbCategoryFilled className="text-[1.3rem] text-gray-500 dark:text-white" />
+                  <p
+                    className={`${
+                      isCollapse1 ? "inline" : "hidden"
+                    } text-[1rem] font-bold text-gray-500 dark:text-white`}
+                  >
+                    Category
+                  </p>
+                </div>
+
+                <IoIosArrowDown
+                  className={`${
+                    isDropdownOpen1 ? "rotate-[180deg]" : "rotate-0"
+                  } ${
+                    isCollapse1 ? "inline" : "hidden"
+                  } transition-all duration-300 text-[1rem] text-gray-500 dark:text-white`}
+                />
               </div>
+
+              {!isCollapse1 && (
+                <>
+                  {/* hover projects dropdown */}
+                  <ul className="translate-y-[20px] list-none opacity-0 z-[-1] dark:bg-slate-900 group-hover:translate-y-0 group-hover:opacity-100 group-hover:z-30 absolute top-0 left-[70px] bg-white boxShadow transition-all duration-300 p-[8px] rounded-md flex flex-col gap-[3px] text-[1rem] text-gray-500 dark:text-white">
+                    <li className="px-[20px] py-[5px] rounded-md">
+                      <Link to="/add-category">Add Category</Link>
+                    </li>
+                    <li className="px-[20px] py-[5px] rounded-md">
+                      <Link to="/all-categories">All Categories</Link>
+                    </li>
+                  </ul>
+                </>
+              )}
             </div>
+
+            {/* active projects dropdown category */}
+            <ul
+              className={`${
+                isDropdownOpen1
+                  ? "h-auto my-3 opacity-100 z-[1]"
+                  : "opacity-0 z-[-1] h-0"
+              } ${
+                isCollapse1 ? "inline" : "hidden"
+              } transition-all duration-300 marker:text-blue-400 ml-[35px] flex flex-col gap-[3px] text-[1rem] text-gray-500 dark:text-white`}
+            >
+              <li className="px-[10px] py-1 rounded-md">
+                <Link to="/add-category">Add Category</Link>
+              </li>
+              <li className="px-[10px] py-1 rounded-md">
+                <Link to="/all-categories">All Categories</Link>
+              </li>
+            </ul>
+
+            <Link to="/advertisement">
+              <div
+                className={`${
+                  isCollapse1 ? "justify-between" : "justify-center"
+                } flex items-center w-full p-[5px] rounded-md cursor-pointer transition-all duration-200 relative group`}
+              >
+                <div className="flex items-center gap-[8px]">
+                  <FiBarChart className="text-[1.3rem] text-gray-500 dark:text-white" />
+                  <p
+                    className={`${
+                      isCollapse1 ? "inline" : "hidden"
+                    } text-[1rem] font-bold text-gray-500 dark:text-white`}
+                  >
+                    Advertisement
+                  </p>
+                </div>
+
+                {/* tooltip */}
+                <div
+                  className={`${
+                    isCollapse1 ? "hidden" : "inline"
+                  } absolute top-0 right-[-100px] translate-x-[20px] opacity-0 z-[-1] group-hover:translate-x-0 group-hover:opacity-100 group-hover:z-[1] transition-all duration-500`}
+                >
+                  <p className="text-[0.9rem] w-max bg-slate-900 text-white text-secondary rounded px-3 py-[5px]">
+                    Advertisement
+                  </p>
+                </div>
+              </div>
+            </Link>
+            {/* optional */}
             <div
               className={`${
                 isCollapse1 ? "justify-between" : "justify-center"
-              } flex items-center w-full hover:bg-gray-50 p-[5px] rounded-md cursor-pointer transition-all duration-200 relative group`}
+              } flex hidden items-center w-full hover:bg-gray-50 p-[5px] rounded-md cursor-pointer transition-all duration-200 relative group`}
             >
               <div className="flex items-center gap-[8px]">
                 <FiPieChart className="text-[1.3rem] text-gray-500" />
@@ -250,7 +328,7 @@ const ResponsiveSidebar = () => {
             <div
               className={`${
                 isCollapse1 ? "justify-between" : "justify-center"
-              } flex items-center w-full hover:bg-gray-50 p-[5px] rounded-md cursor-pointer transition-all duration-200 relative group`}
+              } flex items-center w-full hidden hover:bg-gray-50 p-[5px] rounded-md cursor-pointer transition-all duration-200 relative group`}
             >
               <div className="flex items-center gap-[8px]">
                 <IoNotificationsOutline className="text-[1.3rem] text-gray-500" />
@@ -276,25 +354,27 @@ const ResponsiveSidebar = () => {
             <div
               className={`${
                 isCollapse1 ? "justify-between" : "justify-center"
-              } flex items-center w-full hover:bg-gray-50 p-[5px] rounded-md cursor-pointer transition-all duration-200 relative group`}
+              } flex items-center w-full p-[5px] rounded-md cursor-pointer transition-all duration-200 relative group`}
             >
               <div className="flex items-center gap-[8px]">
-                <IoSettingsOutline className="text-[1.3rem] text-gray-500" />
+                <FaUsers className="text-[1.3rem] text-gray-500 dark:text-white" />
                 <p
                   className={`${
                     isCollapse1 ? "inline" : "hidden"
-                  } text-[1rem] font-[400] text-gray-500`}
-                ></p>
+                  } text-[1rem] font-bold text-gray-500 dark:text-white`}
+                >
+                  Users Manage
+                </p>
               </div>
 
               {/* tooltip */}
               <div
                 className={`${
                   isCollapse1 ? "hidden" : "inline"
-                } absolute top-0 right-[-96px] translate-x-[20px] opacity-0 z-[-1] group-hover:translate-x-0 group-hover:opacity-100 group-hover:z-[1] transition-all duration-500`}
+                } absolute top-0 right-[-96px] translate-x-[20px] opacity-0 z-[-1] group-hover:translate-x-[10px] group-hover:opacity-100 group-hover:z-[1] transition-all duration-500`}
               >
-                <p className="text-[0.9rem] w-max bg-gray-600 text-secondary rounded px-3 py-[5px]">
-                  Setting
+                <p className="text-[0.9rem] w-max bg-slate-900 text-white text-secondary rounded px-3 py-[5px]">
+                  Users Manage
                 </p>
               </div>
             </div>
@@ -326,7 +406,7 @@ const ResponsiveSidebar = () => {
         <div className={`${isCollapse1 ? "inline" : "hidden"} relative group`}>
           <BsThreeDots className="text-[1.2rem] text-gray-500 dark:text-white cursor-pointer" />
 
-          <ul className="translate-y-[20px] opacity-0 z-[-1] group-hover:translate-y-0 group-hover:opacity-100 group-hover:z-30 absolute top-[-52px] left-[30px] bg-white dark:bg-slate-900 boxShadow transition-all duration-300 p-[8px] rounded-md flex flex-col gap-[3px]">
+          <ul className="translate-x-[20px] opacity-0 z-[-1] group-hover:translate-x-0 group-hover:opacity-100 group-hover:z-30 absolute top-[-52px] left-[30px] bg-white dark:bg-slate-900 boxShadow transition-all duration-300 p-[8px] rounded-md flex flex-col gap-[3px]">
             <li className="flex items-center gap-[7px] text-[0.9rem] text-gray-600 dark:text-white px-[8px] py-[4px] rounded-md cursor-pointer">
               <RiAccountCircleLine />
               Profile
