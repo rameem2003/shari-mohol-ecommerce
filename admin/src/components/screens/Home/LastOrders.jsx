@@ -20,9 +20,9 @@ const LastOrders = () => {
   const fetchOrders = async () => {
     let res = await axios.get(`${import.meta.env.VITE_API}/order/all`);
     setOrders(
-      res.data.data.sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-      )
+      res.data.data
+        .filter((data) => data.deliveryStatus == "pending")
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     );
   };
 

@@ -7,6 +7,9 @@ const categorySchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    description: {
+      type: String,
+    },
     subCategories: {
       type: [String], // This will store subcategory names as an array of strings
       default: [],

@@ -5,6 +5,8 @@ import Home from "./pages/Home";
 import AddProduct from "./pages/AddProduct";
 import AddCategory from "./pages/AddCategory";
 import OrdersPage from "./pages/OrdersPage";
+import AllCategory from "./pages/AllCategory";
+import AllProducts from "./pages/AllProducts";
 
 const App = () => {
   return (
@@ -14,6 +16,8 @@ const App = () => {
           <Route index element={<Home />} />
           <Route path="/add-product" element={<AddProduct />} />
           <Route path="/add-category" element={<AddCategory />} />
+          <Route path="/all-categories" element={<AllCategory />} />
+          <Route path="/all-products" element={<AllProducts />} />
           <Route path="/orders" element={<OrdersPage />} />
         </Route>
       </Routes>
