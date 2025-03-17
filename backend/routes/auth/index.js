@@ -31,7 +31,7 @@ router.post("/auth/register", registerUser);
 router.post("/auth/login", loginUser);
 
 /**
- * Login Route
+ * Logout Route
  * http://localhost:5000/api/v1/auth/logout/:id
  */
 router.post("/auth/logout/:id", logoutUser);

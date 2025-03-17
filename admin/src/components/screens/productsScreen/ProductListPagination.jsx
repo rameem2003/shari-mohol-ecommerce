@@ -33,7 +33,7 @@ const ProductListPagination = ({
               Cookie: `token=${accessToken}`,
             },
             withCredentials: true,
-          }
+          },
         );
 
         Swal.fire({
@@ -81,7 +81,7 @@ const ProductListPagination = ({
               Cookie: `token=${accessToken}`,
             },
             withCredentials: true,
-          }
+          },
         );
 
         Swal.fire({
@@ -118,6 +118,8 @@ const ProductListPagination = ({
           currentItems.map((p, index) => (
             <ProductCard
               data={p}
+              handleFeaturedUpdate={handleFeaturedUpdate}
+              handleHotSellUpdate={handleHotSellUpdate}
               className="w-full md:w-[48%] lg:w-[32%] 2xl:w-[24%]"
             />
           ))}
@@ -141,7 +143,7 @@ const ProductListPagination = ({
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % items.length;
     console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
+      `User requested page number ${event.selected}, which is offset ${newOffset}`,
     );
     setItemOffset(newOffset);
   };
@@ -149,7 +151,7 @@ const ProductListPagination = ({
   return (
     <>
       <Items currentItems={currentItems} />
-      <Flex className=" flex items-center justify-between gap-5 mt-10  w-full lg:gap-0">
+      <Flex className="mt-10 flex w-full items-center justify-between gap-5 lg:gap-0">
         <ReactPaginate
           breakLabel="..."
           className="flex gap-4"

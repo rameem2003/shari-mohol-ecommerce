@@ -12,15 +12,37 @@ import { TbCategoryFilled } from "react-icons/tb";
 import { MdCategory } from "react-icons/md";
 import { FaShoppingCart, FaUsers } from "react-icons/fa";
 import { Link } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import Cookies from "js-cookie";
+import axios from "axios";
+import { adminLoginReducer } from "../../redux/features/AdminSlice";
 
 const ResponsiveSidebar = () => {
+  const dispatch = useDispatch(); // dispatch instance
+  const admin = useSelector((state) => state.admin.admin);
   const [isCollapse1, setIsCollapse1] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(true);
   const [isDropdownOpen1, setIsDropdownOpen1] = useState(true);
 
+  // handle logout
+  const handleLogout = async (id) => {
+    try {
+      let res = await axios.post(
+        `${import.meta.env.VITE_API}/auth/logout/${id}`,
+      );
+
+      Cookies.remove("accessToken");
+      Cookies.remove("sessionToken");
+      dispatch(adminLoginReducer(""));
+      console.log(res);
+      location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <aside
-      className={`bg-white dark:bg-slate-900 boxShadow transition-all duration-300 ease h-full flex flex-col justify-between  ${
+      className={`boxShadow ease flex h-full flex-col justify-between bg-white transition-all duration-300 dark:bg-slate-900 ${
         isCollapse1 ? "w-3/12 2xl:w-2/12" : "w-auto"
       }`}
     >
@@ -37,17 +59,17 @@ const ResponsiveSidebar = () => {
                 alt="logo"
                 className="w-[130px] cursor-pointer"
               />
-              <div className="relative group">
+              <div className="group relative">
                 <GoSidebarCollapse
-                  className="text-[1.5rem] text-gray-600 dark:text-white cursor-pointer"
+                  className="cursor-pointer text-[1.5rem] text-gray-600 dark:text-white"
                   onClick={() => setIsCollapse1(false)}
                 />
 
                 {/* tooltip */}
                 <div
-                  className={`absolute -top-1 right-[-115px] translate-x-[20px] opacity-0 z-[-1] group-hover:translate-x-0 group-hover:opacity-100 group-hover:z-[1] transition-all duration-500`}
+                  className={`absolute -top-1 right-[-115px] z-[-1] translate-x-[20px] opacity-0 transition-all duration-500 group-hover:z-[1] group-hover:translate-x-0 group-hover:opacity-100`}
                 >
-                  <p className="text-[0.9rem] w-max bg-gray-600 text-secondary rounded px-3 py-[5px]">
+                  <p className="text-secondary w-max rounded bg-gray-600 px-3 py-[5px] text-[0.9rem]">
                     Collapse
                   </p>
                 </div>
@@ -57,7 +79,7 @@ const ResponsiveSidebar = () => {
             <img
               src="https://i.ibb.co/0BZfPq6/darklogo.png"
               alt="logo"
-              className="w-[50px] mx-auto cursor-pointer"
+              className="mx-auto w-[50px] cursor-pointer"
               onClick={() => setIsCollapse1(!isCollapse1)}
             />
           )}
@@ -74,14 +96,14 @@ const ResponsiveSidebar = () => {
               <div
                 className={`${
                   isCollapse1 ? "justify-between" : "justify-center"
-                } flex items-center w-full  p-[5px] rounded-md cursor-pointer transition-all duration-200 relative group`}
+                } group relative flex w-full cursor-pointer items-center rounded-md p-[5px] transition-all duration-200`}
               >
                 <div className="flex items-center gap-[8px]">
                   <GoHome className="text-[1.3rem] text-gray-500 dark:text-white" />
                   <p
                     className={`${
                       isCollapse1 ? "inline" : "hidden"
-                    } text-[1rem] font-bold text-gray-500 dark:text-white}`}
+                    } dark:text-white} text-[1rem] font-bold text-gray-500`}
                   >
                     Dashboard
                   </p>
@@ -91,9 +113,9 @@ const ResponsiveSidebar = () => {
                 <div
                   className={`${
                     isCollapse1 ? "hidden" : "inline"
-                  } absolute top-0 right-[-80px] translate-x-[20px] opacity-0 z-[-1] group-hover:translate-x-0 group-hover:opacity-100 group-hover:z-[1] transition-all duration-500`}
+                  } absolute right-[-80px] top-0 z-[-1] translate-x-[20px] opacity-0 transition-all duration-500 group-hover:z-[1] group-hover:translate-x-0 group-hover:opacity-100`}
                 >
-                  <p className="text-[0.9rem] w-max bg-slate-900 dark:text-white text-secondary rounded px-3 py-[5px]">
+                  <p className="text-secondary w-max rounded bg-slate-900 px-3 py-[5px] text-[0.9rem] dark:text-white">
                     Dashboard
                   </p>
                 </div>
@@ -104,7 +126,7 @@ const ResponsiveSidebar = () => {
               <div
                 className={`${
                   isCollapse1 ? "justify-between" : "justify-center"
-                } flex items-center w-full p-[5px] rounded-md cursor-pointer transition-all duration-200 relative group`}
+                } group relative flex w-full cursor-pointer items-center rounded-md p-[5px] transition-all duration-200`}
               >
                 <div className="flex items-center gap-[8px]">
                   <FaShoppingCart className="text-[1.3rem] text-gray-500 dark:text-white" />
@@ -121,9 +143,9 @@ const ResponsiveSidebar = () => {
                 <div
                   className={`${
                     isCollapse1 ? "hidden" : "inline"
-                  } absolute top-0 right-[-99px] translate-x-[20px] opacity-0 z-[-1] group-hover:translate-x-[-20px] group-hover:opacity-100 group-hover:z-[1] transition-all duration-500`}
+                  } absolute right-[-99px] top-0 z-[-1] translate-x-[20px] opacity-0 transition-all duration-500 group-hover:z-[1] group-hover:translate-x-[-20px] group-hover:opacity-100`}
                 >
-                  <p className="text-[0.9rem] w-max bg-slate-900 text-white text-secondary rounded px-3 py-[5px]">
+                  <p className="text-secondary w-max rounded bg-slate-900 px-3 py-[5px] text-[0.9rem] text-white">
                     Order's
                   </p>
                 </div>
@@ -134,13 +156,13 @@ const ResponsiveSidebar = () => {
             <div
               className={`${
                 isCollapse1 && "justify-center"
-              } ${null}  flex w-full  p-[5px] rounded-md cursor-pointer transition-all duration-200 relative group flex-col bg-white dark:bg-slate-900`}
+              } ${null} group relative flex w-full cursor-pointer flex-col rounded-md bg-white p-[5px] transition-all duration-200 dark:bg-slate-900`}
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
               <div
                 className={`${
-                  isCollapse1 ? " justify-between" : "justify-center"
-                } flex items-center gap-[8px  w-full`}
+                  isCollapse1 ? "justify-between" : "justify-center"
+                } gap-[8px flex w-full items-center`}
               >
                 <div className="flex items-center gap-[8px]">
                   <MdCategory className="text-[1.3rem] text-gray-500 dark:text-white" />
@@ -158,18 +180,18 @@ const ResponsiveSidebar = () => {
                     isDropdownOpen ? "rotate-[180deg]" : "rotate-0"
                   } ${
                     isCollapse1 ? "inline" : "hidden"
-                  } transition-all duration-300 text-[1rem] text-gray-500 dark:text-white`}
+                  } text-[1rem] text-gray-500 transition-all duration-300 dark:text-white`}
                 />
               </div>
 
               {!isCollapse1 && (
                 <>
                   {/* hover projects dropdown */}
-                  <ul className="translate-y-[20px] list-none opacity-0 z-[-1] dark:bg-slate-900 group-hover:translate-y-0 group-hover:opacity-100 group-hover:z-30 absolute top-0 left-[70px] bg-white boxShadow transition-all duration-300 p-[8px] rounded-md flex flex-col gap-[3px] text-[1rem] text-gray-500 dark:text-white">
-                    <li className="px-[20px] py-[5px] rounded-md">
+                  <ul className="boxShadow absolute left-[70px] top-0 z-[-1] flex translate-y-[20px] list-none flex-col gap-[3px] rounded-md bg-white p-[8px] text-[1rem] text-gray-500 opacity-0 transition-all duration-300 group-hover:z-30 group-hover:translate-y-0 group-hover:opacity-100 dark:bg-slate-900 dark:text-white">
+                    <li className="rounded-md px-[20px] py-[5px]">
                       <Link to="/add-product">Add Product</Link>
                     </li>
-                    <li className="px-[20px] py-[5px] rounded-md">
+                    <li className="rounded-md px-[20px] py-[5px]">
                       <Link to="/all-products">All Products</Link>
                     </li>
                   </ul>
@@ -181,16 +203,16 @@ const ResponsiveSidebar = () => {
             <ul
               className={`${
                 isDropdownOpen
-                  ? "h-auto my-3 opacity-100 z-[1]"
-                  : "opacity-0 z-[-1] h-0"
+                  ? "z-[1] my-3 h-auto opacity-100"
+                  : "z-[-1] h-0 opacity-0"
               } ${
                 isCollapse1 ? "inline" : "hidden"
-              } transition-all duration-300 marker:text-blue-400 ml-[35px] flex flex-col gap-[3px] text-[1rem] text-gray-500 dark:text-white`}
+              } ml-[35px] flex flex-col gap-[3px] text-[1rem] text-gray-500 transition-all duration-300 marker:text-blue-400 dark:text-white`}
             >
-              <li className="px-[10px] py-1 rounded-md">
+              <li className="rounded-md px-[10px] py-1">
                 <Link to="/add-product">Add Product</Link>
               </li>
-              <li className="px-[10px] py-1 rounded-md">
+              <li className="rounded-md px-[10px] py-1">
                 <Link to="/all-products">All Products</Link>
               </li>
             </ul>
@@ -199,13 +221,13 @@ const ResponsiveSidebar = () => {
             <div
               className={`${
                 isCollapse1 && "justify-center"
-              } ${null}  flex w-full  p-[5px] rounded-md cursor-pointer transition-all duration-200 relative group flex-col bg-white dark:bg-slate-900`}
+              } ${null} group relative flex w-full cursor-pointer flex-col rounded-md bg-white p-[5px] transition-all duration-200 dark:bg-slate-900`}
               onClick={() => setIsDropdownOpen1(!isDropdownOpen1)}
             >
               <div
                 className={`${
-                  isCollapse1 ? " justify-between" : "justify-center"
-                } flex items-center gap-[8px  w-full`}
+                  isCollapse1 ? "justify-between" : "justify-center"
+                } gap-[8px flex w-full items-center`}
               >
                 <div className="flex items-center gap-[8px]">
                   <TbCategoryFilled className="text-[1.3rem] text-gray-500 dark:text-white" />
@@ -223,18 +245,18 @@ const ResponsiveSidebar = () => {
                     isDropdownOpen1 ? "rotate-[180deg]" : "rotate-0"
                   } ${
                     isCollapse1 ? "inline" : "hidden"
-                  } transition-all duration-300 text-[1rem] text-gray-500 dark:text-white`}
+                  } text-[1rem] text-gray-500 transition-all duration-300 dark:text-white`}
                 />
               </div>
 
               {!isCollapse1 && (
                 <>
                   {/* hover projects dropdown */}
-                  <ul className="translate-y-[20px] list-none opacity-0 z-[-1] dark:bg-slate-900 group-hover:translate-y-0 group-hover:opacity-100 group-hover:z-30 absolute top-0 left-[70px] bg-white boxShadow transition-all duration-300 p-[8px] rounded-md flex flex-col gap-[3px] text-[1rem] text-gray-500 dark:text-white">
-                    <li className="px-[20px] py-[5px] rounded-md">
+                  <ul className="boxShadow absolute left-[70px] top-0 z-[-1] flex translate-y-[20px] list-none flex-col gap-[3px] rounded-md bg-white p-[8px] text-[1rem] text-gray-500 opacity-0 transition-all duration-300 group-hover:z-30 group-hover:translate-y-0 group-hover:opacity-100 dark:bg-slate-900 dark:text-white">
+                    <li className="rounded-md px-[20px] py-[5px]">
                       <Link to="/add-category">Add Category</Link>
                     </li>
-                    <li className="px-[20px] py-[5px] rounded-md">
+                    <li className="rounded-md px-[20px] py-[5px]">
                       <Link to="/all-categories">All Categories</Link>
                     </li>
                   </ul>
@@ -246,16 +268,16 @@ const ResponsiveSidebar = () => {
             <ul
               className={`${
                 isDropdownOpen1
-                  ? "h-auto my-3 opacity-100 z-[1]"
-                  : "opacity-0 z-[-1] h-0"
+                  ? "z-[1] my-3 h-auto opacity-100"
+                  : "z-[-1] h-0 opacity-0"
               } ${
                 isCollapse1 ? "inline" : "hidden"
-              } transition-all duration-300 marker:text-blue-400 ml-[35px] flex flex-col gap-[3px] text-[1rem] text-gray-500 dark:text-white`}
+              } ml-[35px] flex flex-col gap-[3px] text-[1rem] text-gray-500 transition-all duration-300 marker:text-blue-400 dark:text-white`}
             >
-              <li className="px-[10px] py-1 rounded-md">
+              <li className="rounded-md px-[10px] py-1">
                 <Link to="/add-category">Add Category</Link>
               </li>
-              <li className="px-[10px] py-1 rounded-md">
+              <li className="rounded-md px-[10px] py-1">
                 <Link to="/all-categories">All Categories</Link>
               </li>
             </ul>
@@ -264,7 +286,7 @@ const ResponsiveSidebar = () => {
               <div
                 className={`${
                   isCollapse1 ? "justify-between" : "justify-center"
-                } flex items-center w-full p-[5px] rounded-md cursor-pointer transition-all duration-200 relative group`}
+                } group relative flex w-full cursor-pointer items-center rounded-md p-[5px] transition-all duration-200`}
               >
                 <div className="flex items-center gap-[8px]">
                   <FiBarChart className="text-[1.3rem] text-gray-500 dark:text-white" />
@@ -281,9 +303,9 @@ const ResponsiveSidebar = () => {
                 <div
                   className={`${
                     isCollapse1 ? "hidden" : "inline"
-                  } absolute top-0 right-[-100px] translate-x-[20px] opacity-0 z-[-1] group-hover:translate-x-0 group-hover:opacity-100 group-hover:z-[1] transition-all duration-500`}
+                  } absolute right-[-100px] top-0 z-[-1] translate-x-[20px] opacity-0 transition-all duration-500 group-hover:z-[1] group-hover:translate-x-0 group-hover:opacity-100`}
                 >
-                  <p className="text-[0.9rem] w-max bg-slate-900 text-white text-secondary rounded px-3 py-[5px]">
+                  <p className="text-secondary w-max rounded bg-slate-900 px-3 py-[5px] text-[0.9rem] text-white">
                     Advertisement
                   </p>
                 </div>
@@ -293,7 +315,7 @@ const ResponsiveSidebar = () => {
             <div
               className={`${
                 isCollapse1 ? "justify-between" : "justify-center"
-              } flex hidden items-center w-full hover:bg-gray-50 p-[5px] rounded-md cursor-pointer transition-all duration-200 relative group`}
+              } group relative flex hidden w-full cursor-pointer items-center rounded-md p-[5px] transition-all duration-200 hover:bg-gray-50`}
             >
               <div className="flex items-center gap-[8px]">
                 <FiPieChart className="text-[1.3rem] text-gray-500" />
@@ -308,9 +330,9 @@ const ResponsiveSidebar = () => {
               <div
                 className={`${
                   isCollapse1 ? "hidden" : "inline"
-                } absolute top-0 right-[-76px] translate-x-[20px] opacity-0 z-[-1] group-hover:translate-x-0 group-hover:opacity-100 group-hover:z-[1] transition-all duration-500`}
+                } absolute right-[-76px] top-0 z-[-1] translate-x-[20px] opacity-0 transition-all duration-500 group-hover:z-[1] group-hover:translate-x-0 group-hover:opacity-100`}
               >
-                <p className="text-[0.9rem] w-max bg-gray-600 text-secondary rounded px-3 py-[5px]">
+                <p className="text-secondary w-max rounded bg-gray-600 px-3 py-[5px] text-[0.9rem]">
                   Goals
                 </p>
               </div>
@@ -322,13 +344,13 @@ const ResponsiveSidebar = () => {
         <div
           className={`${
             isCollapse1 ? "px-[20px]" : "px-[10px]"
-          } mt-6 border-t border-gray-200  transition-all duration-300 ease-in-out`}
+          } mt-6 border-t border-gray-200 transition-all duration-300 ease-in-out`}
         >
           <div className="mt-3 flex flex-col gap-[5px]">
             <div
               className={`${
                 isCollapse1 ? "justify-between" : "justify-center"
-              } flex items-center w-full hidden hover:bg-gray-50 p-[5px] rounded-md cursor-pointer transition-all duration-200 relative group`}
+              } group relative flex hidden w-full cursor-pointer items-center rounded-md p-[5px] transition-all duration-200 hover:bg-gray-50`}
             >
               <div className="flex items-center gap-[8px]">
                 <IoNotificationsOutline className="text-[1.3rem] text-gray-500" />
@@ -343,9 +365,9 @@ const ResponsiveSidebar = () => {
               <div
                 className={`${
                   isCollapse1 ? "hidden" : "inline"
-                } absolute top-0 right-[-98px] translate-x-[20px] opacity-0 z-[-1] group-hover:translate-x-0 group-hover:opacity-100 group-hover:z-[1] transition-all duration-500`}
+                } absolute right-[-98px] top-0 z-[-1] translate-x-[20px] opacity-0 transition-all duration-500 group-hover:z-[1] group-hover:translate-x-0 group-hover:opacity-100`}
               >
-                <p className="text-[0.9rem] w-max bg-gray-600 text-secondary rounded px-3 py-[5px]">
+                <p className="text-secondary w-max rounded bg-gray-600 px-3 py-[5px] text-[0.9rem]">
                   Activity
                 </p>
               </div>
@@ -354,7 +376,7 @@ const ResponsiveSidebar = () => {
             <div
               className={`${
                 isCollapse1 ? "justify-between" : "justify-center"
-              } flex items-center w-full p-[5px] rounded-md cursor-pointer transition-all duration-200 relative group`}
+              } group relative flex w-full cursor-pointer items-center rounded-md p-[5px] transition-all duration-200`}
             >
               <div className="flex items-center gap-[8px]">
                 <FaUsers className="text-[1.3rem] text-gray-500 dark:text-white" />
@@ -371,9 +393,9 @@ const ResponsiveSidebar = () => {
               <div
                 className={`${
                   isCollapse1 ? "hidden" : "inline"
-                } absolute top-0 right-[-96px] translate-x-[20px] opacity-0 z-[-1] group-hover:translate-x-[10px] group-hover:opacity-100 group-hover:z-[1] transition-all duration-500`}
+                } absolute right-[-96px] top-0 z-[-1] translate-x-[20px] opacity-0 transition-all duration-500 group-hover:z-[1] group-hover:translate-x-[10px] group-hover:opacity-100`}
               >
-                <p className="text-[0.9rem] w-max bg-slate-900 text-white text-secondary rounded px-3 py-[5px]">
+                <p className="text-secondary w-max rounded bg-slate-900 px-3 py-[5px] text-[0.9rem] text-white">
                   Users Manage
                 </p>
               </div>
@@ -386,35 +408,38 @@ const ResponsiveSidebar = () => {
       <div
         className={`${
           isCollapse1 ? "justify-between" : "justify-center"
-        } bg-gray-100 py-3 px-[20px] flex items-center mt-10 dark:bg-slate-900`}
+        } mt-10 flex items-center bg-gray-100 px-[20px] py-3 dark:bg-slate-900`}
       >
         <div className="flex items-center gap-[10px]">
           <img
-            src="https://img.freepik.com/free-photo/indoor-picture-cheerful-handsome-young-man-having-folded-hands-looking-directly-smiling-sincerely-wearing-casual-clothes_176532-10257.jpg?t=st=1724478146~exp=1724481746~hmac=7de91a5b9271ecb4309974122ae6f47d71c01f7fff840c69755f781a03d9e340&w=996"
+            src={admin.photo}
             alt="avatar"
-            className="w-[30px] h-[30px] cursor-pointer rounded-full object-cover"
+            className="h-[30px] w-[30px] cursor-pointer rounded-full object-cover"
           />
           <h3
             className={`${
               isCollapse1 ? "inline" : "hidden"
-            } text-[0.9rem] text-gray-800 dark:text-white font-[500]`}
+            } text-[0.9rem] font-[500] text-gray-800 dark:text-white`}
           >
-            Jhon Deo
+            {admin.name}
           </h3>
         </div>
 
-        <div className={`${isCollapse1 ? "inline" : "hidden"} relative group`}>
-          <BsThreeDots className="text-[1.2rem] text-gray-500 dark:text-white cursor-pointer" />
+        <div className={`${isCollapse1 ? "inline" : "hidden"} group relative`}>
+          <BsThreeDots className="cursor-pointer text-[1.2rem] text-gray-500 dark:text-white" />
 
-          <ul className="translate-x-[20px] opacity-0 z-[-1] group-hover:translate-x-0 group-hover:opacity-100 group-hover:z-30 absolute top-[-52px] left-[30px] bg-white dark:bg-slate-900 boxShadow transition-all duration-300 p-[8px] rounded-md flex flex-col gap-[3px]">
-            <li className="flex items-center gap-[7px] text-[0.9rem] text-gray-600 dark:text-white px-[8px] py-[4px] rounded-md cursor-pointer">
+          <ul className="boxShadow absolute left-[30px] top-[-52px] z-[-1] flex translate-x-[20px] flex-col gap-[3px] rounded-md bg-white p-[8px] opacity-0 transition-all duration-300 group-hover:z-30 group-hover:translate-x-0 group-hover:opacity-100 dark:bg-slate-900">
+            <li className="flex cursor-pointer items-center gap-[7px] rounded-md px-[8px] py-[4px] text-[0.9rem] text-gray-600 dark:text-white">
               <RiAccountCircleLine />
               Profile
             </li>
-            <li className="flex items-center gap-[7px] text-[0.9rem] text-red-500 dark:text-red-300 px-[8px] py-[4px] rounded-md cursor-pointer">
+            <button
+              onClick={() => handleLogout(admin.id)}
+              className="flex cursor-pointer items-center gap-[7px] rounded-md px-[8px] py-[4px] text-[0.9rem] text-red-500 dark:text-red-300"
+            >
               <CiLogout />
               Logout
-            </li>
+            </button>
           </ul>
         </div>
       </div>

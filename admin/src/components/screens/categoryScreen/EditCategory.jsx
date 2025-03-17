@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { IoCloudUploadOutline } from "react-icons/io5";
-// react icons
-import { RxCross1 } from "react-icons/rx";
 import Flex from "../../common/Flex";
+import Cookies from "js-cookie";
+import Swal from "sweetalert2";
+import Loader from "../../common/Loader";
+import axios from "axios";
+// react icons
+import { IoCloudUploadOutline } from "react-icons/io5";
+import { RxCross1 } from "react-icons/rx";
 
 const EditCategory = ({
   isModalOpen,
@@ -10,10 +14,12 @@ const EditCategory = ({
   handleClose,
   onUpdate,
 }) => {
+  const accessToken = Cookies.get("accessToken"); // access token
   const [isDragging, setIsDragging] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [displayImage, setDisplayImage] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   // upload product local object
   const [category, setCategory] = useState({
@@ -81,27 +87,81 @@ const EditCategory = ({
 
   // update the category
   const handleSubmit = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
     console.log(category);
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("name", category.name);
+      formDataToSend.append("description", category.description);
+      formDataToSend.append("subCategories", category.subcategories);
+      if (category.image) {
+        formDataToSend.append("image", category.image);
+      }
+
+      const res = await axios.patch(
+        `${import.meta.env.VITE_API}/category/update/${selectedCategory._id}`,
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Cookie: `accessToken=${accessToken}`,
+          },
+          withCredentials: true,
+        },
+      );
+      setIsLoading(false);
+      Swal.fire({
+        title: res.data.msg,
+        confirmButtonText: "Ok",
+        confirmButtonColor: "green",
+        icon: "success",
+      });
+      onUpdate(); // Refresh the category list
+      handleClose();
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+      handleClose();
+      Swal.fire({
+        title: error.response.data.msg,
+        showConfirmButton: false,
+        showCancelButton: true,
+        cancelButtonText: "Ok",
+        cancelButtonColor: "red",
+        icon: "error",
+      }).then((result) => {
+        if (result.isDismissed) {
+          location.reload();
+        }
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div
       className={`${
-        isModalOpen ? " visible" : " invisible"
-      } w-full h-screen fixed top-0 left-0 z-[200000000] bg-[#0000002a] transition-all duration-300 flex items-center justify-center`}
+        isModalOpen ? "visible" : "invisible"
+      } fixed left-0 top-0 z-[200000000] flex h-screen w-full items-center justify-center bg-[#0000002a] transition-all duration-300`}
     >
+      {isLoading && (
+        <Flex className="fixed left-0 top-0 z-[99999999] h-screen w-full items-center justify-center bg-white dark:bg-slate-900">
+          <Loader />
+        </Flex>
+      )}
       <div
         className={`${
-          isModalOpen ? " scale-[1] opacity-100" : " scale-[0] opacity-0"
-        } w-[90%] sm:w-[80%] md:w-[35%] bg-white dark:bg-slate-700 rounded-lg transition-all duration-300 mx-auto mt-8`}
+          isModalOpen ? "scale-[1] opacity-100" : "scale-[0] opacity-0"
+        } mx-auto mt-8 w-[90%] rounded-lg bg-white transition-all duration-300 dark:bg-slate-700 sm:w-[80%] md:w-[35%]`}
       >
-        <div className="w-full flex items-end p-4 justify-between border-b border-[#d1d1d1]">
+        <div className="flex w-full items-end justify-between border-b border-[#d1d1d1] p-4">
           <h1 className="text-[1.5rem] font-bold text-black dark:text-white">
             Edit Category
           </h1>
           <RxCross1
-            className="p-2 text-[2.5rem] hover:bg-[#e7e7e7] text-red-600 rounded-full transition-all duration-300 cursor-pointer"
+            className="cursor-pointer rounded-full p-2 text-[2.5rem] text-red-600 transition-all duration-300 hover:bg-[#e7e7e7]"
             onClick={() => handleClose()}
           />
         </div>
@@ -123,7 +183,7 @@ const EditCategory = ({
                 setCategory({ ...category, name: e.target.value })
               }
               placeholder="Category Name"
-              className="py-2 px-3 border border-[#d1d1d1] rounded-md w-full focus:outline-none mt-1 focus:border-[#3B9DF8]"
+              className="mt-1 w-full rounded-md border border-[#d1d1d1] px-3 py-2 focus:border-[#3B9DF8] focus:outline-none"
             />
           </div>
           <div>
@@ -142,7 +202,7 @@ const EditCategory = ({
                 setCategory({ ...category, description: e.target.value })
               }
               placeholder="Description"
-              className="py-2 px-3 border border-[#d1d1d1] rounded-md w-full focus:outline-none mt-1 focus:border-[#3B9DF8]"
+              className="mt-1 w-full rounded-md border border-[#d1d1d1] px-3 py-2 focus:border-[#3B9DF8] focus:outline-none"
             />
           </div>
 
@@ -162,46 +222,46 @@ const EditCategory = ({
                 setCategory({ ...category, subcategories: e.target.value })
               }
               placeholder="Sub Categories"
-              className="py-2 px-3 border border-[#d1d1d1] rounded-md w-full focus:outline-none mt-1 focus:border-[#3B9DF8]"
+              className="mt-1 w-full rounded-md border border-[#d1d1d1] px-3 py-2 focus:border-[#3B9DF8] focus:outline-none"
             />
           </div>
 
-          <div className="flex justify-center items-center w-full flex-col mb-5">
+          <div className="mb-5 flex w-full flex-col items-center justify-center">
             <div
               className={`${
                 isDragging ? "border-blue-300 !bg-blue-50" : "border-gray-300"
               } ${
-                selectedImage ? "" : "border-dashed border-2 p-6"
-              } rounded-lg w-full h-64 flex flex-col justify-center items-center bg-white dark:bg-slate-900`}
+                selectedImage ? "" : "border-2 border-dashed p-6"
+              } flex h-64 w-full flex-col items-center justify-center rounded-lg bg-white dark:bg-slate-900`}
               onDragEnter={handleDragEnter}
               onDragLeave={handleDragLeave}
               onDrop={handleFileDrop}
               onDragOver={handleImageDragOver}
             >
               {selectedImage ? (
-                <Flex className="items-center gap-5 flex-wrap">
+                <Flex className="flex-wrap items-center gap-5">
                   <img
                     src={displayImage}
                     alt="Preview"
-                    className="w-[200px] h-[200px] object-cover rounded-lg"
+                    className="h-[200px] w-[200px] rounded-lg object-cover"
                   />
                 </Flex>
               ) : (
                 <>
                   {isDragging ? (
-                    <h5 className="text-[2rem] text-blue-700 font-[600]">
+                    <h5 className="text-[2rem] font-[600] text-blue-700">
                       Drop Here
                     </h5>
                   ) : (
                     <>
-                      <IoCloudUploadOutline className="text-[3rem] mb-4 text-gray-400" />
-                      <p className="text-gray-500 text-center text-[1.1rem] font-[500] mb-2">
+                      <IoCloudUploadOutline className="mb-4 text-[3rem] text-gray-400" />
+                      <p className="mb-2 text-center text-[1.1rem] font-[500] text-gray-500">
                         Drag & Drop your image here
                       </p>
                       <p className="text-gray-400">or</p>
                       <label
                         htmlFor="file-upload"
-                        className="cursor-pointer py-2 px-4 bg-gray-200 rounded-md mt-2"
+                        className="mt-2 cursor-pointer rounded-md bg-gray-200 px-4 py-2"
                       >
                         Browse File
                       </label>
@@ -219,14 +279,14 @@ const EditCategory = ({
             </div>
 
             {errorMessage && (
-              <p className="text-red-500 mt-4">{errorMessage}</p>
+              <p className="mt-4 text-red-500">{errorMessage}</p>
             )}
 
             {selectedImage && (
               <div className="mt-4">
                 <button
                   onClick={() => setSelectedImage(null)}
-                  className="bg-red-500 text-white px-4 py-2 rounded-lg"
+                  className="rounded-lg bg-red-500 px-4 py-2 text-white"
                 >
                   Remove Image
                 </button>
@@ -236,7 +296,7 @@ const EditCategory = ({
 
           <button
             type="submit"
-            className="py-2 px-4 w-full bg-[#3B9DF8] text-[#fff] rounded-md"
+            className="w-full rounded-md bg-[#3B9DF8] px-4 py-2 text-[#fff]"
           >
             Update
           </button>
