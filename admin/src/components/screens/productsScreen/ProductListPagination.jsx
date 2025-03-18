@@ -13,7 +13,8 @@ const ProductListPagination = ({
   handleEdit,
 }) => {
   const [loading, setLoading] = useState(false);
-  const accessToken = Cookies.get("token");
+  const accessToken = Cookies.get("accessToken"); // access token
+  const sessionToken = Cookies.get("sessionToken"); // access token
   const items = products;
 
   function Items({ currentItems }) {
@@ -30,7 +31,7 @@ const ProductListPagination = ({
           {
             headers: {
               "Content-Type": "multipart/form-data",
-              Cookie: `token=${accessToken}`,
+              Cookie: `accessToken=${accessToken};sessionToken=${sessionToken}`,
             },
             withCredentials: true,
           },
@@ -78,7 +79,7 @@ const ProductListPagination = ({
           {
             headers: {
               "Content-Type": "multipart/form-data",
-              Cookie: `token=${accessToken}`,
+              Cookie: `accessToken=${accessToken};sessionToken=${sessionToken}`,
             },
             withCredentials: true,
           },

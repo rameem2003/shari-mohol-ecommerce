@@ -15,6 +15,7 @@ const EditProduct = ({
   onUpdate,
 }) => {
   const accessToken = Cookies.get("accessToken"); // access token
+  const sessionToken = Cookies.get("sessionToken"); // access token
   const [isDragging, setIsDragging] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [displayImage, setDisplayImage] = useState(null);
@@ -121,7 +122,7 @@ const EditProduct = ({
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Cookie: `accessToken=${accessToken}`,
+            Cookie: `accessToken=${accessToken};sessionToken=${sessionToken}`,
           },
           withCredentials: true,
         },
@@ -186,8 +187,8 @@ const EditProduct = ({
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5 p-4">
-          <Flex className="items-center justify-between gap-2">
-            <div>
+          <Flex className="flex-col flex-wrap items-center justify-between gap-2 lg:flex-row lg:flex-nowrap">
+            <div className="w-full lg:w-1/2">
               <label
                 htmlFor="name"
                 className="text-[1rem] font-[500] text-[#464646] dark:text-white"
@@ -206,7 +207,7 @@ const EditProduct = ({
                 className="mt-1 w-full rounded-md border border-[#d1d1d1] px-3 py-2 focus:border-[#3B9DF8] focus:outline-none"
               />
             </div>
-            <div>
+            <div className="w-full lg:w-1/2">
               <label
                 htmlFor="description"
                 className="text-[1rem] font-[500] text-[#464646] dark:text-white"
@@ -227,8 +228,8 @@ const EditProduct = ({
             </div>
           </Flex>
 
-          <Flex className="items-center justify-between gap-2">
-            <div>
+          <Flex className="flex-col flex-wrap items-center justify-between gap-2 lg:flex-row lg:flex-nowrap">
+            <div className="w-full lg:w-1/2">
               <label
                 htmlFor="sellingPrice"
                 className="text-[1rem] font-[500] text-[#464646] dark:text-white"
@@ -251,7 +252,7 @@ const EditProduct = ({
               />
             </div>
 
-            <div>
+            <div className="w-full lg:w-1/2">
               <label
                 htmlFor="sellingPrice"
                 className="text-[1rem] font-[500] text-[#464646] dark:text-white"
@@ -275,8 +276,8 @@ const EditProduct = ({
             </div>
           </Flex>
 
-          <Flex className="items-center justify-between gap-2">
-            <div>
+          <Flex className="flex-col flex-wrap items-center justify-between gap-2 lg:flex-row lg:flex-nowrap">
+            <div className="w-full lg:w-1/2">
               <label
                 htmlFor="colors"
                 className="text-[1rem] font-[500] text-[#464646] dark:text-white"
@@ -296,7 +297,7 @@ const EditProduct = ({
               />
             </div>
 
-            <div>
+            <div className="w-full lg:w-1/2">
               <label
                 htmlFor="sizes"
                 className="text-[1rem] font-[500] text-[#464646] dark:text-white"

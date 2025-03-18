@@ -9,6 +9,8 @@ import AllCategory from "./pages/AllCategory";
 import AllProducts from "./pages/AllProducts";
 import Login from "./pages/Login";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import AdvertisementPage from "./pages/AdvertisementPage";
+import UsersManage from "./pages/UsersManage";
 
 const App = () => {
   return (
@@ -60,6 +62,22 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <OrdersPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/advertisement"
+            element={
+              <ProtectedRoute>
+                <AdvertisementPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/manageUsers"
+            element={
+              <ProtectedRoute>
+                <UsersManage />
               </ProtectedRoute>
             }
           />

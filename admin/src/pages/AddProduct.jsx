@@ -10,6 +10,7 @@ import { IoCloudUploadOutline } from "react-icons/io5";
 
 const AddProduct = () => {
   const accessToken = Cookies.get("accessToken"); // access token
+  const sessionToken = Cookies.get("sessionToken"); // access token
   const [isActive, setIsActive] = useState(false);
   const [isActive1, setIsActive1] = useState(false);
   const [mainCategory, setMainCategory] = useState("Select Option");
@@ -149,7 +150,7 @@ const AddProduct = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Cookie: `accessToken=${accessToken}`,
+            Cookie: `accessToken=${accessToken};sessionToken=${sessionToken}`,
           },
         },
       );
@@ -194,8 +195,8 @@ const AddProduct = () => {
       )}
 
       <form action="" className="mt-10" onSubmit={handleUpload}>
-        <Flex className="mb-5 items-center gap-5">
-          <div className="w-1/2">
+        <Flex className="mb-5 flex-col flex-wrap items-center gap-5 lg:flex-row lg:flex-nowrap">
+          <div className="w-full lg:w-1/2">
             <div className="w-full">
               <label
                 htmlFor="name"
@@ -217,7 +218,7 @@ const AddProduct = () => {
               />
             </div>
           </div>
-          <div className="w-1/2">
+          <div className="w-full lg:w-1/2">
             <div className="w-full">
               <label
                 htmlFor="description"
@@ -241,8 +242,8 @@ const AddProduct = () => {
           </div>
         </Flex>
 
-        <Flex className="mb-5 items-center gap-5">
-          <div className="w-1/2">
+        <Flex className="mb-5 flex-col flex-wrap items-center gap-5 lg:flex-row lg:flex-nowrap">
+          <div className="w-full lg:w-1/2">
             <div className="w-full">
               <label
                 htmlFor="selling"
@@ -267,7 +268,7 @@ const AddProduct = () => {
               />
             </div>
           </div>
-          <div className="w-1/2">
+          <div className="w-full lg:w-1/2">
             <div className="w-full">
               <label
                 htmlFor="discount"
@@ -293,8 +294,8 @@ const AddProduct = () => {
           </div>
         </Flex>
 
-        <Flex className="mb-5 items-center gap-5">
-          <div className="w-1/2">
+        <Flex className="mb-5 flex-col flex-wrap items-center gap-5 lg:flex-row lg:flex-nowrap">
+          <div className="w-full lg:w-1/2">
             <div className="w-full">
               <label
                 htmlFor="colors"
@@ -317,7 +318,7 @@ const AddProduct = () => {
               />
             </div>
           </div>
-          <div className="w-1/2">
+          <div className="w-full lg:w-1/2">
             <div className="w-full">
               <label
                 htmlFor="size"
@@ -340,8 +341,8 @@ const AddProduct = () => {
           </div>
         </Flex>
 
-        <Flex className="mb-5 items-center gap-5">
-          <div className="w-1/3">
+        <Flex className="mb-5 flex-col flex-wrap items-center gap-5 lg:flex-row lg:flex-nowrap">
+          <div className="w-full lg:w-1/3">
             <div className="mb-4 flex w-full flex-col justify-start gap-5">
               <label
                 htmlFor="name"
@@ -387,7 +388,7 @@ const AddProduct = () => {
               </button>
             </div>
           </div>
-          <div className="w-1/3">
+          <div className="w-full lg:w-1/3">
             <div className="mb-4 flex w-full flex-col justify-start gap-5">
               <label
                 htmlFor="name"
@@ -433,7 +434,7 @@ const AddProduct = () => {
             </div>
           </div>
 
-          <div className="w-1/3">
+          <div className="w-full lg:w-1/3">
             <div className="w-full">
               <label
                 htmlFor="stock"

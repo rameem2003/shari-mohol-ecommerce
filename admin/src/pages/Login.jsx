@@ -18,9 +18,12 @@ const Login = () => {
   const dispatch = useDispatch(); // dispatch instance
 
   const accessToken = Cookies.get("accessToken"); // access token
+  const sessionToken = Cookies.get("sessionToken"); // access token
+
+  console.log(accessToken, sessionToken);
 
   useEffect(() => {
-    if (accessToken) {
+    if (accessToken || sessionToken) {
       navigate("/");
     }
   }, []);

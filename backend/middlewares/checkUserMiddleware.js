@@ -74,14 +74,14 @@ const checkUserMiddleware = (req, res, next) => {
       );
 
       // Create Session Token (Long-lived)
-      const newSessionToken = jwt.sign(
-        { email: existUser.email },
-        process.env.SESSION_SECRET,
-        { expiresIn: "7d" } // Expires in 7 days
-      );
+      // const newSessionToken = jwt.sign(
+      //   { email: existUser.email },
+      //   process.env.SESSION_SECRET,
+      //   { expiresIn: "7d" } // Expires in 7 days
+      // );
 
-      user.sessionToken = newSessionToken;
-      await user.save();
+      // user.sessionToken = newSessionToken;
+      // await user.save();
 
       res.cookie("accessToken", accessToken, {
         // httpOnly: true,

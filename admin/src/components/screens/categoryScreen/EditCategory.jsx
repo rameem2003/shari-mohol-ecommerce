@@ -15,6 +15,7 @@ const EditCategory = ({
   onUpdate,
 }) => {
   const accessToken = Cookies.get("accessToken"); // access token
+  const sessionToken = Cookies.get("sessionToken"); // access token
   const [isDragging, setIsDragging] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [displayImage, setDisplayImage] = useState(null);
@@ -105,7 +106,7 @@ const EditCategory = ({
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Cookie: `accessToken=${accessToken}`,
+            Cookie: `accessToken=${accessToken};sessionToken=${sessionToken}`,
           },
           withCredentials: true,
         },

@@ -51,16 +51,15 @@ const checkAdminMiddleware = (req, res, next) => {
     }
 
     jwt.verify(sessionToken, process.env.JWT_SECRET, async (err, decoded) => {
-      if (err)
+      if (err) {
         return res
           .status(403)
           .json({ success: false, msg: "Invalid Session Token" });
+      }
 
       const user = await authModel.findOne({ email: decoded.email });
       if (!user || user.sessionToken !== sessionToken) {
-        return res
-          .status(403)
-          .json({ success: false, msg: "Invalid Session Token" });
+        return res.status(403).json({ success: false, msg: "Invalid Admin" });
       }
 
       let existUser = {
@@ -80,16 +79,6 @@ const checkAdminMiddleware = (req, res, next) => {
         process.env.JWT_SECRET,
         { expiresIn: "15m" } // Expires in 15 minutes
       );
-
-      // Create Session Token (Long-lived)
-      const newSessionToken = jwt.sign(
-        { email: existUser.email },
-        process.env.SESSION_SECRET,
-        { expiresIn: "1d" } // Expires in 1 day
-      );
-
-      user.sessionToken = newSessionToken;
-      await user.save();
 
       res.cookie("accessToken", accessToken, {
         // httpOnly: true,

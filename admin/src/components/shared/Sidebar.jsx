@@ -10,7 +10,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { RiAccountCircleLine } from "react-icons/ri";
 import { TbCategoryFilled } from "react-icons/tb";
 import { MdCategory } from "react-icons/md";
-import { FaShoppingCart, FaUsers } from "react-icons/fa";
+import { FaHome, FaShoppingCart, FaUsers } from "react-icons/fa";
 import { Link } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
@@ -99,11 +99,11 @@ const ResponsiveSidebar = () => {
                 } group relative flex w-full cursor-pointer items-center rounded-md p-[5px] transition-all duration-200`}
               >
                 <div className="flex items-center gap-[8px]">
-                  <GoHome className="text-[1.3rem] text-gray-500 dark:text-white" />
+                  <FaHome className="text-[1.3rem] text-gray-500 dark:text-white" />
                   <p
                     className={`${
                       isCollapse1 ? "inline" : "hidden"
-                    } dark:text-white} text-[1rem] font-bold text-gray-500`}
+                    } text-[1rem] font-bold text-gray-500 dark:text-white`}
                   >
                     Dashboard
                   </p>
@@ -373,33 +373,35 @@ const ResponsiveSidebar = () => {
               </div>
             </div>
 
-            <div
-              className={`${
-                isCollapse1 ? "justify-between" : "justify-center"
-              } group relative flex w-full cursor-pointer items-center rounded-md p-[5px] transition-all duration-200`}
-            >
-              <div className="flex items-center gap-[8px]">
-                <FaUsers className="text-[1.3rem] text-gray-500 dark:text-white" />
-                <p
-                  className={`${
-                    isCollapse1 ? "inline" : "hidden"
-                  } text-[1rem] font-bold text-gray-500 dark:text-white`}
-                >
-                  Users Manage
-                </p>
-              </div>
-
-              {/* tooltip */}
+            <Link to="/manageUsers">
               <div
                 className={`${
-                  isCollapse1 ? "hidden" : "inline"
-                } absolute right-[-96px] top-0 z-[-1] translate-x-[20px] opacity-0 transition-all duration-500 group-hover:z-[1] group-hover:translate-x-[10px] group-hover:opacity-100`}
+                  isCollapse1 ? "justify-between" : "justify-center"
+                } group relative flex w-full cursor-pointer items-center rounded-md p-[5px] transition-all duration-200`}
               >
-                <p className="text-secondary w-max rounded bg-slate-900 px-3 py-[5px] text-[0.9rem] text-white">
-                  Users Manage
-                </p>
+                <div className="flex items-center gap-[8px]">
+                  <FaUsers className="text-[1.3rem] text-gray-500 dark:text-white" />
+                  <p
+                    className={`${
+                      isCollapse1 ? "inline" : "hidden"
+                    } text-[1rem] font-bold text-gray-500 dark:text-white`}
+                  >
+                    Users Manage
+                  </p>
+                </div>
+
+                {/* tooltip */}
+                <div
+                  className={`${
+                    isCollapse1 ? "hidden" : "inline"
+                  } absolute right-[-96px] top-0 z-[-1] translate-x-[20px] opacity-0 transition-all duration-500 group-hover:z-[1] group-hover:translate-x-[10px] group-hover:opacity-100`}
+                >
+                  <p className="text-secondary w-max rounded bg-slate-900 px-3 py-[5px] text-[0.9rem] text-white">
+                    Users Manage
+                  </p>
+                </div>
               </div>
-            </div>
+            </Link>
           </div>
         </div>
       </div>

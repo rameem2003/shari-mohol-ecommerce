@@ -1,28 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Flex from "../components/common/Flex";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
-import Loader from "../components/common/Loader";
 import axios from "axios";
+import Loader from "../components/common/Loader";
 import { IoCloudUploadOutline } from "react-icons/io5";
+import Image from "../components/common/Image";
+import { FaStar } from "react-icons/fa";
 
-const AddCategory = () => {
+const AdvertisementPage = () => {
   const accessToken = Cookies.get("accessToken"); // access token
   const sessionToken = Cookies.get("sessionToken"); // access token
-  const [isDragging, setIsDragging] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [displayImage, setDisplayImage] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  // upload product local object
-  const [category, setCategory] = useState({
-    name: "",
+  const [isDragging, setIsDragging] = useState(false);
+  const [banner, setBanner] = useState({
+    banner: null,
     description: "",
-    subcategory: "",
-    image: null,
+    advertisementLink: "",
   });
+  const [banners, setBanners] = useState([]);
 
-  // Handle file selection when dropped or clicked
   const handleFileDrop = (e) => {
     e.preventDefault();
     const file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
@@ -30,7 +30,7 @@ const AddCategory = () => {
     setSelectedImage(file);
     handleFile(file);
     setIsDragging(false);
-    setCategory({ ...category, image: file });
+    setBanner({ ...banner, banner: file });
   };
 
   // Function to validate and display the image
@@ -42,7 +42,7 @@ const AddCategory = () => {
       const reader = new FileReader();
       console.log(reader.result);
 
-      reader.onload = () => setSelectedImage(reader.result);
+      reader.onload = () => setSelectedImages(reader.result);
       //   reader.readAsDataURL(file);
 
       const url = URL.createObjectURL(file);
@@ -66,22 +66,19 @@ const AddCategory = () => {
     setIsDragging(false);
   };
 
-  // Product upload
-  const handleUpload = async (e) => {
+  // function for upload banner
+  const handleUploadBanner = async (e) => {
     e.preventDefault();
-    console.log(category);
-
     setIsLoading(true);
-    let data = new FormData();
-    data.append("name", category.name);
-    data.append("description", category.description);
-    data.append("subCategories", category.subcategory);
-    data.append("image", category.image);
+    const formData = new FormData();
+    formData.append("banner", banner.banner);
+    formData.append("description", banner.description);
+    formData.append("advertisementLink", banner.advertisementLink);
 
     try {
       let res = await axios.post(
-        `${import.meta.env.VITE_API}/category/create`,
-        data,
+        `${import.meta.env.VITE_API}/banner/create`,
+        formData,
         {
           withCredentials: true,
         },
@@ -99,7 +96,15 @@ const AddCategory = () => {
         confirmButtonText: "Ok",
         confirmButtonColor: "green",
         icon: "success",
-      });
+      })
+        .then((result) => {
+          if (result.isConfirmed) {
+            location.reload();
+          }
+        })
+        .finally(() => {
+          location.reload();
+        });
 
       console.log(res.data);
     } catch (error) {
@@ -120,10 +125,77 @@ const AddCategory = () => {
       });
     }
   };
+
+  // fetch all banners
+  const fetchAllBanners = async () => {
+    let res = await axios.get(`${import.meta.env.VITE_API}/banner/all`);
+    setBanners(res.data.data);
+  };
+
+  // handle delete banner
+  const handleBannerDelete = async (id) => {
+    setIsLoading(true);
+    try {
+      let res = await axios.delete(
+        `${import.meta.env.VITE_API}/banner/delete/${id}`,
+        {
+          withCredentials: true,
+        },
+        {
+          headers: {
+            Cookie: `accessToken=${accessToken};sessionToken=${sessionToken}`,
+          },
+        },
+      );
+
+      setIsLoading(false);
+      Swal.fire({
+        title: res.data.msg,
+        confirmButtonText: "Ok",
+        confirmButtonColor: "green",
+        icon: "success",
+      })
+        .then((result) => {
+          if (result.isConfirmed) {
+            location.reload();
+          }
+        })
+        .finally(() => {
+          location.reload();
+        });
+
+      console.log(res.data);
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+
+      Swal.fire({
+        title: error.response.data.msg,
+        showConfirmButton: false,
+        showCancelButton: true,
+        cancelButtonText: "Ok",
+        cancelButtonColor: "red",
+        icon: "error",
+      })
+        .then((result) => {
+          if (result.isConfirmed) {
+            location.reload();
+          }
+        })
+        .finally(() => {
+          location.reload();
+        });
+    }
+  };
+
+  useEffect(() => {
+    fetchAllBanners();
+  }, []);
+
   return (
     <main className="w-full overflow-y-scroll border-l-[1px] border-black bg-white p-2 dark:border-white dark:bg-slate-900">
       <h2 className="text-2xl font-semibold text-black dark:text-white">
-        Add New Category
+        Place and Manage Your Advertisements Banner
       </h2>
 
       {isLoading && (
@@ -132,74 +204,48 @@ const AddCategory = () => {
         </Flex>
       )}
 
-      <form action="" className="mt-10" onSubmit={handleUpload}>
-        <Flex className="mb-5 items-center gap-5">
-          <div className="w-1/2">
+      <form action="" className="mt-10">
+        <Flex className="mb-5 flex-col flex-wrap items-center gap-5 lg:flex-row lg:flex-nowrap">
+          <div className="w-full lg:w-1/2">
             <div className="w-full">
               <label
-                htmlFor="name"
+                htmlFor="addDescription"
                 className="text-text text-[15px] font-[400] text-black dark:text-white"
               >
-                Category Name <span className="text-red-500">*</span>
+                Banner Description
               </label>
               <input
                 required
-                value={category.name}
+                value={banner.description}
                 onChange={(e) =>
-                  setCategory({ ...category, name: e.target.value })
+                  setBanner({ ...banner, description: e.target.value })
                 }
                 type="text"
-                name="name"
-                id="name"
-                placeholder="Your name"
+                name="addDescription"
+                id="addDescription"
+                placeholder="Advertisement Description"
                 className="border-border focus:border-primary mt-1 w-full rounded-md border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 dark:bg-transparent dark:text-white"
               />
             </div>
           </div>
-          <div className="w-1/2">
+          <div className="w-full lg:w-1/2">
             <div className="w-full">
               <label
-                htmlFor="description"
+                htmlFor="addLink"
                 className="text-text text-[15px] font-[400] text-black dark:text-white"
               >
-                Category Description <span className="text-red-500">*</span>
+                Advertisement Link <span className="text-red-500">*</span>
               </label>
               <input
                 required
-                value={category.description}
+                value={banner.advertisementLink}
                 onChange={(e) =>
-                  setCategory({ ...category, description: e.target.value })
+                  setBanner({ ...banner, advertisementLink: e.target.value })
                 }
                 type="text"
-                name="description"
-                id="description"
-                placeholder="Product Description"
-                className="border-border focus:border-primary mt-1 w-full rounded-md border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 dark:bg-transparent dark:text-white"
-              />
-            </div>
-          </div>
-        </Flex>
-
-        <Flex className="mb-5 items-center gap-5">
-          <div className="w-1/2">
-            <div className="w-full">
-              <label
-                htmlFor="subcategory"
-                className="text-text text-[15px] font-[400] text-black dark:text-white"
-              >
-                Sub Categories (Input Comma Separated){" "}
-                <span className="text-red-500">*</span>
-              </label>
-              <input
-                required
-                value={category.subcategory}
-                onChange={(e) =>
-                  setCategory({ ...category, subcategory: e.target.value })
-                }
-                type="text"
-                name="subcategory"
-                id="subcategory"
-                placeholder="Your name"
+                name="addLink"
+                id="addLink"
+                placeholder="Advertisement Link"
                 className="border-border focus:border-primary mt-1 w-full rounded-md border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 dark:bg-transparent dark:text-white"
               />
             </div>
@@ -240,13 +286,13 @@ const AddCategory = () => {
                     </p>
                     <p className="text-gray-400">or</p>
                     <label
-                      htmlFor="file-upload"
+                      htmlFor="file-upload2"
                       className="mt-2 cursor-pointer rounded-md bg-gray-200 px-4 py-2"
                     >
                       Browse File
                     </label>
                     <input
-                      id="file-upload"
+                      id="file-upload2"
                       type="file"
                       accept="image/*"
                       className="hidden"
@@ -273,14 +319,56 @@ const AddCategory = () => {
         </div>
 
         <button
+          onClick={handleUploadBanner}
           type="submit"
           className="hover:bg-secondary w-full rounded border border-[#3B9DF8] bg-blue-500 px-6 py-2 text-[#fff] transition duration-300"
         >
           Add
         </button>
       </form>
+
+      <section className="mt-5">
+        <Flex className="mt-5 flex-wrap gap-5">
+          {banners.map((b, i) => (
+            <div
+              className="boxShadow relative w-[24%] rounded-md bg-white"
+              key={i}
+            >
+              <img
+                src={b.banner}
+                alt="image"
+                className="h-[250px] w-full rounded-t-md object-cover"
+              />
+
+              <span
+                onClick={() => handleBannerDelete(b._id)}
+                className="absolute right-4 top-4 cursor-pointer rounded-full bg-red-500 px-3 py-0.5 text-[0.9rem] text-white"
+              >
+                Delete
+              </span>
+
+              <div className="p-3">
+                <div className="flex items-center gap-[5px]">
+                  <a
+                    className="font-semibold text-red-500"
+                    href={b.advertisementLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Link
+                  </a>
+                </div>
+
+                <h1 className="mt-1.5 text-[20px] font-bold leading-[24px] text-black">
+                  {b.description}
+                </h1>
+              </div>
+            </div>
+          ))}
+        </Flex>
+      </section>
     </main>
   );
 };
 
-export default AddCategory;
+export default AdvertisementPage;

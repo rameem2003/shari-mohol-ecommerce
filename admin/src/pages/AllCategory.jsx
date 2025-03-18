@@ -12,6 +12,7 @@ import { CiEdit } from "react-icons/ci";
 
 const AllCategory = () => {
   const accessToken = Cookies.get("accessToken"); // access token
+  const sessionToken = Cookies.get("sessionToken"); // access token
   const [categories, setCategories] = useState([]);
   const [openActionMenuId, setOpenActionMenuId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -54,7 +55,7 @@ const AllCategory = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Cookie: `accessToken=${accessToken}`,
+            Cookie: `accessToken=${accessToken};sessionToken=${sessionToken}`,
           },
         },
       );
