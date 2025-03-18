@@ -9,6 +9,8 @@ import { useNavigate } from "react-router";
 import { adminLoginReducer } from "../redux/features/AdminSlice";
 
 const Login = () => {
+  const accessToken = Cookies.get("accessToken"); // access token
+  const sessionToken = Cookies.get("sessionToken"); // access token
   const [isEyeOpen, setIsEyeOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,9 +18,6 @@ const Login = () => {
   const [error, setError] = useState(false);
   const navigate = useNavigate(); // navigation instance
   const dispatch = useDispatch(); // dispatch instance
-
-  const accessToken = Cookies.get("accessToken"); // access token
-  const sessionToken = Cookies.get("sessionToken"); // access token
 
   console.log(accessToken, sessionToken);
 
@@ -28,6 +27,7 @@ const Login = () => {
     }
   }, []);
 
+  // function for handle submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -75,7 +75,9 @@ const Login = () => {
           Login Here
         </h2>
 
+        {/* login form */}
         <form className="mt-8" action="" onSubmit={handleSubmit}>
+          {/* validation error */}
           {error && (
             <div className="flex items-center gap-3 rounded bg-[#fdeded] p-3">
               <MdErrorOutline className="text-[1.5rem] text-[#d74242]" />

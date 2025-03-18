@@ -493,7 +493,7 @@ const updateUser = async (req, res) => {
 
   const updateFields = {};
 
-  const allFields = ["name", "phone", "address", "photo"];
+  const allFields = ["name", "phone", "role", "isVarify", "address", "photo"];
 
   allFields.forEach((field) => {
     if (req.body[field] !== undefined) {

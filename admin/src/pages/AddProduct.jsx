@@ -194,6 +194,7 @@ const AddProduct = () => {
         </Flex>
       )}
 
+      {/* Form */}
       <form action="" className="mt-10" onSubmit={handleUpload}>
         <Flex className="mb-5 flex-col flex-wrap items-center gap-5 lg:flex-row lg:flex-nowrap">
           <div className="w-full lg:w-1/2">

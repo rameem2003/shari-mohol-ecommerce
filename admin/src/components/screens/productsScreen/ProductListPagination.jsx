@@ -115,6 +115,7 @@ const ProductListPagination = ({
     };
     return (
       <Flex className="flex-wrap justify-between">
+        {/* Product List Display */}
         {currentItems &&
           currentItems.map((p, index) => (
             <ProductCard

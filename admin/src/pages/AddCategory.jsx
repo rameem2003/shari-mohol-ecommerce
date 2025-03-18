@@ -132,6 +132,7 @@ const AddCategory = () => {
         </Flex>
       )}
 
+      {/* Form section */}
       <form action="" className="mt-10" onSubmit={handleUpload}>
         <Flex className="mb-5 items-center gap-5">
           <div className="w-1/2">

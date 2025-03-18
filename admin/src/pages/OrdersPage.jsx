@@ -22,13 +22,13 @@ const OrdersPage = () => {
     let res = await axios.get(`${import.meta.env.VITE_API}/order/all`);
     setFilterResult(
       res.data.data.sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-      )
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+      ),
     );
     setOrders(
       res.data.data.sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-      )
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+      ),
     );
   };
   const toggleActionMenu = (id) => {
@@ -41,7 +41,7 @@ const OrdersPage = () => {
       setFilterResult(orders);
     } else {
       const searchResult = orders.filter((searchItem) =>
-        searchItem.phone.includes(e.target.value.toLowerCase())
+        searchItem.phone.includes(e.target.value.toLowerCase()),
       );
       setFilterResult(searchResult); // state for store the search result
     }
@@ -64,9 +64,9 @@ const OrdersPage = () => {
     fetchOrders();
   }, []);
   return (
-    <main className="bg-white dark:bg-slate-900 border-l-[1px] border-black p-2 dark:border-white w-full overflow-y-scroll">
+    <main className="w-full overflow-y-scroll border-l-[1px] border-black bg-white p-2 dark:border-white dark:bg-slate-900">
       <Flex className="items-center justify-between">
-        <h2 className=" text-black dark:text-white text-2xl font-semibold">
+        <h2 className="text-2xl font-semibold text-black dark:text-white">
           All Order's
         </h2>
 
@@ -75,34 +75,36 @@ const OrdersPage = () => {
             placeholder="Search by phone..."
             // value={search}
             onChange={handleSearch}
-            className="max-w-sm py-2.5 px-4 border border-gray-200 rounded-md outline-none focus:border-blue-300"
+            className="max-w-sm rounded-md border border-gray-200 px-4 py-2.5 outline-none focus:border-blue-300"
           />
         </div>
       </Flex>
 
-      <div className="customTable w-full rounded-md ">
+      {/* Order's Table */}
+
+      <section className="customTable w-full rounded-md">
         <table className="w-full text-sm">
           <thead className="bg-gray-200 dark:bg-slate-900">
             <tr>
-              <th className="text-left text-black font-medium dark:text-white p-3">
+              <th className="p-3 text-left font-medium text-black dark:text-white">
                 Order ID
               </th>
-              <th className="text-left text-black font-medium dark:text-white p-3">
+              <th className="p-3 text-left font-medium text-black dark:text-white">
                 Customer Name
               </th>
-              <th className="text-left text-black font-medium dark:text-white p-3">
+              <th className="p-3 text-left font-medium text-black dark:text-white">
                 Phone
               </th>
-              <th className="text-left text-black font-medium dark:text-white p-3">
+              <th className="p-3 text-left font-medium text-black dark:text-white">
                 Grand Total
               </th>
-              <th className="text-left text-black font-medium dark:text-white p-3">
+              <th className="p-3 text-left font-medium text-black dark:text-white">
                 Items
               </th>
-              <th className="text-left text-black font-medium dark:text-white p-3">
+              <th className="p-3 text-left font-medium text-black dark:text-white">
                 Payment Status
               </th>
-              <th className="text-left text-black font-medium dark:text-white p-3">
+              <th className="p-3 text-left font-medium text-black dark:text-white">
                 Delivery Status
               </th>
 
@@ -113,71 +115,65 @@ const OrdersPage = () => {
           </thead>
           <tbody className="">
             {filterResult.map((item, index) => (
-              <tr className="border-t border-gray-200 " key={item._id}>
-                <td className=" p-3 text-black dark:text-white">{item._id}</td>
-                <td className=" p-3 text-black dark:text-white">{item.name}</td>
-                <td className=" p-3 text-black dark:text-white">
-                  {item.phone}
-                </td>
-                <td className=" p-3 text-black dark:text-white">
+              <tr className="border-t border-gray-200" key={item._id}>
+                <td className="p-3 text-black dark:text-white">{item._id}</td>
+                <td className="p-3 text-black dark:text-white">{item.name}</td>
+                <td className="p-3 text-black dark:text-white">{item.phone}</td>
+                <td className="p-3 text-black dark:text-white">
                   {item.grandTotal} BDT
                 </td>
-                <td className=" p-3 text-black dark:text-white">
+                <td className="p-3 text-black dark:text-white">
                   {item.cartItems.length}
                 </td>
-                <td className=" p-3 text-black dark:text-white">
+                <td className="p-3 text-black dark:text-white">
                   {item.paymentStatus == "paid" ? (
-                    <div className=" py-1.5 bg-[#18c964] text-white rounded-full text-[0.9rem] font-[500] flex items-center justify-center gap-2">
-                      <MdDone className="p-0.5 text-[1.4rem] rounded-full bg-[#18c964] text-[#fff]" />
+                    <div className="flex items-center justify-center gap-2 rounded-full bg-[#18c964] py-1.5 text-[0.9rem] font-[500] text-white">
+                      <MdDone className="rounded-full bg-[#18c964] p-0.5 text-[1.4rem] text-[#fff]" />
                       Paid
                     </div>
                   ) : (
-                    <div className=" py-1.5 bg-red-500 text-white rounded-full text-[0.9rem] font-[500] flex items-center justify-center gap-2">
-                      <FaTimes className="p-0.5 text-[1.4rem] rounded-full bg-red-500 text-[#fff]" />
+                    <div className="flex items-center justify-center gap-2 rounded-full bg-red-500 py-1.5 text-[0.9rem] font-[500] text-white">
+                      <FaTimes className="rounded-full bg-red-500 p-0.5 text-[1.4rem] text-[#fff]" />
                       Unpaid
                     </div>
                   )}
                 </td>
-                <td className=" p-3 text-black dark:text-white">
+                <td className="p-3 text-black dark:text-white">
                   {item.deliveryStatus == "delivered" ? (
-                    <div className=" py-1.5 bg-[#18c964] text-white rounded-full text-[0.9rem] font-[500] flex items-center justify-center gap-2">
-                      <MdDone className="p-0.5 text-[1.4rem] rounded-full bg-[#18c964] text-[#fff]" />
+                    <div className="flex items-center justify-center gap-2 rounded-full bg-[#18c964] py-1.5 text-[0.9rem] font-[500] text-white">
+                      <MdDone className="rounded-full bg-[#18c964] p-0.5 text-[1.4rem] text-[#fff]" />
                       Delivered
                     </div>
                   ) : (
-                    <div className=" py-1.5 bg-red-500 text-white rounded-full text-[0.9rem] font-[500] flex items-center justify-center gap-2">
-                      <FaTimes className="p-0.5 text-[1.4rem] rounded-full bg-red-500 text-[#fff]" />
+                    <div className="flex items-center justify-center gap-2 rounded-full bg-red-500 py-1.5 text-[0.9rem] font-[500] text-white">
+                      <FaTimes className="rounded-full bg-red-500 p-0.5 text-[1.4rem] text-[#fff]" />
                       Pending
                     </div>
                   )}
                 </td>
 
-                <td className="p-3 relative">
+                <td className="relative p-3">
                   <BsThreeDotsVertical
                     onClick={() => toggleActionMenu(item._id)}
-                    className="action-btn text-gray-600 dark:text-white cursor-pointer"
+                    className="action-btn cursor-pointer text-gray-600 dark:text-white"
                   />
 
                   <div
                     className={`${
                       openActionMenuId === item._id
-                        ? "opacity-100 scale-[1] z-30"
-                        : "opacity-0 scale-[0.8] z-[-1]"
-                    }
-                                               ${
-                                                 item._id > 1
-                                                   ? "bottom-[90%]"
-                                                   : "top-[90%]"
-                                               }
-                                               zenui-table absolute right-[80%] p-1.5 rounded-md bg-white shadow-md min-w-[160px] transition-all duration-100`}
+                        ? "z-30 scale-[1] opacity-100"
+                        : "z-[-1] scale-[0.8] opacity-0"
+                    } ${
+                      item._id > 1 ? "bottom-[90%]" : "top-[90%]"
+                    } zenui-table absolute right-[80%] min-w-[160px] rounded-md bg-white p-1.5 shadow-md transition-all duration-100`}
                   >
-                    <Link className="flex items-center gap-[8px] text-[0.9rem] py-1.5 px-2 w-full rounded-md text-gray-700 cursor-pointer hover:bg-gray-50 transition-all duration-200">
+                    <Link className="flex w-full cursor-pointer items-center gap-[8px] rounded-md px-2 py-1.5 text-[0.9rem] text-gray-700 transition-all duration-200 hover:bg-gray-50">
                       <MdDeleteOutline />
                       Delete
                     </Link>
                     <Link
                       to={`/view/${item._id}`}
-                      className="flex items-center gap-[8px] text-[0.9rem] py-1.5 px-2 w-full rounded-md text-gray-700 cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                      className="flex w-full cursor-pointer items-center gap-[8px] rounded-md px-2 py-1.5 text-[0.9rem] text-gray-700 transition-all duration-200 hover:bg-gray-50"
                     >
                       <IoEyeOutline />
                       View Details
@@ -190,11 +186,11 @@ const OrdersPage = () => {
         </table>
 
         {!orders?.length && (
-          <p className="text-[0.9rem] text-gray-500 py-6 text-center w-full">
+          <p className="w-full py-6 text-center text-[0.9rem] text-gray-500">
             No data found!
           </p>
         )}
-      </div>
+      </section>
     </main>
   );
 };

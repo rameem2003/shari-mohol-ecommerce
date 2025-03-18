@@ -17,12 +17,13 @@ const AllProducts = () => {
   }, []);
 
   return (
-    <main className="bg-white dark:bg-slate-900 border-l-[1px] border-black p-2 dark:border-white w-full overflow-y-scroll">
-      <h2 className=" text-black dark:text-white text-2xl font-semibold">
+    <main className="w-full overflow-y-scroll border-l-[1px] border-black bg-white p-2 dark:border-white dark:bg-slate-900">
+      <h2 className="text-2xl font-semibold text-black dark:text-white">
         All Products
       </h2>
 
-      <section className="mt-10 ">
+      {/* Product List Pagination */}
+      <section className="mt-10">
         <ProductListPagination itemsPerPage={6} products={allProducts} />
       </section>
     </main>

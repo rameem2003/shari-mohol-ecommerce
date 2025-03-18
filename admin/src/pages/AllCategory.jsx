@@ -122,6 +122,7 @@ const AllCategory = () => {
         </Flex>
       )}
 
+      {/* Category Table */}
       <div className="customTable w-full rounded-md">
         <table className="w-full text-sm">
           <thead className="bg-gray-200 dark:bg-slate-900">
@@ -205,6 +206,7 @@ const AllCategory = () => {
         )}
       </div>
 
+      {/* Edit Modal */}
       <EditCategory
         isModalOpen={isModalOpen}
         selectedCategory={selectedCategory}

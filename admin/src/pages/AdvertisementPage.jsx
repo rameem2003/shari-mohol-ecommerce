@@ -204,6 +204,7 @@ const AdvertisementPage = () => {
         </Flex>
       )}
 
+      {/* From */}
       <form action="" className="mt-10">
         <Flex className="mb-5 flex-col flex-wrap items-center gap-5 lg:flex-row lg:flex-nowrap">
           <div className="w-full lg:w-1/2">
@@ -327,6 +328,7 @@ const AdvertisementPage = () => {
         </button>
       </form>
 
+      {/* Display Banners */}
       <section className="mt-5">
         <Flex className="mt-5 flex-wrap gap-5">
           {banners.map((b, i) => (

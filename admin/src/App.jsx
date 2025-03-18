@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AdvertisementPage from "./pages/AdvertisementPage";
 import UsersManage from "./pages/UsersManage";
+import ViewProfile from "./pages/ViewProfile";
 
 const App = () => {
   return (
@@ -78,6 +79,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <UsersManage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile/:id"
+            element={
+              <ProtectedRoute>
+                <ViewProfile />
               </ProtectedRoute>
             }
           />

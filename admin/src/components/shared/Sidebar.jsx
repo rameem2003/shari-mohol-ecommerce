@@ -414,7 +414,7 @@ const ResponsiveSidebar = () => {
       >
         <div className="flex items-center gap-[10px]">
           <img
-            src={admin.photo}
+            src={admin?.photo}
             alt="avatar"
             className="h-[30px] w-[30px] cursor-pointer rounded-full object-cover"
           />
@@ -423,7 +423,7 @@ const ResponsiveSidebar = () => {
               isCollapse1 ? "inline" : "hidden"
             } text-[0.9rem] font-[500] text-gray-800 dark:text-white`}
           >
-            {admin.name}
+            {admin?.name}
           </h3>
         </div>
 
