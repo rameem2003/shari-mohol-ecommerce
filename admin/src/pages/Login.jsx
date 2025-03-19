@@ -138,6 +138,17 @@ const Login = () => {
           </button>
         </form>
       </div>
+      <p className="fixed bottom-2 right-2 font-semibold italic text-black dark:text-white">
+        Developed by:{" "}
+        <a
+          href="https://www.facebook.com/rolstudiobangladesh"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {" "}
+          ROL Studio Bangladesh || Mahmood Hassan Rameem
+        </a>
+      </p>
     </main>
   );
 };

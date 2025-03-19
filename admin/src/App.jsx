@@ -12,6 +12,8 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import AdvertisementPage from "./pages/AdvertisementPage";
 import UsersManage from "./pages/UsersManage";
 import ViewProfile from "./pages/ViewProfile";
+import ViewOrder from "./pages/ViewOrder";
+import ProfilePage from "./pages/profilePage";
 
 const App = () => {
   return (
@@ -87,6 +89,22 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <ViewProfile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/order/:id"
+            element={
+              <ProtectedRoute>
+                <ViewOrder />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/my-account"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
               </ProtectedRoute>
             }
           />

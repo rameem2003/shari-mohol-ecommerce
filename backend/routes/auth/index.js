@@ -10,6 +10,7 @@ const {
   allusers,
   logoutUser,
   changePassword,
+  deleteUser,
 } = require("../../controllers/auth.controller");
 const checkAdminMiddleware = require("../../middlewares/checkAdminMiddleware");
 const checkUserMiddleware = require("../../middlewares/checkUserMiddleware");
@@ -84,10 +85,15 @@ router.get("/auth/verify-admin", checkAdminMiddleware, verifyAdmin);
 router.get("/auth/verify-user", checkUserMiddleware, verifyUser);
 
 /**
- * Protected User Test Route
+ * Users Route
  * http://localhost:5000/api/v1/auth/users
  */
-
 router.get("/auth/users", checkAdminMiddleware, allusers);
+
+/**
+ * Delete User Route
+ * http://localhost:5000/api/v1/auth/delete/:id
+ */
+router.delete("/auth/delete/:id", checkAdminMiddleware, deleteUser);
 
 module.exports = router;

@@ -174,7 +174,7 @@ const loginUser = async (req, res) => {
           res.cookie("accessToken", accessToken, {
             // httpOnly: true,
             secure: false,
-            maxAge: 9000000, // 15 min
+            maxAge: 900000, // 15 min
           });
           return res.status(200).send({
             success: true,
@@ -209,7 +209,7 @@ const loginUser = async (req, res) => {
           res.cookie("accessToken", accessToken, {
             // httpOnly: true,
             secure: false,
-            maxAge: 9000000, // 15 min
+            maxAge: 900000, // 15 min
           });
           return res.status(200).send({
             success: true,
@@ -579,6 +579,42 @@ const allusers = async (req, res) => {
   });
 };
 
+/**
+ * Delete User
+ */
+const deleteUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    let targetUser = await authModel.findOneAndDelete({ _id: id });
+
+    if (targetUser.photo) {
+      let imagePath = targetUser.photo.split("/");
+      let oldImage = imagePath[imagePath.length - 1];
+
+      try {
+        await deleteFile(`${path.join(__dirname, "../temp")}/${oldImage}`);
+      } catch (fileDeleteErr) {
+        res.status(500).send({
+          success: false,
+          msg: "Internal Server Error",
+          fileDeleteErr,
+        });
+      }
+    }
+
+    res.status(200).send({
+      success: true,
+      msg: "User Deleted",
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      msg: "Internal Server Error",
+      error,
+    });
+  }
+};
+
 module.exports = {
   singleUser,
   updateUser,
@@ -592,4 +628,5 @@ module.exports = {
   verifyAdmin,
   verifyUser,
   allusers,
+  deleteUser,
 };

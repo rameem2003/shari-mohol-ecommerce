@@ -431,10 +431,13 @@ const ResponsiveSidebar = () => {
           <BsThreeDots className="cursor-pointer text-[1.2rem] text-gray-500 dark:text-white" />
 
           <ul className="boxShadow absolute left-[30px] top-[-52px] z-[-1] flex translate-x-[20px] flex-col gap-[3px] rounded-md bg-white p-[8px] opacity-0 transition-all duration-300 group-hover:z-30 group-hover:translate-x-0 group-hover:opacity-100 dark:bg-slate-900">
-            <li className="flex cursor-pointer items-center gap-[7px] rounded-md px-[8px] py-[4px] text-[0.9rem] text-gray-600 dark:text-white">
+            <Link
+              to="/my-account"
+              className="flex cursor-pointer items-center gap-[7px] rounded-md px-[8px] py-[4px] text-[0.9rem] text-gray-600 dark:text-white"
+            >
               <RiAccountCircleLine />
               Profile
-            </li>
+            </Link>
             <button
               onClick={() => handleLogout(admin.id)}
               className="flex cursor-pointer items-center gap-[7px] rounded-md px-[8px] py-[4px] text-[0.9rem] text-red-500 dark:text-red-300"

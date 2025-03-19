@@ -22,7 +22,7 @@ const LastOrders = () => {
     setOrders(
       res.data.data
         .filter((data) => data.deliveryStatus == "pending")
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
     );
   };
 
@@ -34,8 +34,8 @@ const LastOrders = () => {
   const filteredData = useMemo(() => {
     return data.filter((item) =>
       Object.values(item).some((value) =>
-        value.toString().toLowerCase().includes(search.toLowerCase())
-      )
+        value.toString().toLowerCase().includes(search.toLowerCase()),
+      ),
     );
   }, [data, search]);
 
@@ -80,38 +80,38 @@ const LastOrders = () => {
   }, []);
 
   return (
-    <div className="customTable p-2 rounded-md min-h-full mb-4 w-full bg-gray-100 dark:bg-slate-800 flex items-center flex-col gap-5 justify-center lg:w-8/12">
-      <div className="w-full mx-auto">
+    <div className="customTable mb-4 flex min-h-full w-full flex-col items-center justify-center gap-5 rounded-md bg-gray-100 p-2 dark:bg-slate-800 lg:w-8/12">
+      <div className="mx-auto w-full">
         <div className="mb-4 hidden">
           <input
             placeholder="Search..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="max-w-sm py-2.5 px-4 border border-gray-200 rounded-md outline-none focus:border-blue-300"
+            className="max-w-sm rounded-md border border-gray-200 px-4 py-2.5 outline-none focus:border-blue-300"
           />
         </div>
 
-        <h2 className=" font-bold text-2xl text-black dark:text-white mb-5">
+        <h2 className="mb-5 text-2xl font-bold text-black dark:text-white">
           Last 5 Pending Orders
         </h2>
 
-        <div className="customTable w-full rounded-md ">
+        <div className="customTable w-full rounded-md">
           <table className="w-full text-sm">
             <thead className="bg-gray-200 dark:bg-slate-900">
               <tr>
-                <th className="text-left text-black font-medium dark:text-white p-3">
+                <th className="p-3 text-left font-medium text-black dark:text-white">
                   Order ID
                 </th>
-                <th className="text-left text-black font-medium dark:text-white p-3">
+                <th className="p-3 text-left font-medium text-black dark:text-white">
                   Customer Name
                 </th>
-                <th className="text-left text-black font-medium dark:text-white p-3">
+                <th className="p-3 text-left font-medium text-black dark:text-white">
                   Phone
                 </th>
-                <th className="text-left text-black font-medium dark:text-white p-3">
+                <th className="p-3 text-left font-medium text-black dark:text-white">
                   Payment Status
                 </th>
-                <th className="text-left text-black font-medium dark:text-white p-3">
+                <th className="p-3 text-left font-medium text-black dark:text-white">
                   Delivery Status
                 </th>
 
@@ -122,69 +122,63 @@ const LastOrders = () => {
             </thead>
             <tbody className="">
               {orders.slice(0, 4).map((item, index) => (
-                <tr className="border-t border-gray-200 " key={item._id}>
-                  <td className=" p-3 text-black dark:text-white">
-                    {item._id}
-                  </td>
-                  <td className=" p-3 text-black dark:text-white">
+                <tr className="border-t border-gray-200" key={item._id}>
+                  <td className="p-3 text-black dark:text-white">{item._id}</td>
+                  <td className="p-3 text-black dark:text-white">
                     {item.name}
                   </td>
-                  <td className=" p-3 text-black dark:text-white">
+                  <td className="p-3 text-black dark:text-white">
                     {item.phone}
                   </td>
-                  <td className=" p-3 text-black dark:text-white">
+                  <td className="p-3 text-black dark:text-white">
                     {item.paymentStatus == "paid" ? (
-                      <div className=" py-1.5 bg-[#18c964] text-white rounded-full text-[0.9rem] font-[500] flex items-center justify-center gap-2">
-                        <MdDone className="p-0.5 text-[1.4rem] rounded-full bg-[#18c964] text-[#fff]" />
+                      <div className="flex items-center justify-center gap-2 rounded-full bg-[#18c964] py-1.5 text-[0.9rem] font-[500] text-white">
+                        <MdDone className="rounded-full bg-[#18c964] p-0.5 text-[1.4rem] text-[#fff]" />
                         Paid
                       </div>
                     ) : (
-                      <div className=" py-1.5 bg-red-500 text-white rounded-full text-[0.9rem] font-[500] flex items-center justify-center gap-2">
-                        <FaTimes className="p-0.5 text-[1.4rem] rounded-full bg-red-500 text-[#fff]" />
+                      <div className="flex items-center justify-center gap-2 rounded-full bg-red-500 py-1.5 text-[0.9rem] font-[500] text-white">
+                        <FaTimes className="rounded-full bg-red-500 p-0.5 text-[1.4rem] text-[#fff]" />
                         Unpaid
                       </div>
                     )}
                   </td>
-                  <td className=" p-3 text-black dark:text-white">
+                  <td className="p-3 text-black dark:text-white">
                     {item.deliveryStatus == "delivered" ? (
-                      <div className=" py-1.5 bg-[#18c964] text-white rounded-full text-[0.9rem] font-[500] flex items-center justify-center gap-2">
-                        <MdDone className="p-0.5 text-[1.4rem] rounded-full bg-[#18c964] text-[#fff]" />
+                      <div className="flex items-center justify-center gap-2 rounded-full bg-[#18c964] py-1.5 text-[0.9rem] font-[500] text-white">
+                        <MdDone className="rounded-full bg-[#18c964] p-0.5 text-[1.4rem] text-[#fff]" />
                         Delivered
                       </div>
                     ) : (
-                      <div className=" py-1.5 bg-red-500 text-white rounded-full text-[0.9rem] font-[500] flex items-center justify-center gap-2">
-                        <FaTimes className="p-0.5 text-[1.4rem] rounded-full bg-red-500 text-[#fff]" />
+                      <div className="flex items-center justify-center gap-2 rounded-full bg-red-500 py-1.5 text-[0.9rem] font-[500] text-white">
+                        <FaTimes className="rounded-full bg-red-500 p-0.5 text-[1.4rem] text-[#fff]" />
                         Pending
                       </div>
                     )}
                   </td>
 
-                  <td className="p-3 relative">
+                  <td className="relative p-3">
                     <BsThreeDotsVertical
                       onClick={() => toggleActionMenu(item._id)}
-                      className="action-btn text-gray-600 dark:text-white cursor-pointer"
+                      className="action-btn cursor-pointer text-gray-600 dark:text-white"
                     />
 
                     <div
                       className={`${
                         openActionMenuId === item._id
-                          ? "opacity-100 scale-[1] z-30"
-                          : "opacity-0 scale-[0.8] z-[-1]"
-                      }
-                                               ${
-                                                 item._id > 1
-                                                   ? "bottom-[90%]"
-                                                   : "top-[90%]"
-                                               }
-                                               zenui-table absolute right-[80%] p-1.5 rounded-md bg-white shadow-md min-w-[160px] transition-all duration-100`}
+                          ? "z-30 scale-[1] opacity-100"
+                          : "z-[-1] scale-[0.8] opacity-0"
+                      } ${
+                        item._id > 1 ? "bottom-[90%]" : "top-[90%]"
+                      } zenui-table absolute right-[80%] min-w-[160px] rounded-md bg-white p-1.5 shadow-md transition-all duration-100`}
                     >
-                      <Link className="flex items-center gap-[8px] text-[0.9rem] py-1.5 px-2 w-full rounded-md text-gray-700 cursor-pointer hover:bg-gray-50 transition-all duration-200">
+                      <Link className="flex w-full cursor-pointer items-center gap-[8px] rounded-md px-2 py-1.5 text-[0.9rem] text-gray-700 transition-all duration-200 hover:bg-gray-50">
                         <MdDeleteOutline />
                         Delete
                       </Link>
                       <Link
-                        to={`/view/${item._id}`}
-                        className="flex items-center gap-[8px] text-[0.9rem] py-1.5 px-2 w-full rounded-md text-gray-700 cursor-pointer hover:bg-gray-50 transition-all duration-200"
+                        to={`/order/${item._id}`}
+                        className="flex w-full cursor-pointer items-center gap-[8px] rounded-md px-2 py-1.5 text-[0.9rem] text-gray-700 transition-all duration-200 hover:bg-gray-50"
                       >
                         <IoEyeOutline />
                         View Details
@@ -196,7 +190,7 @@ const LastOrders = () => {
               {sortedData.map((item, index) => (
                 <tr
                   key={item.id}
-                  className="border-t border-gray-200 hover:bg-gray-50 hidden"
+                  className="hidden border-t border-gray-200 hover:bg-gray-50"
                 >
                   {Object.entries(item).map(
                     ([key, value]) =>
@@ -204,36 +198,32 @@ const LastOrders = () => {
                         <td key={key} className="p-3">
                           {value}
                         </td>
-                      )
+                      ),
                   )}
-                  <td className="p-3 relative">
+                  <td className="relative p-3">
                     <BsThreeDotsVertical
                       onClick={() => toggleActionMenu(item.id)}
-                      className="action-btn text-gray-600 cursor-pointer"
+                      className="action-btn cursor-pointer text-gray-600"
                     />
 
                     <div
                       className={`${
                         openActionMenuId === item.id
-                          ? "opacity-100 scale-[1] z-30"
-                          : "opacity-0 scale-[0.8] z-[-1]"
-                      }
-                                         ${
-                                           index > 1
-                                             ? "bottom-[90%]"
-                                             : "top-[90%]"
-                                         }
-                                         zenui-table absolute right-[80%] p-1.5 rounded-md bg-white shadow-md min-w-[160px] transition-all duration-100`}
+                          ? "z-30 scale-[1] opacity-100"
+                          : "z-[-1] scale-[0.8] opacity-0"
+                      } ${
+                        index > 1 ? "bottom-[90%]" : "top-[90%]"
+                      } zenui-table absolute right-[80%] min-w-[160px] rounded-md bg-white p-1.5 shadow-md transition-all duration-100`}
                     >
-                      <p className="flex items-center gap-[8px] text-[0.9rem] py-1.5 px-2 w-full rounded-md text-gray-700 cursor-pointer hover:bg-gray-50 transition-all duration-200">
+                      <p className="flex w-full cursor-pointer items-center gap-[8px] rounded-md px-2 py-1.5 text-[0.9rem] text-gray-700 transition-all duration-200 hover:bg-gray-50">
                         <MdOutlineEdit />
                         Edit
                       </p>
-                      <p className="flex items-center gap-[8px] text-[0.9rem] py-1.5 px-2 w-full rounded-md text-gray-700 cursor-pointer hover:bg-gray-50 transition-all duration-200">
+                      <p className="flex w-full cursor-pointer items-center gap-[8px] rounded-md px-2 py-1.5 text-[0.9rem] text-gray-700 transition-all duration-200 hover:bg-gray-50">
                         <MdDeleteOutline />
                         Delete
                       </p>
-                      <p className="flex items-center gap-[8px] text-[0.9rem] py-1.5 px-2 w-full rounded-md text-gray-700 cursor-pointer hover:bg-gray-50 transition-all duration-200">
+                      <p className="flex w-full cursor-pointer items-center gap-[8px] rounded-md px-2 py-1.5 text-[0.9rem] text-gray-700 transition-all duration-200 hover:bg-gray-50">
                         <IoEyeOutline />
                         View Details
                       </p>
@@ -245,7 +235,7 @@ const LastOrders = () => {
           </table>
 
           {!orders?.length && (
-            <p className="text-[0.9rem] text-gray-500 py-6 text-center w-full">
+            <p className="w-full py-6 text-center text-[0.9rem] text-gray-500">
               No data found!
             </p>
           )}

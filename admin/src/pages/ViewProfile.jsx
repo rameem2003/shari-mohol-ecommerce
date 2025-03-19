@@ -57,6 +57,7 @@ const ViewProfile = () => {
         <div className="w-full lg:w-4/12">
           <div className="w-full rounded bg-white shadow-lg dark:bg-slate-800">
             <div
+              style={{ backgroundImage: `url(${user.photo})` }}
               className={`relative h-[150px] w-full rounded-t-md bg-[url('${"https://img.freepik.com/premium-vector/content-writer-vector-colored-round-line-illustration_104589-2571.jpg"}')] bg-center`}
             >
               <img

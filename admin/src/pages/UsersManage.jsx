@@ -9,8 +9,10 @@ import { MdDeleteOutline, MdDone } from "react-icons/md";
 import { FaTimes } from "react-icons/fa";
 import { Link } from "react-router";
 import { IoEyeOutline } from "react-icons/io5";
+import { useSelector } from "react-redux";
 
 const UsersManage = () => {
+  const admin = useSelector((state) => state.admin.admin);
   const accessToken = Cookies.get("accessToken"); // access token
   const sessionToken = Cookies.get("sessionToken"); // access token
   const [users, setUsers] = useState([]);
@@ -28,7 +30,7 @@ const UsersManage = () => {
       setFilterResult(orders);
     } else {
       const searchResult = users.filter((searchItem) =>
-        searchItem.phone.includes(e.target.value.toLowerCase()),
+        searchItem.email.includes(e.target.value.toLowerCase()),
       );
       setFilterResult(searchResult); // state for store the search result
     }
@@ -63,6 +65,54 @@ const UsersManage = () => {
       setIsLoading(false);
 
       console.log(res.data);
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+
+      Swal.fire({
+        title: error.response.data.msg,
+        showConfirmButton: false,
+        showCancelButton: true,
+        cancelButtonText: "Ok",
+        cancelButtonColor: "red",
+        icon: "error",
+      })
+        .then((result) => {
+          if (result.isConfirmed) {
+            location.reload();
+          }
+        })
+        .finally(() => {
+          location.reload();
+        });
+    }
+  };
+
+  // function for delete user
+  const handleDelete = async (id) => {
+    setIsLoading(true);
+    try {
+      let res = await axios.delete(
+        `${import.meta.env.VITE_API}/auth/delete/${id}`,
+        {
+          withCredentials: true,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Cookie: `accessToken=${accessToken};sessionToken=${sessionToken}`,
+          },
+        },
+      );
+      setIsLoading(false);
+      Swal.fire({
+        title: res.data.msg,
+        confirmButtonText: "Ok",
+        confirmButtonColor: "green",
+        icon: "success",
+      }).finally(() => {
+        location.reload();
+      });
     } catch (error) {
       setIsLoading(false);
       console.log(error);
@@ -138,7 +188,7 @@ const UsersManage = () => {
         )}
         <div className="mb-4">
           <input
-            placeholder="Search by phone..."
+            placeholder="Search by email..."
             // value={search}
             onChange={handleSearch}
             className="max-w-sm rounded-md border border-gray-200 px-4 py-2.5 outline-none focus:border-blue-300"
@@ -179,7 +229,7 @@ const UsersManage = () => {
               </tr>
             </thead>
             <tbody className="">
-              {users.map((item, index) => (
+              {filterResult.map((item, index) => (
                 <tr className="border-t border-gray-200" key={index}>
                   <td className="p-3 text-black dark:text-white">
                     {item.name}
@@ -194,21 +244,29 @@ const UsersManage = () => {
                     {item.role == "admin" ? "Admin" : "User"}
                   </td>
                   <td className="p-3 text-black dark:text-white">
-                    <div
-                      className={`${
-                        item.role == "admin" ? "!bg-[#3B9DF8]" : "bg-[#f0f0f0]"
-                      } relative h-[30px] w-[57px] cursor-pointer rounded-full border border-[#e5eaf2] px-[0.150rem] py-[0.160rem] transition-colors duration-500`}
-                      onClick={() => handleAdmin(item)}
-                    >
+                    {item._id === admin?.id ? (
+                      "You"
+                    ) : (
                       <div
                         className={`${
                           item.role == "admin"
-                            ? "translate-x-[27px] !bg-white"
-                            : "translate-x-[1px]"
-                        } h-[23px] w-[23px] rounded-full bg-[#fff] pb-1 transition-all duration-500`}
-                        style={{ boxShadow: "1px 2px 5px 2px rgb(0,0,0,0.1)" }}
-                      ></div>
-                    </div>
+                            ? "!bg-[#3B9DF8]"
+                            : "bg-[#f0f0f0]"
+                        } relative h-[30px] w-[57px] cursor-pointer rounded-full border border-[#e5eaf2] px-[0.150rem] py-[0.160rem] transition-colors duration-500`}
+                        onClick={() => handleAdmin(item)}
+                      >
+                        <div
+                          className={`${
+                            item.role == "admin"
+                              ? "translate-x-[27px] !bg-white"
+                              : "translate-x-[1px]"
+                          } h-[23px] w-[23px] rounded-full bg-[#fff] pb-1 transition-all duration-500`}
+                          style={{
+                            boxShadow: "1px 2px 5px 2px rgb(0,0,0,0.1)",
+                          }}
+                        ></div>
+                      </div>
+                    )}
                   </td>
 
                   <td className="p-3 text-black dark:text-white">
@@ -243,10 +301,15 @@ const UsersManage = () => {
                         item._id > 1 ? "bottom-[90%]" : "top-[90%]"
                       } zenui-table absolute right-[80%] min-w-[160px] rounded-md bg-white p-1.5 shadow-md transition-all duration-100`}
                     >
-                      <button className="flex w-full cursor-pointer items-center gap-[8px] rounded-md px-2 py-1.5 text-[0.9rem] text-gray-700 transition-all duration-200 hover:bg-gray-50">
-                        <MdDeleteOutline />
-                        Delete
-                      </button>
+                      {admin?.id !== item._id && (
+                        <button
+                          onClick={() => handleDelete(item._id)}
+                          className="flex w-full cursor-pointer items-center gap-[8px] rounded-md px-2 py-1.5 text-[0.9rem] text-gray-700 transition-all duration-200 hover:bg-gray-50"
+                        >
+                          <MdDeleteOutline />
+                          Delete
+                        </button>
+                      )}
                       <Link
                         to={`/profile/${item._id}`}
                         className="flex w-full cursor-pointer items-center gap-[8px] rounded-md px-2 py-1.5 text-[0.9rem] text-gray-700 transition-all duration-200 hover:bg-gray-50"
@@ -261,7 +324,7 @@ const UsersManage = () => {
             </tbody>
           </table>
 
-          {!users?.length && (
+          {!filterResult?.length && (
             <p className="w-full py-6 text-center text-[0.9rem] text-gray-500">
               No data found!
             </p>

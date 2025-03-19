@@ -167,12 +167,12 @@ const OrdersPage = () => {
                       item._id > 1 ? "bottom-[90%]" : "top-[90%]"
                     } zenui-table absolute right-[80%] min-w-[160px] rounded-md bg-white p-1.5 shadow-md transition-all duration-100`}
                   >
-                    <Link className="flex w-full cursor-pointer items-center gap-[8px] rounded-md px-2 py-1.5 text-[0.9rem] text-gray-700 transition-all duration-200 hover:bg-gray-50">
+                    <Link className="flex hidden w-full cursor-pointer items-center gap-[8px] rounded-md px-2 py-1.5 text-[0.9rem] text-gray-700 transition-all duration-200 hover:bg-gray-50">
                       <MdDeleteOutline />
                       Delete
                     </Link>
                     <Link
-                      to={`/view/${item._id}`}
+                      to={`/order/${item._id}`}
                       className="flex w-full cursor-pointer items-center gap-[8px] rounded-md px-2 py-1.5 text-[0.9rem] text-gray-700 transition-all duration-200 hover:bg-gray-50"
                     >
                       <IoEyeOutline />
