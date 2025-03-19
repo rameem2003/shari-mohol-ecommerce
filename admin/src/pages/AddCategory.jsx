@@ -134,8 +134,8 @@ const AddCategory = () => {
 
       {/* Form section */}
       <form action="" className="mt-10" onSubmit={handleUpload}>
-        <Flex className="mb-5 items-center gap-5">
-          <div className="w-1/2">
+        <Flex className="mb-5 flex-col items-center gap-5 lg:flex-row">
+          <div className="w-full lg:w-1/2">
             <div className="w-full">
               <label
                 htmlFor="name"
@@ -157,7 +157,7 @@ const AddCategory = () => {
               />
             </div>
           </div>
-          <div className="w-1/2">
+          <div className="w-full lg:w-1/2">
             <div className="w-full">
               <label
                 htmlFor="description"
@@ -182,7 +182,7 @@ const AddCategory = () => {
         </Flex>
 
         <Flex className="mb-5 items-center gap-5">
-          <div className="w-1/2">
+          <div className="w-full">
             <div className="w-full">
               <label
                 htmlFor="subcategory"
@@ -200,7 +200,7 @@ const AddCategory = () => {
                 type="text"
                 name="subcategory"
                 id="subcategory"
-                placeholder="Your name"
+                placeholder="Sub Categories"
                 className="border-border focus:border-primary mt-1 w-full rounded-md border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 dark:bg-transparent dark:text-white"
               />
             </div>

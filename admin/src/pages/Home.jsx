@@ -6,9 +6,9 @@ import LastOrders from "../components/screens/Home/LastOrders";
 
 const Home = () => {
   return (
-    <main className="bg-white dark:bg-slate-900 border-l-[1px] border-black p-2 dark:border-white w-full">
+    <main className="w-full border-l-[1px] border-black bg-white p-2 dark:border-white dark:bg-slate-900">
       <Stats />
-      <Flex className=" mt-5 max-h-[450px] items-start gap-4 ">
+      <Flex className="mt-5 h-full flex-col items-start gap-4 md:flex-row lg:max-h-[450px]">
         <PieChart />
         <LastOrders />
       </Flex>

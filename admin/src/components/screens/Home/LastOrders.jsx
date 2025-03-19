@@ -80,7 +80,7 @@ const LastOrders = () => {
   }, []);
 
   return (
-    <div className="customTable mb-4 flex min-h-full w-full flex-col items-center justify-center gap-5 rounded-md bg-gray-100 p-2 dark:bg-slate-800 lg:w-8/12">
+    <div className="customTable mb-4 hidden h-auto w-full flex-col items-start gap-5 rounded-md bg-gray-100 p-2 lg:flex lg:w-8/12 dark:bg-slate-800">
       <div className="mx-auto w-full">
         <div className="mb-4 hidden">
           <input
@@ -96,7 +96,7 @@ const LastOrders = () => {
         </h2>
 
         <div className="customTable w-full rounded-md">
-          <table className="w-full text-sm">
+          <table className="w-full overflow-x-scroll text-sm">
             <thead className="bg-gray-200 dark:bg-slate-900">
               <tr>
                 <th className="p-3 text-left font-medium text-black dark:text-white">

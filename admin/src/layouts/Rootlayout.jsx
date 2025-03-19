@@ -4,7 +4,7 @@ import Sidebar from "../components/shared/Sidebar";
 
 const Rootlayout = () => {
   return (
-    <div className=" flex w-full h-screen">
+    <div className="flex h-full w-full lg:h-screen">
       <Sidebar />
       <Outlet />
     </div>

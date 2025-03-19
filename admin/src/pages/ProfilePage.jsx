@@ -1,12 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Flex from "../components/common/Flex";
 import Image from "../components/common/Image";
 import profile from "../assets/profile.png";
+import { CiEdit } from "react-icons/ci";
+import { IoCloudUploadOutline } from "react-icons/io5";
+import Cookies from "js-cookie";
+import Swal from "sweetalert2";
+import axios from "axios";
+import Loader from "../components/common/Loader";
+import { adminLoginReducer } from "../redux/features/AdminSlice";
 
 const ProfilePage = () => {
+  const dispatch = useDispatch(); // dispatch instance
+  const accessToken = Cookies.get("accessToken"); // access token
+  const sessionToken = Cookies.get("sessionToken"); // access token
   const admin = useSelector((state) => state.admin.admin);
+  const [isDragging, setIsDragging] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [displayImage, setDisplayImage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
+  // data state for admin
   const [data, setData] = useState({
     name: "",
     email: "",
@@ -15,17 +31,145 @@ const ProfilePage = () => {
     address: "",
   });
 
+  // fetch update data
+  const fetchUpdateUser = async () => {
+    let res = await axios.get(
+      `${import.meta.env.VITE_API}/auth/user/${admin.id}`,
+    );
+    let newData = {
+      id: res.data.user._id,
+      name: res.data.user.name,
+      email: res.data.user.email,
+      role: res.data.user.role,
+      phone: res.data.user.phone,
+      address: res.data.user.address,
+      photo: res.data.user.photo,
+    };
+    dispatch(adminLoginReducer(newData));
+    console.log(res.data);
+  };
+
+  // handle profile update
+  const handleProfileUpdate = async () => {
+    setIsLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("name", data.name);
+      // formData.append("email", data.email);
+      formData.append("phone", data.phone);
+      formData.append("address", data.address);
+      if (data.photo) {
+        formData.append("photo", data.photo);
+      }
+
+      let res = await axios.patch(
+        `${import.meta.env.VITE_API}/auth/update/${admin.id}`,
+        formData,
+        {
+          withCredentials: true,
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/formdata",
+            Cookie: `accessToken=${accessToken};sessionToken=${sessionToken}`,
+          },
+        },
+      );
+
+      await fetchUpdateUser();
+
+      setIsLoading(false);
+      Swal.fire({
+        title: res.data.msg,
+        showConfirmButton: false,
+        showCancelButton: true,
+        cancelButtonText: "Ok",
+        cancelButtonColor: "green",
+        icon: "success",
+      });
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+
+      Swal.fire({
+        title: error.response.data.msg,
+        showConfirmButton: false,
+        showCancelButton: true,
+        cancelButtonText: "Ok",
+        cancelButtonColor: "red",
+        icon: "error",
+      })
+        .then((result) => {
+          if (result.isDismissed) {
+            location.reload();
+          }
+        })
+        .finally(() => {
+          location.reload();
+          setIsLoading(false);
+        });
+    }
+  };
+
+  // Handle file selection when dropped or clicked
+  const handleFileDrop = (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
+    console.log(file);
+    setSelectedImage(file);
+    handleFile(file);
+    setIsDragging(false);
+    setData({ ...data, photo: file });
+  };
+
+  // Function to validate and display the image
+  const handleFile = (file) => {
+    if (!file) return;
+
+    if (file) {
+      setErrorMessage("");
+      const reader = new FileReader();
+      console.log(reader.result);
+
+      reader.onload = () => setSelectedImage(reader.result);
+      //   reader.readAsDataURL(file);
+
+      const url = URL.createObjectURL(file);
+      setDisplayImage(url);
+    } else {
+      setErrorMessage("Please upload image file.");
+      setSelectedImage(null);
+    }
+  };
+
+  // Handle drag over event to allow the drop
+  const handleImageDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDragEnter = () => {
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  console.log(data);
+
   useEffect(() => {
     if (admin) {
       setData({
         name: admin.name,
         email: admin.email,
         phone: admin.phone,
-        photo: admin.photo,
+        photo: "",
         address: admin.address,
       });
+
+      setDisplayImage(admin.photo);
     }
-  }, []);
+  }, [admin]);
 
   return (
     <main className="w-full overflow-y-scroll border-l-[1px] border-black bg-white p-2 dark:border-white dark:bg-slate-900">
@@ -33,16 +177,106 @@ const ProfilePage = () => {
         Profile Page
       </h2>
 
+      {isLoading && (
+        <Flex className="fixed left-0 top-0 z-[99999999] h-screen w-full items-center justify-center bg-white dark:bg-slate-900">
+          <Loader />
+        </Flex>
+      )}
       <section className="mt-10">
         <Flex className="items-start gap-5">
           <div className="w-full md:w-3/12">
-            <Image
-              alt={data.name}
-              src={data.photo ? data.photo : profile}
-              className="rounded-md"
-            />
+            <div className="mb-5 flex w-full flex-col items-center justify-center">
+              <div
+                className={`${
+                  isDragging ? "border-blue-300 !bg-blue-50" : "border-gray-300"
+                } ${
+                  selectedImage ? "" : "border-2 border-dashed p-6"
+                } flex h-64 w-full flex-col items-center justify-center rounded-lg bg-white dark:bg-slate-900`}
+                onDragEnter={handleDragEnter}
+                onDragLeave={handleDragLeave}
+                onDrop={handleFileDrop}
+                onDragOver={handleImageDragOver}
+              >
+                {displayImage ? (
+                  <Flex className="relative flex-wrap items-center gap-5">
+                    <label
+                      htmlFor="file-upload-profile"
+                      className="absolute right-2 top-2 flex h-10 w-10 items-center justify-center rounded-full bg-red-500"
+                    >
+                      <CiEdit className="text-2xl text-white" />
+                    </label>
+
+                    <img
+                      // htmlFor="file-upload-profile"
+                      src={displayImage}
+                      alt="Preview"
+                      className="h-[200px] w-[200px] rounded-lg object-cover"
+                    />
+                    <input
+                      id="file-upload-profile"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleFileDrop}
+                    />
+                  </Flex>
+                ) : (
+                  <>
+                    {isDragging ? (
+                      <h5 className="text-[2rem] font-[600] text-blue-700">
+                        Drop Here
+                      </h5>
+                    ) : (
+                      <>
+                        <IoCloudUploadOutline className="mb-4 text-[3rem] text-gray-400" />
+                        <p className="mb-2 text-center text-[1.1rem] font-[500] text-gray-500">
+                          Drag & Drop your image here
+                        </p>
+                        <p className="text-gray-400">or</p>
+                        <label
+                          htmlFor="file-upload"
+                          className="mt-2 cursor-pointer rounded-md bg-gray-200 px-4 py-2"
+                        >
+                          Browse File
+                        </label>
+                        <input
+                          id="file-upload"
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={handleFileDrop}
+                        />
+                      </>
+                    )}
+                  </>
+                )}
+              </div>
+
+              {errorMessage && (
+                <p className="mt-4 text-red-500">{errorMessage}</p>
+              )}
+
+              {/* {selectedImage && (
+                <div className="mt-4">
+                  <button
+                    onClick={() => setSelectedImage(null)}
+                    className="rounded-lg bg-red-500 px-4 py-2 text-white"
+                  >
+                    Remove Image
+                  </button>
+                </div>
+              )} */}
+            </div>
           </div>
           <div className="w-full md:w-9/12">
+            <button
+              onClick={handleProfileUpdate}
+              className="ml-auto flex items-center gap-1 rounded-md bg-red-500 px-3 py-2 text-white"
+            >
+              <CiEdit className="text-lg text-white" />
+              Update
+            </button>
+
             <div className="mb-5 w-full">
               <label
                 htmlFor="name"

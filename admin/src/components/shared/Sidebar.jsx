@@ -43,7 +43,7 @@ const ResponsiveSidebar = () => {
   return (
     <aside
       className={`boxShadow ease flex h-full flex-col justify-between bg-white transition-all duration-300 dark:bg-slate-900 ${
-        isCollapse1 ? "w-3/12 2xl:w-2/12" : "w-auto"
+        isCollapse1 ? "w-6/12 md:w-3/12 2xl:w-2/12" : "w-auto"
       }`}
     >
       <div>
