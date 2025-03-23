@@ -13,7 +13,7 @@ import AdvertisementPage from "./pages/AdvertisementPage";
 import UsersManage from "./pages/UsersManage";
 import ViewProfile from "./pages/ViewProfile";
 import ViewOrder from "./pages/ViewOrder";
-import ProfilePage from "./pages/profilePage";
+import ProfilePage from "./pages/ProfilePage";
 
 const App = () => {
   return (

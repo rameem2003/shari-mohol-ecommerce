@@ -31,6 +31,13 @@ const ProfilePage = () => {
     address: "",
   });
 
+  // data state for password change
+  const [passwordData, setPasswordData] = useState({
+    oldPassword: "",
+    newPassword: "",
+    conFirmPassword: "",
+  });
+
   // fetch update data
   const fetchUpdateUser = async () => {
     let res = await axios.get(
@@ -81,10 +88,9 @@ const ProfilePage = () => {
       setIsLoading(false);
       Swal.fire({
         title: res.data.msg,
-        showConfirmButton: false,
-        showCancelButton: true,
-        cancelButtonText: "Ok",
-        cancelButtonColor: "green",
+        showConfirmButton: true,
+        confirmButtonText: "Ok",
+        confirmButtonColor: "green",
         icon: "success",
       });
     } catch (error) {
@@ -108,6 +114,82 @@ const ProfilePage = () => {
           location.reload();
           setIsLoading(false);
         });
+    }
+  };
+
+  // handle password change
+  const handlePasswordChange = async () => {
+    setIsLoading(true);
+    try {
+      let res = await axios.patch(
+        `${import.meta.env.VITE_API}/auth/changepassword/${admin.id}`,
+        passwordData,
+        {
+          withCredentials: true,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Cookie: `accessToken=${accessToken};sessionToken=${sessionToken}`,
+          },
+        },
+      );
+
+      setIsLoading(false);
+
+      Swal.fire({
+        title: res.data.msg,
+        showConfirmButton: true,
+        confirmButtonText: "Ok",
+        confirmButtonColor: "green",
+        icon: "success",
+      })
+        .then((result) => {
+          if (result.isConfirmed) {
+            handleLogout(admin.id);
+          }
+        })
+        .finally(() => {
+          handleLogout(admin.id);
+        });
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+
+      Swal.fire({
+        title: error.response.data.msg,
+        showConfirmButton: false,
+        showCancelButton: true,
+        cancelButtonText: "Ok",
+        cancelButtonColor: "red",
+        icon: "error",
+      })
+        .then((result) => {
+          if (result.isDismissed) {
+            location.reload();
+          }
+        })
+        .finally(() => {
+          location.reload();
+          setIsLoading(false);
+        });
+    }
+  };
+
+  // handle logout
+  const handleLogout = async (id) => {
+    try {
+      let res = await axios.post(
+        `${import.meta.env.VITE_API}/auth/logout/${id}`,
+      );
+
+      Cookies.remove("accessToken");
+      Cookies.remove("sessionToken");
+      dispatch(adminLoginReducer(""));
+      console.log(res);
+      location.reload();
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -350,6 +432,91 @@ const ProfilePage = () => {
             </div>
           </div>
         </Flex>
+      </section>
+
+      <section className="mt-10 border-t-[1px] border-black py-5 dark:border-white">
+        <h2 className="text-2xl font-semibold text-black dark:text-white">
+          Change Password
+        </h2>
+
+        <div className="mt-5">
+          <div className="mb-5 w-full md:w-1/2">
+            <label
+              htmlFor="old-password"
+              className="text-text text-[15px] font-[400] text-black dark:text-white"
+            >
+              Old Password <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              name="old-password"
+              id="old-password"
+              value={passwordData.oldPassword}
+              onChange={(e) =>
+                setPasswordData({
+                  ...passwordData,
+                  oldPassword: e.target.value,
+                })
+              }
+              placeholder="Your Old Password"
+              className="border-border focus:border-primary mt-1 w-full rounded-md border px-4 py-3 outline-none transition-colors duration-300"
+            />
+          </div>
+
+          <div className="mb-5 w-full md:w-1/2">
+            <label
+              htmlFor="new-password"
+              className="text-text text-[15px] font-[400] text-black dark:text-white"
+            >
+              New Password <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              name="new-password"
+              id="new-password"
+              value={passwordData.newPassword}
+              onChange={(e) =>
+                setPasswordData({
+                  ...passwordData,
+                  newPassword: e.target.value,
+                })
+              }
+              placeholder="Your New Password"
+              className="border-border focus:border-primary mt-1 w-full rounded-md border px-4 py-3 outline-none transition-colors duration-300"
+            />
+          </div>
+
+          <div className="mb-5 w-full md:w-1/2">
+            <label
+              htmlFor="confirm-new-password"
+              className="text-text text-[15px] font-[400] text-black dark:text-white"
+            >
+              Confirm New Password <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              name="confirm-new-password"
+              id="confirm-new-password"
+              value={passwordData.conFirmPassword}
+              onChange={(e) =>
+                setPasswordData({
+                  ...passwordData,
+                  conFirmPassword: e.target.value,
+                })
+              }
+              placeholder="Your Confirm New Password"
+              className="border-border focus:border-primary mt-1 w-full rounded-md border px-4 py-3 outline-none transition-colors duration-300"
+            />
+          </div>
+
+          <button
+            onClick={handlePasswordChange}
+            className="flex items-center gap-1 rounded-md bg-blue-500 px-3 py-2 text-white"
+          >
+            <CiEdit className="text-lg text-white" />
+            Change Password
+          </button>
+        </div>
       </section>
     </main>
   );

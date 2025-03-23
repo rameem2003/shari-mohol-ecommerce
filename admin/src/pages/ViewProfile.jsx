@@ -25,7 +25,7 @@ const ViewProfile = () => {
     }
   };
 
-  // fethch orders from the backend
+  // fetch orders from the backend
   const fetchOrders = async () => {
     setIsLoading(true);
     try {

@@ -107,7 +107,7 @@ const Login = () => {
               htmlFor="password"
               className="text-text text-[15px] font-[400] text-black dark:text-white"
             >
-              Password
+              Password <span className="text-red-500">*</span>
             </label>
             <div className="relative w-full">
               <input
