@@ -1,16 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "../common/Container";
 import Flex from "../common/Flex";
 import { FaBarsStaggered, FaCartShopping, FaUser } from "react-icons/fa6";
 import { Link } from "react-router";
 import { IoIosSearch } from "react-icons/io";
+import logowhite from "../../assets/logowhite.png";
 const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const user = false;
   return (
-    <nav className="bg-slate-900 py-7">
+    <nav className="bg-transparent py-7 fixed w-full z-50">
       <Container>
-        <Flex className="items-center justify-between">
-          <FaBarsStaggered className="text-3xl cursor-pointer text-white" />
+        <Flex className="items-center justify-between px-8">
+          <FaBarsStaggered
+            onClick={() => setIsOpen(!isOpen)}
+            className="text-3xl cursor-pointer text-white"
+          />
 
           <Link to="/">
             <img className=" w-16" src="/vite.svg" alt="logo" />
@@ -65,6 +70,43 @@ const Navbar = () => {
           </Flex>
         </Flex>
       </Container>
+
+      <aside
+        className={` bg-white p-3 h-screen w-3/12 fixed top-0 duration-300 ease-in-out ${
+          isOpen ? "left-0" : "left-[-200%]"
+        } z-50`}
+      >
+        <div className="w-full">
+          <img className=" w-60 mx-auto" src={logowhite} alt="" />
+        </div>
+
+        <ul className=" mt-10">
+          <li className=" rounded-md mb-2 bg-purple-50">
+            <Link
+              className=" p-2 block text-black hover:text-purple-600 text-3xl font-semibold"
+              to="/"
+            >
+              Shari
+            </Link>
+          </li>
+          <li className=" rounded-md mb-2 bg-purple-50">
+            <Link
+              className=" p-2 block text-black hover:text-purple-600 text-3xl font-semibold"
+              to="/"
+            >
+              Shari
+            </Link>
+          </li>
+          <li className=" rounded-md mb-2 bg-purple-50">
+            <Link
+              className=" p-2 block text-black hover:text-purple-600 text-3xl font-semibold"
+              to="/"
+            >
+              Shari
+            </Link>
+          </li>
+        </ul>
+      </aside>
     </nav>
   );
 };

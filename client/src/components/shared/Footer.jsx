@@ -6,7 +6,7 @@ import Container from "../common/Container";
 
 const Footer = () => {
   return (
-    <footer className="bg-slate-900 boxShadow w-full p-6 md:p-9">
+    <footer className="bg-purple-900 boxShadow w-full p-6 md:p-9">
       <Container>
         <div className="flex justify-center gap-[30px] flex-wrap w-full sm:px-20">
           <div className="flex justify-center sm:justify-between gap-[30px] w-full flex-wrap">
