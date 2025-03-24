@@ -77,12 +77,16 @@ const Banner = () => {
 
         <Slider {...settings}>
           <div
-            className="relative test flex items-center justify-center py-[250px] bg-black"
+            className="relative test flex items-center justify-center py-[120px] 2xl:py-[300px] bg-black"
             style={{
               background: `url('${im}') no-repeat center center /cover`,
             }}
           >
-            <img src={im} className=" absolute top-0 left-0 w-full" alt="" />
+            <img
+              src={im}
+              className=" absolute top-0 left-0  h-full w-full"
+              alt=""
+            />
             {/* Overlay */}
             <div className="absolute inset-0 bg-black opacity-50"></div>
 
@@ -90,15 +94,11 @@ const Banner = () => {
             <div className="relative z-[9999999]">
               <Container className="">
                 <div className="text-center text-white">
-                  <h1 className="text-5xl font-bold mb-4">
+                  <h1 className=" text-xl md:text-2xl lg:text-3xl 2xl:text-5xl font-bold mb-4">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     Necessitatibus, debitis?
                   </h1>
-                  <p className="mb-6">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Eius obcaecati, nulla quae sunt dolor similique doloribus
-                    corrupti voluptatibus tempore vero.
-                  </p>
+
                   <Link className="bg-purple-600 rounded-lg text-white px-6 py-2 ">
                     Shop Now
                   </Link>
@@ -107,12 +107,16 @@ const Banner = () => {
             </div>
           </div>
           <div
-            className="relative test flex items-center justify-center py-[250px] bg-black"
+            className="relative test flex items-center justify-center py-[120px] 2xl:py-[300px] bg-black"
             style={{
               background: `url('${im}') no-repeat center center /cover`,
             }}
           >
-            <img src={im} className=" absolute top-0 left-0 w-full" alt="" />
+            <img
+              src={im}
+              className=" absolute top-0 left-0  h-full w-full"
+              alt=""
+            />
             {/* Overlay */}
             <div className="absolute inset-0 bg-black opacity-50"></div>
 
@@ -120,15 +124,11 @@ const Banner = () => {
             <div className="relative z-[9999999]">
               <Container className="">
                 <div className="text-center text-white">
-                  <h1 className="text-5xl font-bold mb-4">
+                  <h1 className=" text-xl md:text-2xl lg:text-3xl 2xl:text-5xl font-bold mb-4">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     Necessitatibus, debitis?
                   </h1>
-                  <p className="mb-6">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Eius obcaecati, nulla quae sunt dolor similique doloribus
-                    corrupti voluptatibus tempore vero.
-                  </p>
+
                   <Link className="bg-purple-600 rounded-lg text-white px-6 py-2 ">
                     Shop Now
                   </Link>
@@ -137,12 +137,16 @@ const Banner = () => {
             </div>
           </div>
           <div
-            className="relative test flex items-center justify-center py-[250px] bg-black"
+            className="relative test flex items-center justify-center py-[120px] 2xl:py-[300px] bg-black"
             style={{
               background: `url('${im}') no-repeat center center /cover`,
             }}
           >
-            <img src={im} className=" absolute top-0 left-0 w-full" alt="" />
+            <img
+              src={im}
+              className=" absolute top-0 left-0  h-full w-full"
+              alt=""
+            />
             {/* Overlay */}
             <div className="absolute inset-0 bg-black opacity-50"></div>
 
@@ -150,15 +154,11 @@ const Banner = () => {
             <div className="relative z-[9999999]">
               <Container className="">
                 <div className="text-center text-white">
-                  <h1 className="text-5xl font-bold mb-4">
+                  <h1 className=" text-xl md:text-2xl lg:text-3xl 2xl:text-5xl font-bold mb-4">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     Necessitatibus, debitis?
                   </h1>
-                  <p className="mb-6">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Eius obcaecati, nulla quae sunt dolor similique doloribus
-                    corrupti voluptatibus tempore vero.
-                  </p>
+
                   <Link className="bg-purple-600 rounded-lg text-white px-6 py-2 ">
                     Shop Now
                   </Link>

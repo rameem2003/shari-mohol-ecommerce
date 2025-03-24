@@ -2,7 +2,12 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        merry: ["Merriweather", "serif"],
+        hambra: ["Hambra", "serif"],
+      },
+    },
   },
   plugins: [],
 };

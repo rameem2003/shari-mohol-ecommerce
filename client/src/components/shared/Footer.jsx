@@ -1,33 +1,48 @@
 import React from "react";
+import logowhite from "../../assets/logowhite.png";
+import Container from "../common/Container";
 // react icons
 import { CgFacebook } from "react-icons/cg";
 import { BsInstagram, BsLinkedin, BsTwitter } from "react-icons/bs";
-import Container from "../common/Container";
-
+import { Link } from "react-router";
 const Footer = () => {
   return (
-    <footer className="bg-purple-900 boxShadow w-full p-6 md:p-9">
+    <footer className="bg-purple-900 boxShadow w-full p-6 md:p-9 pb-[120px] lg:pb-5">
       <Container>
         <div className="flex justify-center gap-[30px] flex-wrap w-full sm:px-20">
-          <div className="flex justify-center sm:justify-between gap-[30px] w-full flex-wrap">
-            <p className="text-[0.9rem] text-white hover:text-[#3B9DF8] cursor-pointer transition-all duration-200">
-              Service
-            </p>
-            <p className="text-[0.9rem] text-white hover:text-[#3B9DF8] cursor-pointer transition-all duration-200">
-              Features
-            </p>
-            <p className="text-[0.9rem] text-white hover:text-[#3B9DF8] cursor-pointer transition-all duration-200">
-              Our Team
-            </p>
-            <p className="text-[0.9rem] text-white hover:text-[#3B9DF8] cursor-pointer transition-all duration-200">
-              Portfolio
-            </p>
-            <p className="text-[0.9rem] text-white hover:text-[#3B9DF8] cursor-pointer transition-all duration-200">
-              Blog
-            </p>
-            <p className="text-[0.9rem] text-white hover:text-[#3B9DF8] cursor-pointer transition-all duration-200">
-              Contact Us
-            </p>
+          <div className=" text-center">
+            <img src={logowhite} className=" mx-auto" alt="logo" />
+
+            <h3 className=" mt-8 text-xl font-bold text-white">
+              That inspires your confidence and makes you feel good.
+            </h3>
+          </div>
+
+          <div className="flex justify-center sm:justify-center gap-[30px] w-full flex-wrap">
+            <Link
+              to=""
+              className="text-[0.9rem] text-white hover:text-[#3B9DF8] cursor-pointer transition-all duration-200"
+            >
+              FAQ
+            </Link>
+            <Link
+              to=""
+              className="text-[0.9rem] text-white hover:text-[#3B9DF8] cursor-pointer transition-all duration-200"
+            >
+              How To Buy
+            </Link>
+            <Link
+              to=""
+              className="text-[0.9rem] text-white hover:text-[#3B9DF8] cursor-pointer transition-all duration-200"
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              to=""
+              className="text-[0.9rem] text-white hover:text-[#3B9DF8] cursor-pointer transition-all duration-200"
+            >
+              Account
+            </Link>
           </div>
 
           <div className="flex items-center flex-wrap gap-[10px] text-white">
