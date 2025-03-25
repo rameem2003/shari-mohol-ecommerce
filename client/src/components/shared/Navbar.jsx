@@ -12,8 +12,12 @@ import { IoIosSearch } from "react-icons/io";
 import logopurple from "../../assets/logopurple.png";
 import logowhite from "../../assets/logowhite.png";
 import { FaHome, FaTimes } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { userLogout } from "../../services/userLogout";
+import { AccountReducer } from "../../redux/slices/AccountSlice";
 const Navbar = () => {
-  const user = false;
+  const user = useSelector((state) => state.account.account);
+  const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const handleScroll = () => {
@@ -89,19 +93,23 @@ const Navbar = () => {
 
                 <Flex>
                   {user ? (
-                    <div className="text-white relative group">
+                    <div className="text-white relative group cursor-pointer">
                       <img
                         className="w-8 h-8 rounded-full"
-                        src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                        src={
+                          user.photo
+                            ? user.photo
+                            : "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                        }
                         alt=""
                       />
 
                       <div className=" bg-white hidden group-hover:block p-2 rounded absolute top-8 right-0 min-w-[250px]">
                         <h2 className="text-black font-semibold text-xl">
-                          User
+                          {user.name}
                         </h2>
                         <h2 className="text-black font-medium text-base">
-                          email@gamil.com
+                          {user.email}
                         </h2>
 
                         <Link
@@ -111,7 +119,12 @@ const Navbar = () => {
                           Profile
                         </Link>
 
-                        <button className="text-black p-2 rounded border-[2px] border-black w-full block mt-2 text-center font-semibold">
+                        <button
+                          onClick={() =>
+                            userLogout(user.id, dispatch, AccountReducer)
+                          }
+                          className="text-black p-2 rounded border-[2px] border-black w-full block mt-2 text-center font-semibold"
+                        >
                           Logout
                         </button>
                       </div>

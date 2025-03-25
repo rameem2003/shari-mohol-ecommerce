@@ -1,8 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "../components/common/Container";
-import { Link } from "react-router";
+import { data, Link, useNavigate } from "react-router";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { AccountReducer } from "../redux/slices/AccountSlice";
+import { MdErrorOutline } from "react-icons/md";
 
 const Login = () => {
+  const dispatch = useDispatch(); // dispatch instance
+  const navigate = useNavigate(); // navigation instance
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm(); // react hook form
+  const [msg, setMsg] = useState(null); // error message
+
+  // function to handle form submission
+  const onSubmit = async (data) => {
+    try {
+      let res = await axios.post(
+        `${import.meta.env.VITE_API}/auth/login`,
+        data,
+        {
+          withCredentials: true,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      dispatch(AccountReducer(res.data.user));
+      navigate("/");
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+      setMsg(error.response.data.msg);
+    }
+  };
   return (
     <main className=" py-[100px]">
       <Container>
@@ -25,34 +63,61 @@ const Login = () => {
                 </Link>
               </p>
             </div>
-            <form className="max-w-md md:ml-auto w-full">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="max-w-md md:ml-auto w-full"
+            >
               <h3 className="text-slate-900 lg:text-3xl text-2xl font-bold mb-8">
                 Log In
               </h3>
+              {msg && (
+                <div className="p-3 flex items-center gap-3 border-[2px] border-[#d74242] rounded">
+                  <MdErrorOutline className="text-[#d74242] text-[1.5rem]" />
+                  <p className="text-[#d74242] text-[1rem]">{msg}</p>
+                </div>
+              )}
               <div className="space-y-6">
                 <div>
                   <label className="text-sm text-slate-800 font-medium mb-2 block">
                     Email
                   </label>
                   <input
+                    {...register("email", {
+                      required: "Email is required",
+                      pattern: {
+                        value:
+                          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                        message: "Invalid email format",
+                      },
+                    })}
                     name="email"
                     type="email"
                     required=""
                     className="bg-slate-100 w-full text-sm text-slate-800 px-4 py-3 rounded-md outline-none border focus:border-purple-600 focus:bg-transparent"
                     placeholder="Enter Email"
                   />
+                  {errors.email && (
+                    <p className="text-red-500">{errors.email.message}</p>
+                  )}
                 </div>
                 <div>
                   <label className="text-sm text-slate-800 font-medium mb-2 block">
                     Password
                   </label>
                   <input
+                    {...register("password", {
+                      required: "Password is required",
+                      minLength: { value: 6, message: "Minimum 6 characters" },
+                    })}
                     name="password"
                     type="password"
                     required=""
                     className="bg-slate-100 w-full text-sm text-slate-800 px-4 py-3 rounded-md outline-none border focus:border-purple-600 focus:bg-transparent"
                     placeholder="Enter Password"
                   />
+                  {errors.password && (
+                    <p className="text-red-500">{errors.password.message}</p>
+                  )}
                 </div>
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div className="text-sm">
@@ -64,10 +129,11 @@ const Login = () => {
               </div>
               <div className="!mt-12">
                 <button
-                  type="button"
+                  type="submit"
+                  disabled={isSubmitting}
                   className="w-full shadow-xl py-2.5 px-4 text-sm font-semibold rounded text-white bg-purple-600 hover:bg-purple-700 focus:outline-none"
                 >
-                  Log in
+                  {isSubmitting ? "Logging in..." : "Log In"}
                 </button>
               </div>
             </form>
