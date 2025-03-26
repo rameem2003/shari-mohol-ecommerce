@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Container from "../components/common/Container";
-import { data, Link, useNavigate } from "react-router";
-import { useForm } from "react-hook-form";
 import axios from "axios";
+import { Link, useNavigate } from "react-router";
+import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { AccountReducer } from "../redux/slices/AccountSlice";
 import { MdErrorOutline } from "react-icons/md";
@@ -71,7 +71,7 @@ const Login = () => {
                 Log In
               </h3>
               {msg && (
-                <div className="p-3 flex items-center gap-3 border-[2px] border-[#d74242] rounded">
+                <div className="p-3 mb-5 flex items-center gap-3 border-[2px] border-[#d74242] rounded">
                   <MdErrorOutline className="text-[#d74242] text-[1.5rem]" />
                   <p className="text-[#d74242] text-[1rem]">{msg}</p>
                 </div>
@@ -121,9 +121,12 @@ const Login = () => {
                 </div>
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div className="text-sm">
-                    <button className="text-black font-medium">
+                    <Link
+                      to="/forget-password"
+                      className="text-black font-medium"
+                    >
                       Forgot your password?
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import im from "../../../assets/test-banner.jpg";
 import Container from "../../common/Container";
 import { Link } from "react-router";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const Banner = () => {
   // const banners = useSelector((state) => state.banners.banners); // get all banners
@@ -77,7 +77,7 @@ const Banner = () => {
 
         <Slider {...settings}>
           <div
-            className="relative test flex items-center justify-center py-[120px] 2xl:py-[300px] bg-black"
+            className="relative test flex items-center justify-center py-[120px] lg:py-[300px] bg-black"
             style={{
               background: `url('${im}') no-repeat center center /cover`,
             }}
@@ -107,7 +107,7 @@ const Banner = () => {
             </div>
           </div>
           <div
-            className="relative test flex items-center justify-center py-[120px] 2xl:py-[300px] bg-black"
+            className="relative test flex items-center justify-center py-[120px] lg:py-[300px] bg-black"
             style={{
               background: `url('${im}') no-repeat center center /cover`,
             }}
@@ -137,7 +137,7 @@ const Banner = () => {
             </div>
           </div>
           <div
-            className="relative test flex items-center justify-center py-[120px] 2xl:py-[300px] bg-black"
+            className="relative test flex items-center justify-center py-[120px] lg:py-[300px] bg-black"
             style={{
               background: `url('${im}') no-repeat center center /cover`,
             }}
