@@ -1,11 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Title from "../../common/Title";
 import Container from "../../common/Container";
 import Slider from "react-slick";
+import axios from "axios";
 import ProductCard from "../../reusable/ProductCard";
 import "slick-carousel/slick/slick.css";
-import Title from "../../common/Title";
 
 const FeaturedProducts = () => {
+  const [featured, setFeatured] = useState([]);
+
+  // fetch featured products from the backend
+  const fetchFeatured = async () => {
+    try {
+      let res = await axios.get(`${import.meta.env.VITE_API}/product/featured`);
+      setFeatured(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const settings = {
     dots: false,
     infinite: true,
@@ -34,6 +46,12 @@ const FeaturedProducts = () => {
       },
     ],
   };
+
+  useEffect(() => {
+    fetchFeatured();
+  }, []);
+  console.log(featured);
+
   return (
     <section className=" mt-10 mb-20">
       <Container>
@@ -60,11 +78,9 @@ const FeaturedProducts = () => {
         <div className="mt-[31px]">
           <div className="slider-container">
             <Slider {...settings}>
-              <ProductCard className="w-full" />
-              <ProductCard className="w-full" />
-              <ProductCard className="w-full" />
-              <ProductCard className="w-full" />
-              <ProductCard className="w-full" />
+              {featured.map((p, i) => (
+                <ProductCard className="w-full" data={p} key={p._id} />
+              ))}
             </Slider>
           </div>
         </div>

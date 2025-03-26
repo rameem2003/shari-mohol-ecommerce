@@ -15,6 +15,9 @@ import { FaHome, FaTimes } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogout } from "../../services/userLogout";
 import { AccountReducer } from "../../redux/slices/AccountSlice";
+import axios from "axios";
+import { BannerReducer } from "../../redux/slices/BannerSlice";
+import { CategoryReducer } from "../../redux/slices/CategorySlice";
 const Navbar = () => {
   const user = useSelector((state) => state.account.account);
   const dispatch = useDispatch();
@@ -37,6 +40,31 @@ const Navbar = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
+  }, []);
+
+  // fetch all banners
+  const fetchBanners = async () => {
+    try {
+      let res = await axios.get(`${import.meta.env.VITE_API}/banner/all`);
+      dispatch(BannerReducer(res.data.data));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // fetch all categories
+  const fetchCategories = async () => {
+    try {
+      let res = await axios.get(`${import.meta.env.VITE_API}/category/all`);
+      dispatch(CategoryReducer(res.data.data));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchBanners();
+    fetchCategories();
   }, []);
 
   return (

@@ -1,12 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Title from "../../common/Title";
 import Container from "../../common/Container";
 import Slider from "react-slick";
+import axios from "axios";
 import ProductCard from "../../reusable/ProductCard";
 import "slick-carousel/slick/slick.css";
-import Title from "../../common/Title";
 // import "slick-carousel/slick/slick-theme.css";
 
 const Hotsell = () => {
+  const [hotsell, setHotsell] = useState([]);
+
+  // fetch hotsell products from the backend
+  const fetchHotSell = async () => {
+    try {
+      let res = await axios.get(`${import.meta.env.VITE_API}/product/hotsell`);
+      setHotsell(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const settings = {
     dots: false,
     infinite: true,
@@ -36,37 +49,21 @@ const Hotsell = () => {
     ],
   };
 
+  useEffect(() => {
+    fetchHotSell();
+  }, []);
+
   return (
     <section className=" mt-10 mb-20">
       <Container>
         <Title title="Hotsell" />
 
-        {/* <div className="mt-[31px]">
-            {featured.length > 0 ? (
-              <div className="slider-container">
-                <Slider {...settings}>
-                  {featured.map((p, i) => (
-                    <ItemCardProtrait
-                      data={p}
-                      key={p._id}
-                      className="mx-auto w-[90%]"
-                    />
-                  ))}
-                </Slider>
-              </div>
-            ) : (
-              <ProductListSkeleton />
-            )}
-          </div> */}
-
         <div className="mt-[31px]">
           <div className="slider-container">
             <Slider {...settings}>
-              <ProductCard className="w-full" />
-              <ProductCard className="w-full" />
-              <ProductCard className="w-full" />
-              <ProductCard className="w-full" />
-              <ProductCard className="w-full" />
+              {hotsell.map((p, i) => (
+                <ProductCard className="w-full" data={p} key={p._id} />
+              ))}
             </Slider>
           </div>
         </div>

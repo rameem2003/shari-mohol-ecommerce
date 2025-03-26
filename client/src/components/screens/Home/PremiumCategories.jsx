@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Container from "../../common/Container";
 import Flex from "../../common/Flex";
 import Slider from "react-slick";
@@ -6,9 +6,14 @@ import ProductCard from "../../reusable/ProductCard";
 import "slick-carousel/slick/slick.css";
 import { Link } from "react-router";
 import Title from "../../common/Title";
+import { useSelector } from "react-redux";
 // import "slick-carousel/slick/slick-theme.css";
 
 const PremiumCategories = () => {
+  const categories = useSelector((state) => state.category.category);
+
+  const [saree, setSaree] = useState([]);
+  const [threePcs, setThreePcs] = useState([]);
   const settings = {
     dots: false,
     infinite: true,
@@ -37,6 +42,20 @@ const PremiumCategories = () => {
       },
     ],
   };
+
+  useEffect(() => {
+    setSaree(
+      categories.filter(
+        (item) => item.name === "Sharee" || item.name === "Saree"
+      )
+    );
+    setThreePcs(
+      categories.filter((item) => item.name === "Ladies 3 piece dress")
+    );
+  }, [categories]);
+
+  console.log(saree);
+
   return (
     <section className=" mt-10 my-20">
       <Container>
@@ -48,22 +67,22 @@ const PremiumCategories = () => {
             <div className=" rounded-lg overflow-hidden group relative">
               <div className=" absolute top-0 left-0 bg-black/40 w-full h-full z-50">
                 <h2 className=" text-3xl font-medium text-white  absolute bottom-2 left-2">
-                  Sharee
+                  {saree[0]?.name}
                 </h2>
 
                 <h3 className=" text-4xl text-white font-hambra absolute right-[-50px] top-20 rotate-[-90deg]">
-                  Sharee
+                  {saree[0]?.name}
                 </h3>
               </div>
               <img
                 className=" w-full h-full group-hover:scale-[1.2] duration-200"
-                src="https://media.wired.com/photos/65382632fd3d190c7a1f5c68/1:1/w_1800,h_1800,c_limit/Google-Image-Search-news-Gear-GettyImages-824179306.jpg"
-                alt="category"
+                src={saree[0]?.thumb}
+                alt={saree[0]?.name}
               />
             </div>
 
             <Link
-              to=""
+              to={`/category/${saree[0]?._id}`}
               className="text-white inline-block mt-10 bg-purple-700 hover:bg-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
             >
               View All
@@ -71,17 +90,19 @@ const PremiumCategories = () => {
           </div>
           <div className=" w-full lg:w-8/12">
             <h2 className=" text-3xl font-bold text-black text-right">
-              Sharee
+              {saree[0]?.name}
             </h2>
 
             <div className=" mt-10">
               <div className="slider-container">
                 <Slider {...settings}>
-                  <ProductCard className="w-full" />
-                  <ProductCard className="w-full" />
-                  <ProductCard className="w-full" />
-                  <ProductCard className="w-full" />
-                  <ProductCard className="w-full" />
+                  {saree[0]?.products.map((item) => (
+                    <ProductCard
+                      key={item._id}
+                      className="w-full"
+                      data={item}
+                    />
+                  ))}
                 </Slider>
               </div>
             </div>
@@ -94,22 +115,22 @@ const PremiumCategories = () => {
             <div className=" rounded-lg overflow-hidden group relative">
               <div className=" absolute top-0 left-0 bg-black/40 w-full h-full z-50">
                 <h2 className=" text-3xl font-medium text-white  absolute bottom-2 left-2">
-                  Sharee
+                  {threePcs[0]?.name}
                 </h2>
 
-                <h3 className=" text-4xl text-white font-hambra absolute right-[-50px] top-20 rotate-[-90deg]">
-                  Sharee
+                <h3 className=" text-4xl text-white font-hambra absolute right-[-40px] top-20 rotate-[-90deg]">
+                  {threePcs[0]?.name.slice(0, 7)}
                 </h3>
               </div>
               <img
                 className=" w-full h-full group-hover:scale-[1.2] duration-200"
-                src="https://media.wired.com/photos/65382632fd3d190c7a1f5c68/1:1/w_1800,h_1800,c_limit/Google-Image-Search-news-Gear-GettyImages-824179306.jpg"
-                alt="category"
+                src={threePcs[0]?.thumb}
+                alt={threePcs[0]?.name}
               />
             </div>
 
             <Link
-              to=""
+              to={`/category/${threePcs[0]?._id}`}
               className="text-white inline-block mt-10 bg-purple-700 hover:bg-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
             >
               View All
@@ -117,17 +138,19 @@ const PremiumCategories = () => {
           </div>
           <div className="w-full lg:w-8/12">
             <h2 className=" text-3xl font-bold text-black text-right">
-              Sharee
+              {threePcs[0]?.name}
             </h2>
 
             <div className=" mt-10">
               <div className="slider-container">
                 <Slider {...settings}>
-                  <ProductCard className="w-full" />
-                  <ProductCard className="w-full" />
-                  <ProductCard className="w-full" />
-                  <ProductCard className="w-full" />
-                  <ProductCard className="w-full" />
+                  {threePcs[0]?.products.map((item) => (
+                    <ProductCard
+                      key={item._id}
+                      className="w-full"
+                      data={item}
+                    />
+                  ))}
                 </Slider>
               </div>
             </div>

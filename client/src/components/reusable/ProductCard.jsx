@@ -1,22 +1,22 @@
 import React from "react";
 import { FaCartShopping } from "react-icons/fa6";
 
-const ProductCard = ({ className }) => {
+const ProductCard = ({ className, data }) => {
   return (
     <div
       className={`${className} bg-white border border-gray-200  shadow-sm duration-150 scale-[1] hover:bg-purple-300 hover:scale-[1.02]`}
     >
       <a href="#">
         <img
-          className="p-8 rounded-t-lg"
-          src="https://media.wired.com/photos/65382632fd3d190c7a1f5c68/1:1/w_1800,h_1800,c_limit/Google-Image-Search-news-Gear-GettyImages-824179306.jpg"
-          alt="product image"
+          className="p-8 rounded-t-lg h-full w-full"
+          src={data?.images[0]}
+          alt={data?.name}
         />
       </a>
       <div className="px-5 pb-5">
-        <a href="#">
+        <a href={`/product/${data?._id}`}>
           <h5 className="text-xl font-semibold tracking-tight text-gray-900">
-            Apple Watch Series 7 GPS, Aluminium Case, Starlight Sport
+            {data?.name}
           </h5>
         </a>
         <div className="flex items-center mt-2.5 mb-5">
@@ -73,7 +73,8 @@ const ProductCard = ({ className }) => {
         </div>
         <div className="flex items-center justify-between">
           <span className=" text-lg xl:text-3xl font-bold text-gray-900">
-            BDT 599
+            BDT {data?.discountPrice}{" "}
+            <del className=" text-sm text-gray-500">{data?.sellingPrice}</del>
           </span>
           <a
             href="#"

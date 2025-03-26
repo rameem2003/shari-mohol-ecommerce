@@ -4,7 +4,7 @@ const categoryModel = require("../model/category.model");
 
 const allCategory = async (req, res) => {
   try {
-    let allCategory = await categoryModel.find();
+    let allCategory = await categoryModel.find().populate("products");
     res.status(200).send({
       success: true,
       msg: "All Category Fetched Success",
