@@ -466,6 +466,52 @@ const resendOTP = async (req, res) => {
 };
 
 /**
+ * Forget Password
+ */
+const forgetPassword = async (req, res) => {
+  const { email } = req.params;
+  const { newPassword } = req.body;
+  try {
+    let targetUser = await authModel.findOne({ email });
+
+    if (targetUser) {
+      bcrypt.hash(
+        newPassword,
+        parseInt(process.env.SALT),
+        async function (err, hash) {
+          // Store hash in your password DB.
+          if (err) {
+            return res.status(500).send({
+              success: false,
+              msg: "Something Went Wrong Please Try Again",
+              error: err,
+            });
+          } else {
+            targetUser.password = hash;
+            await targetUser.save();
+            res.status(200).send({
+              success: true,
+              msg: "Password Reset Successful",
+            });
+          }
+        }
+      );
+    } else {
+      return res.status(404).send({
+        success: false,
+        msg: "Email is not found",
+      });
+    }
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      msg: "Internal Server Error",
+      error,
+    });
+  }
+};
+
+/**
  * Verify Admin by email and token
  */
 const verifyAdmin = async (req, res) => {
@@ -622,6 +668,7 @@ module.exports = {
   accessToken,
   registerUser,
   changePassword,
+  forgetPassword,
   logoutUser,
   verifyOTP,
   resendOTP,

@@ -11,6 +11,7 @@ const {
   logoutUser,
   changePassword,
   deleteUser,
+  forgetPassword,
 } = require("../../controllers/auth.controller");
 const checkAdminMiddleware = require("../../middlewares/checkAdminMiddleware");
 const checkUserMiddleware = require("../../middlewares/checkUserMiddleware");
@@ -54,11 +55,22 @@ router.patch(
   errorHandleMiddleware,
   updateUser
 );
+
 /**
  * Change Password Route
- * http://localhost:5000/api/v1/auth/changepassword/:id
+ * http://localhost:5000/api/v1/auth/changepassword/:email
  */
-router.patch("/auth/changepassword/:id", checkUserMiddleware, changePassword);
+router.patch(
+  "/auth/changepassword/:email",
+  checkUserMiddleware,
+  changePassword
+);
+
+/**
+ * Forget Password Route
+ * http://localhost:5000/api/v1/auth/forgetpassword/:id
+ */
+router.patch("/auth/forgetpassword/:email", forgetPassword);
 
 /**
  * OTP Verification Route
