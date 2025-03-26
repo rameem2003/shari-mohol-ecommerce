@@ -10,7 +10,6 @@ const Stats = () => {
     try {
       let res = await axios.get(`${import.meta.env.VITE_API}/order/all`);
       setOrders(res.data.data);
-      console.log(res.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -18,13 +17,13 @@ const Stats = () => {
 
   let today = new Date().toISOString().split("T")[0]; // get the current date
 
-  let filterForToday = orders.filter((order) =>
+  let filterForToday = orders?.filter((order) =>
     order.createdAt.includes(today),
   ); // filter the orders for today
   console.log(filterForToday);
 
-  let totalSold = orders.reduce((total, order) => total + order.grandTotal, 0); // calculate the total sold
-  let todaySold = filterForToday.reduce(
+  let totalSold = orders?.reduce((total, order) => total + order.grandTotal, 0); // calculate the total sold
+  let todaySold = filterForToday?.reduce(
     (total, order) => total + order.grandTotal,
     0,
   ); // calculate the total sold for today
@@ -75,7 +74,7 @@ const Stats = () => {
 
             <div className="mt-6 flex gap-1">
               <h2 className="text-2xl font-[800] leading-[4rem] text-black xl:text-[4rem] dark:text-white">
-                {filterForToday.length}
+                {filterForToday?.length}
               </h2>
             </div>
           </div>
@@ -88,7 +87,7 @@ const Stats = () => {
 
             <div className="mt-6 flex gap-1">
               <h2 className="text-2xl font-[800] leading-[4rem] text-black xl:text-[4rem] dark:text-white">
-                {orders.length}
+                {orders?.length}
               </h2>
             </div>
           </div>

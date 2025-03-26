@@ -15,11 +15,11 @@ const PieChart = () => {
     }
   };
 
-  let completeOrder = orders.filter(
-    (item) => item.deliveryStatus == "delivered"
+  let completeOrder = orders?.filter(
+    (item) => item.deliveryStatus == "delivered",
   );
-  let pendingOrder = orders.filter((item) => item.deliveryStatus == "pending");
-  let cancelOrder = orders.filter((item) => item.deliveryStatus == "cancel");
+  let pendingOrder = orders?.filter((item) => item.deliveryStatus == "pending");
+  let cancelOrder = orders?.filter((item) => item.deliveryStatus == "cancel");
 
   const [windowSize, setWindowSize] = useState({
     width: undefined,
@@ -43,9 +43,9 @@ const PieChart = () => {
   }, []);
 
   const data = [
-    { name: "Order Complete", value: completeOrder.length },
-    { name: "Order Pending", value: pendingOrder.length },
-    { name: "Order Cancel", value: cancelOrder.length },
+    { name: "Order Complete", value: completeOrder?.length },
+    { name: "Order Pending", value: pendingOrder?.length },
+    { name: "Order Cancel", value: cancelOrder?.length },
   ];
 
   const width = windowSize.width < 376 ? 250 : 400;
@@ -61,7 +61,7 @@ const PieChart = () => {
 
   if (!Array.isArray(data) || data.length === 0) {
     return (
-      <div className="flex items-center justify-center w-full h-full border rounded-lg p-4">
+      <div className="flex h-full w-full items-center justify-center rounded-lg border p-4">
         <p className="text-gray-500">No data available</p>
       </div>
     );
@@ -71,7 +71,7 @@ const PieChart = () => {
 
   if (total === 0) {
     return (
-      <div className="flex items-center justify-center w-full h-full border rounded-lg p-4">
+      <div className="flex h-full w-full items-center justify-center rounded-lg border p-4">
         <p className="text-gray-500">Invalid data values</p>
       </div>
     );
@@ -126,14 +126,14 @@ const PieChart = () => {
   });
 
   return (
-    <div className="relative w-full bg-gray-100 p-2 rounded-md dark:bg-slate-800 lg:w-4/12">
-      <h2 className=" font-bold text-2xl text-black dark:text-white">
+    <div className="relative w-full rounded-md bg-gray-100 p-2 xl:w-4/12 dark:bg-slate-800">
+      <h2 className="text-2xl font-bold text-black dark:text-white">
         Statistics
       </h2>
       <svg
         width={width}
         height={height - 30}
-        className="overflow-visible mx-auto cursor-pointer"
+        className="mx-auto cursor-pointer overflow-visible"
       >
         {/* Donut Slices */}
         {slices.map((slice, index) => (
@@ -162,14 +162,14 @@ const PieChart = () => {
       </svg>
 
       {/* Department Breakdown */}
-      <div className="flex flex-wrap justify-center mt-4 sm:mt-0 gap-x-[20px] gap-y-[10px] px-[30px] items-center">
+      <div className="mt-4 flex flex-wrap items-center justify-center gap-x-[20px] gap-y-[10px] px-[30px] sm:mt-0">
         {slices.map((slice, index) => (
           <div key={`legend-${index}`} className="flex items-center">
             <div
-              className="w-3 h-3 mr-2"
+              className="mr-2 h-3 w-3"
               style={{ backgroundColor: slice.color }}
             />
-            <span className="text-[0.7rem] sm:text-[0.9rem] text-black dark:text-white">
+            <span className="text-[0.7rem] text-black sm:text-[0.9rem] dark:text-white">
               {slice.name}
             </span>
           </div>

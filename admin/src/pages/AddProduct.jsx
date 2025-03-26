@@ -214,7 +214,7 @@ const AddProduct = () => {
                 type="text"
                 name="name"
                 id="name"
-                placeholder="Your name"
+                placeholder="Product name"
                 className="border-border focus:border-primary mt-1 w-full rounded-md border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 dark:bg-transparent dark:text-white"
               />
             </div>

@@ -20,8 +20,8 @@ const LastOrders = () => {
   const fetchOrders = async () => {
     let res = await axios.get(`${import.meta.env.VITE_API}/order/all`);
     setOrders(
-      res.data.data
-        .filter((data) => data.deliveryStatus == "pending")
+      res?.data?.data
+        ?.filter((data) => data.deliveryStatus == "pending")
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
     );
   };
@@ -80,7 +80,7 @@ const LastOrders = () => {
   }, []);
 
   return (
-    <div className="customTable mb-4 hidden h-auto w-full flex-col items-start gap-5 rounded-md bg-gray-100 p-2 lg:flex lg:w-8/12 dark:bg-slate-800">
+    <div className="customTable mb-4 hidden h-auto w-full flex-col items-start gap-5 rounded-md bg-gray-100 p-2 lg:flex xl:w-8/12 dark:bg-slate-800">
       <div className="mx-auto w-full">
         <div className="mb-4 hidden">
           <input
@@ -121,7 +121,7 @@ const LastOrders = () => {
               </tr>
             </thead>
             <tbody className="">
-              {orders.slice(0, 4).map((item, index) => (
+              {orders?.slice(0, 4).map((item, index) => (
                 <tr className="border-t border-gray-200" key={item._id}>
                   <td className="p-3 text-black dark:text-white">{item._id}</td>
                   <td className="p-3 text-black dark:text-white">

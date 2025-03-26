@@ -25,6 +25,10 @@ const AllProducts = () => {
       {/* Product List Pagination */}
       <section className="mt-10">
         <ProductListPagination itemsPerPage={6} products={allProducts} />
+
+        {allProducts.length == 0 && (
+          <p className="font-bold text-white">No products found</p>
+        )}
       </section>
     </main>
   );
