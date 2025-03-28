@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Container from "../../common/Container";
+import Title from "../../common/Title";
 import Flex from "../../common/Flex";
 import Slider from "react-slick";
 import ProductCard from "../../reusable/ProductCard";
-import "slick-carousel/slick/slick.css";
 import { Link } from "react-router";
-import Title from "../../common/Title";
 import { useSelector } from "react-redux";
+import "slick-carousel/slick/slick.css";
 // import "slick-carousel/slick/slick-theme.css";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const PremiumCategories = () => {
   const categories = useSelector((state) => state.category.category);
@@ -19,14 +21,13 @@ const PremiumCategories = () => {
     infinite: true,
     speed: 500,
     autoplay: true,
-
     slidesToShow: 3,
     slidesToScroll: 3,
     arrows: false,
 
     responsive: [
       {
-        breakpoint: 600,
+        breakpoint: 1200,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 2,
@@ -64,6 +65,11 @@ const PremiumCategories = () => {
         {/* saree section */}
         <Flex className="mt-20 flex-col lg:flex-row rounded-lg p-2 shadow-xl gap-5">
           <div className=" w-full lg:w-4/12">
+            {saree.length == 0 && (
+              <div className="w-full">
+                <Skeleton count={1} className="h-[400px]" />
+              </div>
+            )}
             <div className=" rounded-lg overflow-hidden group relative">
               <div className=" absolute top-0 left-0 bg-black/40 w-full h-full z-50">
                 <h2 className=" text-3xl font-medium text-white  absolute bottom-2 left-2">
@@ -81,12 +87,18 @@ const PremiumCategories = () => {
               />
             </div>
 
-            <Link
-              to={`/category/${saree[0]?._id}`}
-              className="text-white inline-block mt-10 bg-purple-700 hover:bg-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-            >
-              View All
-            </Link>
+            {saree.length == 0 ? (
+              <div className="w-[80px] mt-10">
+                <Skeleton count={1} className="h-[50px]" />
+              </div>
+            ) : (
+              <Link
+                to={`/category/${saree[0]?._id}`}
+                className="text-white inline-block mt-10 bg-purple-700 hover:bg-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                View All
+              </Link>
+            )}
           </div>
           <div className=" w-full lg:w-8/12">
             <h2 className=" text-3xl font-bold text-black text-right">
@@ -94,6 +106,17 @@ const PremiumCategories = () => {
             </h2>
 
             <div className=" mt-10">
+              {saree?.length == 0 && (
+                <Flex className="gap-4">
+                  <div className="hidden md:block w-full md:w-1/2">
+                    <Skeleton inline={true} className="h-[400px]" />
+                  </div>
+                  <div className="hidden md:block w-full md:w-1/2">
+                    <Skeleton inline={true} className="h-[400px]" />
+                  </div>
+                </Flex>
+              )}
+
               <div className="slider-container">
                 <Slider {...settings}>
                   {saree[0]?.products.map((item) => (
@@ -112,6 +135,11 @@ const PremiumCategories = () => {
         {/* 3 pcs section */}
         <Flex className="mt-20 flex-col lg:flex-row rounded-lg p-2 shadow-xl gap-5">
           <div className="w-full lg:w-4/12">
+            {threePcs.length == 0 && (
+              <div className="w-full">
+                <Skeleton count={1} className="h-[400px]" />
+              </div>
+            )}
             <div className=" rounded-lg overflow-hidden group relative">
               <div className=" absolute top-0 left-0 bg-black/40 w-full h-full z-50">
                 <h2 className=" text-3xl font-medium text-white  absolute bottom-2 left-2">
@@ -129,12 +157,18 @@ const PremiumCategories = () => {
               />
             </div>
 
-            <Link
-              to={`/category/${threePcs[0]?._id}`}
-              className="text-white inline-block mt-10 bg-purple-700 hover:bg-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-            >
-              View All
-            </Link>
+            {threePcs.length == 0 ? (
+              <div className="w-[80px] mt-10">
+                <Skeleton count={1} className="h-[50px]" />
+              </div>
+            ) : (
+              <Link
+                to={`/category/${threePcs[0]?._id}`}
+                className="text-white inline-block mt-10 bg-purple-700 hover:bg-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                View All
+              </Link>
+            )}
           </div>
           <div className="w-full lg:w-8/12">
             <h2 className=" text-3xl font-bold text-black text-right">
@@ -142,6 +176,16 @@ const PremiumCategories = () => {
             </h2>
 
             <div className=" mt-10">
+              {threePcs?.length == 0 && (
+                <Flex className="gap-4">
+                  <div className="hidden md:block w-full md:w-1/2">
+                    <Skeleton inline={true} className="h-[400px]" />
+                  </div>
+                  <div className="hidden md:block w-full md:w-1/2">
+                    <Skeleton inline={true} className="h-[400px]" />
+                  </div>
+                </Flex>
+              )}
               <div className="slider-container">
                 <Slider {...settings}>
                   {threePcs[0]?.products.map((item) => (

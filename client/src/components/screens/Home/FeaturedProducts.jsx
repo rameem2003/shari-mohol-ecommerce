@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Title from "../../common/Title";
+import Flex from "../../common/Flex";
 import Container from "../../common/Container";
 import Slider from "react-slick";
 import axios from "axios";
 import ProductCard from "../../reusable/ProductCard";
+import Skeleton from "react-loading-skeleton";
 import "slick-carousel/slick/slick.css";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const FeaturedProducts = () => {
   const [featured, setFeatured] = useState([]);
@@ -57,25 +60,17 @@ const FeaturedProducts = () => {
       <Container>
         <Title title="Featured Products" />
 
-        {/* <div className="mt-[31px]">
-          {featured.length > 0 ? (
-            <div className="slider-container">
-              <Slider {...settings}>
-                {featured.map((p, i) => (
-                  <ItemCardProtrait
-                    data={p}
-                    key={p._id}
-                    className="mx-auto w-[90%]"
-                  />
-                ))}
-              </Slider>
-            </div>
-          ) : (
-            <ProductListSkeleton />
-          )}
-        </div> */}
-
         <div className="mt-[31px]">
+          {featured.length == 0 && (
+            <Flex className="gap-4">
+              <div className=" w-full md:w-1/2">
+                <Skeleton inline={true} className="h-[400px]" />
+              </div>
+              <div className="hidden md:block md:w-1/2">
+                <Skeleton inline={true} className="h-[400px]" />
+              </div>
+            </Flex>
+          )}
           <div className="slider-container">
             <Slider {...settings}>
               {featured.map((p, i) => (
