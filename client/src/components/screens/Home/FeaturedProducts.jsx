@@ -53,7 +53,6 @@ const FeaturedProducts = () => {
   useEffect(() => {
     fetchFeatured();
   }, []);
-  console.log(featured);
 
   return (
     <section className=" mt-10 mb-20">

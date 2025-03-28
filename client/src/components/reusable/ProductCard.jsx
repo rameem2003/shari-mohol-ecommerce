@@ -1,5 +1,6 @@
 import React from "react";
 import { FaCartShopping } from "react-icons/fa6";
+import { Link } from "react-router";
 
 const ProductCard = ({ className, data }) => {
   return (
@@ -8,17 +9,17 @@ const ProductCard = ({ className, data }) => {
     >
       <a href="#">
         <img
-          className="p-8 rounded-t-lg h-full w-full"
+          className="p-8 rounded-t-lg h-auto w-full"
           src={data?.images[0]}
           alt={data?.name}
         />
       </a>
       <div className="px-5 pb-5">
-        <a href={`/product/${data?._id}`}>
+        <Link to={`/product/${data?._id}`}>
           <h5 className="text-xl font-semibold tracking-tight text-gray-900">
             {data?.name}
           </h5>
-        </a>
+        </Link>
         <div className="flex items-center mt-2.5 mb-5">
           <div className="flex items-center space-x-1 rtl:space-x-reverse">
             <svg

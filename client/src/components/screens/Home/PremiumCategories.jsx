@@ -55,8 +55,6 @@ const PremiumCategories = () => {
     );
   }, [categories]);
 
-  console.log(saree);
-
   return (
     <section className=" mt-10 my-20">
       <Container>

@@ -29,7 +29,9 @@ const allProducts = async (req, res) => {
  */
 const getFeaturedProducts = async (req, res) => {
   try {
-    let featuredProducts = await productModel.find({ featured: true });
+    let featuredProducts = await productModel
+      .find({ featured: true })
+      .populate("category");
     res.status(200).send({
       success: true,
       msg: "All Featured Products Fetched Success",
@@ -49,7 +51,9 @@ const getFeaturedProducts = async (req, res) => {
  */
 const getHotSellProducts = async (req, res) => {
   try {
-    let hotSellProducts = await productModel.find({ hotSell: true });
+    let hotSellProducts = await productModel
+      .find({ hotSell: true })
+      .populate("category");
     res.status(200).send({
       success: true,
       msg: "All Hot Sell Products Fetched Success",
@@ -70,7 +74,9 @@ const getHotSellProducts = async (req, res) => {
 const getProductBySubCategory = async (req, res) => {
   const { subCategory } = req.query;
   try {
-    let products = await productModel.find({ subCategory });
+    let products = await productModel
+      .find({ subCategory })
+      .populate("category");
     res.status(200).send({
       success: true,
       msg: `${subCategory} Products Fetched Success`,
@@ -91,7 +97,7 @@ const getProductBySubCategory = async (req, res) => {
 const singleProduct = async (req, res) => {
   const { id } = req.params;
   try {
-    let product = await productModel.findOne({ _id: id });
+    let product = await productModel.findOne({ _id: id }).populate("category");
     res.status(200).send({
       success: true,
       msg: "Product Fetched Success",

@@ -18,6 +18,7 @@ import { AccountReducer } from "../../redux/slices/AccountSlice";
 import axios from "axios";
 import { BannerReducer } from "../../redux/slices/BannerSlice";
 import { CategoryReducer } from "../../redux/slices/CategorySlice";
+import { allProducts } from "../../redux/slices/ProductSlice";
 const Navbar = () => {
   const user = useSelector((state) => state.account.account);
   const dispatch = useDispatch();
@@ -62,9 +63,20 @@ const Navbar = () => {
     }
   };
 
+  // fetch all products
+  const fetchAllProducts = async () => {
+    try {
+      let res = await axios.get(`${import.meta.env.VITE_API}/product/all`);
+      dispatch(allProducts(res.data.data));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchBanners();
     fetchCategories();
+    fetchAllProducts();
   }, []);
 
   return (
@@ -72,7 +84,7 @@ const Navbar = () => {
       <nav
         className={`${
           scrolled ? "bg-white" : "bg-black/20"
-        } py-7 fixed w-full z-[99999999999999]`}
+        } py-7 fixed w-full z-[999]`}
       >
         <Container>
           <Flex className="items-center justify-between lg:px-8">
