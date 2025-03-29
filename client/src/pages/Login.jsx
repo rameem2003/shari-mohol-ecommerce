@@ -1,46 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import Container from "../components/common/Container";
-import axios from "axios";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { AccountReducer } from "../redux/slices/AccountSlice";
 import { MdErrorOutline } from "react-icons/md";
+import useAuth from "../hooks/useAuth";
 
 const Login = () => {
-  const dispatch = useDispatch(); // dispatch instance
-  const navigate = useNavigate(); // navigation instance
+  const { login, msg } = useAuth();
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm(); // react hook form
-  const [msg, setMsg] = useState(null); // error message
 
-  // function to handle form submission
-  const onSubmit = async (data) => {
-    try {
-      let res = await axios.post(
-        `${import.meta.env.VITE_API}/auth/login`,
-        data,
-        {
-          withCredentials: true,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      dispatch(AccountReducer(res.data.user));
-      navigate("/");
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-      setMsg(error.response.data.msg);
-    }
-  };
   return (
     <main className=" py-[100px]">
       <Container>
@@ -64,7 +36,7 @@ const Login = () => {
               </p>
             </div>
             <form
-              onSubmit={handleSubmit(onSubmit)}
+              onSubmit={handleSubmit(login)}
               className="max-w-md md:ml-auto w-full"
             >
               <h3 className="text-slate-900 lg:text-3xl text-2xl font-bold mb-8">

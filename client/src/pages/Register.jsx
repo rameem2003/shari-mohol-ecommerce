@@ -1,43 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import Container from "../components/common/Container";
-import axios from "axios";
-import { Link, useNavigate } from "react-router";
-import { useDispatch } from "react-redux";
+import useAuth from "../hooks/useAuth";
+import { Link } from "react-router";
 import { useForm } from "react-hook-form";
 import { MdErrorOutline } from "react-icons/md";
 
 const Register = () => {
-  const dispatch = useDispatch(); // dispatch instance
-  const navigate = useNavigate(); // navigation instance
+  const { handleRegister, msg } = useAuth();
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm(); // react hook form
-  const [msg, setMsg] = useState(null); // error message
-
-  const onSubmit = async (data) => {
-    console.log(data);
-    try {
-      let res = await axios.post(
-        `${import.meta.env.VITE_API}/auth/register`,
-        data,
-        {
-          withCredentials: true,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      navigate("/verify-otp", { state: { key: res.data.user } });
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-      setMsg(error.response.data.msg);
-    }
-  };
 
   return (
     <main className=" py-[100px]">
@@ -62,7 +36,7 @@ const Register = () => {
               </p>
             </div>
             <form
-              onSubmit={handleSubmit(onSubmit)}
+              onSubmit={handleSubmit(handleRegister)}
               className="max-w-md md:ml-auto w-full"
             >
               <h3 className="text-slate-900 lg:text-3xl text-2xl font-bold mb-8">
