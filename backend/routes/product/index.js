@@ -7,6 +7,7 @@ const {
   updateProduct,
   deleteProduct,
   getProductBySubCategory,
+  getProductByCategory,
 } = require("../../controllers/product.controller");
 const checkAdminMiddleware = require("../../middlewares/checkAdminMiddleware");
 const errorHandleMiddleware = require("../../middlewares/errorHandleMiddleware");
@@ -31,6 +32,12 @@ router.get("/product/featured", getFeaturedProducts);
  * http://localhost:5000/api/v1/product/hotsell
  */
 router.get("/product/hotsell", getHotSellProducts);
+
+/**
+ * Get products by category
+ * http://localhost:5000/api/v1/product/category/:category
+ */
+router.get("/product/category/:category", getProductByCategory);
 
 /**
  * Get products by sub category

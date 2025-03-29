@@ -69,6 +69,27 @@ const getHotSellProducts = async (req, res) => {
 };
 
 /**
+ * Get Products by Category
+ */
+const getProductByCategory = async (req, res) => {
+  const { category } = req.params;
+  try {
+    let products = await productModel.find({ category }).populate("category");
+    res.status(200).send({
+      success: true,
+      msg: `${category} Products Fetched Success`,
+      data: products,
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      msg: "Internal Server Error",
+      error,
+    });
+  }
+};
+
+/**
  * Get Products by Sub Category
  */
 const getProductBySubCategory = async (req, res) => {
@@ -344,6 +365,7 @@ module.exports = {
   allProducts,
   getFeaturedProducts,
   getHotSellProducts,
+  getProductByCategory,
   getProductBySubCategory,
   singleProduct,
   createNewProduct,

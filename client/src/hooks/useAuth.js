@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { AccountReducer } from "../redux/slices/AccountSlice";
@@ -57,7 +58,24 @@ const useAuth = () => {
     }
   };
 
-  return { login, handleRegister, msg };
+  // function for logout
+  const handleLogout = async (id) => {
+    try {
+      let res = await axios.post(
+        `${import.meta.env.VITE_API}/auth/logout/${id}`
+      );
+
+      console.log(res);
+      Cookies.remove("accessToken");
+      Cookies.remove("sessionToken");
+      dispatch(AccountReducer(""));
+      location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return { login, handleRegister, handleLogout, msg };
 };
 
 export default useAuth;

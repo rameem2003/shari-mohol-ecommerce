@@ -4,8 +4,6 @@ import { PhotoProvider, PhotoView } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
 
 const ProductImagePreview = ({ data }) => {
-  console.log(data);
-
   const [img, setImg] = useState(0);
   return (
     <Flex className="flex-col lg:flex-row gap-2">

@@ -19,10 +19,15 @@ import axios from "axios";
 import { BannerReducer } from "../../redux/slices/BannerSlice";
 import { CategoryReducer } from "../../redux/slices/CategorySlice";
 import { allProducts } from "../../redux/slices/ProductSlice";
+import useAuth from "../../hooks/useAuth";
+import CartSidebar from "../reusable/CartSidebar";
 const Navbar = () => {
-  const user = useSelector((state) => state.account.account);
-  const dispatch = useDispatch();
+  const user = useSelector((state) => state.account.account); // user
+  const cart = useSelector((state) => state.cart.cart); // cart
+  const { handleLogout } = useAuth();
+  const dispatch = useDispatch(); // dispatch instance
   const [isOpen, setIsOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const handleScroll = () => {
     const offset = window.scrollY;
@@ -115,13 +120,16 @@ const Navbar = () => {
                       }`}
                     />
                   </div>
-                  <div className="relative">
+                  <div
+                    onClick={() => setIsCartOpen(!isCartOpen)}
+                    className="relative cursor-pointer"
+                  >
                     <span
                       className={`${
                         scrolled && "border-[2px] border-black"
                       } absolute top-[-10px] right-[-10px] inline-flex items-center justify-center h-5 w-5 text-xs font-bold leading-6 text-black bg-white rounded-full`}
                     >
-                      1
+                      {cart?.length}
                     </span>
                     <FaCartShopping
                       className={` text-2xl ${
@@ -160,9 +168,7 @@ const Navbar = () => {
                         </Link>
 
                         <button
-                          onClick={() =>
-                            userLogout(user.id, dispatch, AccountReducer)
-                          }
+                          onClick={() => handleLogout(user.id)}
                           className="text-black p-2 rounded border-[2px] border-black w-full block mt-2 text-center font-semibold"
                         >
                           Logout
@@ -243,6 +249,8 @@ const Navbar = () => {
           <img className="w-[60%] mx-auto" src={logopurple} alt="" />
         </div>
       </aside>
+
+      <CartSidebar isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} />
 
       <section className=" block lg:hidden fixed w-full p-2 z-[99999999999999] left-0 bottom-0 bg-purple-800">
         <Flex className="items-center justify-center gap-10">

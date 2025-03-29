@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import ProductImagePreview from "../components/screens/product-details/ProductImagePreview";
 import Flex from "../components/common/Flex";
 import Container from "../components/common/Container";
+import Slider from "react-slick";
 import Skeleton from "react-loading-skeleton";
+import ProductCard from "../components/reusable/ProductCard";
+import useCart from "../hooks/useCart";
 import "react-loading-skeleton/dist/skeleton.css";
+import "slick-carousel/slick/slick.css";
 import { FaHome } from "react-icons/fa";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 import { BsTruck } from "react-icons/bs";
@@ -13,12 +18,44 @@ import { PiToolboxLight } from "react-icons/pi";
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const [product, setProduct] = useState({});
+  const cart = useSelector((state) => state.cart.cart);
+  const { addToCart, updateCart } = useCart(); // cart hook
+  const [product, setProduct] = useState({}); // state for product
+  const [relatedProducts, setRelatedProducts] = useState([]); // state for related products
   const [selectedColor, setSelectedColor] = useState(null); // state for color select button indicator
   const [color, setColor] = useState(""); // state for store the product color
   const [selectedSize, setSelectedSize] = useState(null); // state for color select button indicator
   const [size, setSize] = useState(""); // state for store the product size
-  console.log(id);
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    autoplay: true,
+
+    slidesToShow: 2,
+    slidesToScroll: 2,
+    arrows: false,
+
+    responsive: [
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
+  let matchToCart = cart.filter((item) => item._id == id);
 
   // fetch product
   const fetchProduct = async () => {
@@ -33,9 +70,32 @@ const ProductDetails = () => {
     }
   };
 
+  // fetch product by category
+  const fetchProductByCategory = async () => {
+    console.log(product?.category?._id);
+
+    try {
+      let res = await axios.get(`
+        ${import.meta.env.VITE_API}/product/category/${
+        product?.category?._id
+      }`);
+      setRelatedProducts(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
     fetchProduct();
   }, [id]);
+
+  useEffect(() => {
+    fetchProductByCategory();
+  }, [product?.category?._id]);
 
   return (
     <main className=" py-[120px]">
@@ -83,7 +143,7 @@ const ProductDetails = () => {
               <hr />
 
               {product?.sizes?.length > 0 && (
-                <Flex className="my-6 items-center gap-6">
+                <Flex className="my-6 items-center gap-6 hidden">
                   <p className="text-[20px] font-normal text-black">Size:</p>
                   <Flex className="gap-4">
                     {product?.sizes?.map((data, i) => (
@@ -107,7 +167,7 @@ const ProductDetails = () => {
               )}
 
               {product?.colors?.length > 0 && (
-                <Flex className="my-6 items-center gap-6">
+                <Flex className="my-6 items-center gap-6 hidden">
                   <p className="text-[20px] font-normal text-black">Color:</p>
 
                   <Flex className="gap-4">
@@ -142,21 +202,30 @@ const ProductDetails = () => {
 
               <Flex className="mt-10 gap-5 flex-col md:flex-row">
                 <Flex className=" w-full xl:w-4/12 border-[2px] border-black items-center justify-between">
-                  <button className=" text-center flex items-center justify-center w-1/3 px-4 py-2 font-bold hover:text-purple-700">
+                  <button
+                    onClick={() => updateCart(id, +1)}
+                    className=" text-center flex items-center justify-center w-1/3 px-4 py-2 font-bold hover:text-purple-700"
+                  >
                     <FaPlus className="" />
                   </button>
                   <button
                     disabled
                     className=" text-center w-1/3 flex items-center justify-center px-4 py-2 font-bold"
                   >
-                    0
+                    {matchToCart[0]?.quantity ? matchToCart[0]?.quantity : 0}
                   </button>
-                  <button className="  text-center w-1/3 flex items-center justify-center px-4 py-2 font-bold hover:text-purple-700">
+                  <button
+                    onClick={() => updateCart(id, -1)}
+                    className="  text-center w-1/3 flex items-center justify-center px-4 py-2 font-bold hover:text-purple-700"
+                  >
                     <FaMinus className="" />
                   </button>
                 </Flex>
 
-                <button className=" w-full flex items-center justify-center gap-2 border-[2px] border-purple-600 py-3 px-5 xl:w-8/12 text-white hover:text-purple-600 bg-purple-600 hover:bg-white">
+                <button
+                  onClick={() => addToCart(product)}
+                  className=" w-full flex items-center justify-center gap-2 border-[2px] border-purple-600 py-3 px-5 xl:w-8/12 text-white hover:text-purple-600 bg-purple-600 hover:bg-white"
+                >
                   Add to cart
                 </button>
               </Flex>
@@ -175,6 +244,30 @@ const ProductDetails = () => {
               </div>
             </div>
           </Flex>
+        </section>
+
+        <section className=" mt-10 my-20">
+          <h2 className=" text-2xl font-bold">Related Products</h2>
+
+          <div className="mt-[31px]">
+            {relatedProducts.length == 0 && (
+              <Flex className="gap-4">
+                <div className=" w-full md:w-1/2">
+                  <Skeleton inline={true} className="h-[400px]" />
+                </div>
+                <div className="hidden md:block md:w-1/2">
+                  <Skeleton inline={true} className="h-[400px]" />
+                </div>
+              </Flex>
+            )}
+            <div className="slider-container">
+              <Slider {...settings}>
+                {relatedProducts.map((p, i) => (
+                  <ProductCard className="w-full" data={p} key={p._id} />
+                ))}
+              </Slider>
+            </div>
+          </div>
         </section>
       </Container>
     </main>
