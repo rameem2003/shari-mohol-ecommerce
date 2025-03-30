@@ -3,7 +3,7 @@ import React, { useState } from "react";
 // react icons
 import { IoChevronDown } from "react-icons/io5";
 
-const Select = ({ items }) => {
+const Select = ({ name, items, onChange }) => {
   // close the dropdown is clicked outside
   document.addEventListener("click", function (event) {
     let target = event.target;
@@ -16,6 +16,12 @@ const Select = ({ items }) => {
   // actions
   const [isActive, setIsActive] = useState(false);
   const [content, setContent] = useState("Select Option");
+  // functions for dropdown
+  const optionSelect = (option) => {
+    setContent(option);
+    onChange(name, option);
+    setIsActive(false);
+  };
 
   return (
     <button
@@ -46,7 +52,7 @@ const Select = ({ items }) => {
           <p
             className="py-2 px-4 text-left text-gray-800 hover:bg-gray-50 transition-all duration-200"
             key={index}
-            onClick={(e) => setContent(e.target.textContent)}
+            onClick={(e) => optionSelect(option)}
           >
             {option}
           </p>

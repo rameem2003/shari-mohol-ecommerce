@@ -11,6 +11,9 @@ import Shop from "./pages/Shop";
 import ErrorPage from "./pages/ErrorPage";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import PaymentFail from "./pages/PaymentFail";
+import PaymentCancel from "./pages/PaymentCancel";
 
 const App = () => {
   return (
@@ -22,6 +25,12 @@ const App = () => {
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route
+            path="/payment/success/:orderId"
+            element={<PaymentSuccess />}
+          />
+          <Route path="/payment/fail/:orderId" element={<PaymentFail />} />
+          <Route path="/payment/cancel/:orderId" element={<PaymentCancel />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/verify-otp" element={<OTP />} />
