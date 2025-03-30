@@ -14,7 +14,7 @@ const CartSidebar = ({ isCartOpen, setIsCartOpen }) => {
   return (
     <aside
       className={` fixed h-screen w-full lg:w-3/12 2xl:w-2/12 duration-200 ${
-        isCartOpen ? "right-0" : "right-[-500px]"
+        isCartOpen ? "right-0" : "right-[-1500px]"
       } top-0 bg-white z-[999999] shadow-lg`}
     >
       <section className=" bg-purple-700 p-3 mb-2">

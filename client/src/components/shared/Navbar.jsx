@@ -7,20 +7,19 @@ import {
   FaShop,
   FaUser,
 } from "react-icons/fa6";
+import axios from "axios";
+import useAuth from "../../hooks/useAuth";
+import CartSidebar from "../reusable/CartSidebar";
+import MenuSidebar from "../reusable/MenuSidebar";
+import { useDispatch, useSelector } from "react-redux";
+import { BannerReducer } from "../../redux/slices/BannerSlice";
+import { CategoryReducer } from "../../redux/slices/CategorySlice";
+import { allProducts } from "../../redux/slices/ProductSlice";
 import { Link } from "react-router";
 import { IoIosSearch } from "react-icons/io";
 import logopurple from "../../assets/logopurple.png";
 import logowhite from "../../assets/logowhite.png";
 import { FaHome, FaTimes } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
-import { userLogout } from "../../services/userLogout";
-import { AccountReducer } from "../../redux/slices/AccountSlice";
-import axios from "axios";
-import { BannerReducer } from "../../redux/slices/BannerSlice";
-import { CategoryReducer } from "../../redux/slices/CategorySlice";
-import { allProducts } from "../../redux/slices/ProductSlice";
-import useAuth from "../../hooks/useAuth";
-import CartSidebar from "../reusable/CartSidebar";
 const Navbar = () => {
   const user = useSelector((state) => state.account.account); // user
   const cart = useSelector((state) => state.cart.cart); // cart
@@ -191,64 +190,7 @@ const Navbar = () => {
         </Container>
       </nav>
 
-      <aside
-        className={` bg-white p-3 h-screen w-full lg:w-2/12 fixed top-0 duration-300 ease-in-out ${
-          isOpen ? "left-0" : "left-[-200%]"
-        } z-[99999999999999]`}
-      >
-        <Flex>
-          <FaTimes
-            className=" text-3xl cursor-pointer text-purple-600"
-            onClick={() => setIsOpen(!isOpen)}
-          />
-        </Flex>
-        <ul className=" mt-10">
-          <li className=" rounded-md mb-2 bg-purple-50">
-            <Link
-              className=" duration-150 hover:ml-2  p-2 block text-black hover:text-purple-600 text-2xl font-medium hover:font-semibold"
-              to="/"
-            >
-              Shari
-            </Link>
-          </li>
-          <li className=" rounded-md mb-2 bg-purple-50">
-            <Link
-              className=" duration-150 hover:ml-2  p-2 block text-black hover:text-purple-600 text-2xl font-medium hover:font-semibold"
-              to="/"
-            >
-              Shari
-            </Link>
-          </li>
-          <li className=" rounded-md mb-2 bg-purple-50">
-            <Link
-              className=" duration-150 hover:ml-2  p-2 block text-black hover:text-purple-600 text-2xl font-medium hover:font-semibold"
-              to="/"
-            >
-              Shari
-            </Link>
-          </li>
-          <li className=" rounded-md mb-2 bg-purple-50">
-            <Link
-              className="  duration-150 hover:ml-2 p-2 block text-black hover:text-purple-600 text-2xl font-medium hover:font-semibold"
-              to="/shop"
-            >
-              Shop
-            </Link>
-          </li>
-          <li className=" rounded-md mb-2 bg-purple-50">
-            <Link
-              className=" duration-150 hover:ml-2  p-2 block text-black hover:text-purple-600 text-2xl font-medium hover:font-semibold"
-              to="/account"
-            >
-              Account
-            </Link>
-          </li>
-        </ul>
-
-        <div className="w-full absolute left-0 bottom-5">
-          <img className="w-[60%] mx-auto" src={logopurple} alt="" />
-        </div>
-      </aside>
+      <MenuSidebar isOpen={isOpen} setIsOpen={setIsOpen} />
 
       <CartSidebar isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} />
 
