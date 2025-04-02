@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import PrizeRangeSlider from "../components/screens/shop/PrizeRangeSlider";
 import axios from "axios";
 import ProductListPagination from "../components/reusable/ProductListPagination";
+import BreadCrumb from "../components/common/BreadCrumb";
 
 const Shop = () => {
   const [range, setRange] = useState(500000);
@@ -74,12 +75,7 @@ const Shop = () => {
 
       <section className=" mt-10 my-20">
         <Container>
-          <p className=" flex items-center gap-2">
-            <Link to="/">
-              <FaHome className="text-2xl text-gray-400" />
-            </Link>
-            / <span className=" text-lg font-medium">Shop</span>
-          </p>
+          <BreadCrumb path={"Shop"} />
 
           <Flex className="items-start gap-4 mt-10">
             <div className="xl:w-3/12">

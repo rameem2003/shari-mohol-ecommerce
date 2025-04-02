@@ -160,7 +160,7 @@ const Navbar = () => {
                         </h2>
 
                         <Link
-                          to="/profile"
+                          to="/account"
                           className="text-black p-2 rounded border-[2px] border-black block mt-2 text-center font-semibold"
                         >
                           Profile

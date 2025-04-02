@@ -43,7 +43,7 @@ const MenuSidebar = ({ isOpen, setIsOpen }) => {
             to="/account"
           >
             <FaUserAlt />
-            Account
+            Profile
           </Link>
         </li>
         <li className=" rounded-md mb-2 bg-purple-50">
@@ -57,7 +57,7 @@ const MenuSidebar = ({ isOpen, setIsOpen }) => {
         </li>
       </ul>
 
-      <div className="w-full absolute left-0 bottom-5">
+      <div className="w-full absolute left-0 bottom-20 lg:bottom-5">
         <img className="w-[60%] mx-auto" src={logopurple} alt="" />
       </div>
     </aside>

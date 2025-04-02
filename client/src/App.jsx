@@ -14,6 +14,7 @@ import Checkout from "./pages/Checkout";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentFail from "./pages/PaymentFail";
 import PaymentCancel from "./pages/PaymentCancel";
+import ProfilePage from "./pages/ProfilePage";
 
 const App = () => {
   return (
@@ -33,6 +34,7 @@ const App = () => {
           <Route path="/payment/cancel/:orderId" element={<PaymentCancel />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/account" element={<ProfilePage />} />
           <Route path="/verify-otp" element={<OTP />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
         </Route>
