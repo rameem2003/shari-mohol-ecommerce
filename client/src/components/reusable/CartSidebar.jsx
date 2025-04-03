@@ -1,20 +1,43 @@
-import React from "react";
-import Flex from "../common/Flex";
-import { FaTimes } from "react-icons/fa";
+import React, { useContext, useEffect, useRef } from "react";
+import { ToggleContext } from "../../context/ToggleContextProvider";
 import { useSelector } from "react-redux";
-import CartCard from "./CartCard";
 import { Link } from "react-router";
+import Flex from "../common/Flex";
+import CartCard from "./CartCard";
+import { FaTimes } from "react-icons/fa";
 
 const CartSidebar = ({ isCartOpen, setIsCartOpen }) => {
+  const { cartToggle, setCartToggle } = useContext(ToggleContext);
+  const cartRef = useRef(null);
   const cart = useSelector((state) => state.cart.cart);
   const grandTotal = cart.reduce(
     (total, item) => total + item.quantity * item.discountPrice,
     0
   );
+
+  // Close sidebar when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (cartRef.current && !cartRef.current.contains(event.target)) {
+        setCartToggle(false);
+      }
+    };
+
+    if (cartToggle) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [cartToggle]);
   return (
     <aside
+      ref={cartRef}
       className={` fixed h-screen w-full lg:w-3/12 2xl:w-2/12 duration-200 ${
-        isCartOpen ? "right-0" : "right-[-1500px]"
+        cartToggle ? "right-0" : "right-[-1500px]"
       } top-0 bg-white z-[999999] shadow-lg`}
     >
       <section className=" bg-purple-700 p-3 mb-2">
@@ -22,7 +45,7 @@ const CartSidebar = ({ isCartOpen, setIsCartOpen }) => {
           <span className=" text-white text-xl font-bold">Cart</span>
           <span>
             <FaTimes
-              onClick={() => setIsCartOpen(false)}
+              onClick={() => setCartToggle(false)}
               className=" text-white cursor-pointer"
             />
           </span>

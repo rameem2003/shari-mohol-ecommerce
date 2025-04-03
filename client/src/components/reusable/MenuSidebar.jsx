@@ -1,21 +1,45 @@
-import React from "react";
-import Flex from "../common/Flex";
+import React, { useContext, useEffect, useRef } from "react";
+import { ToggleContext } from "../../context/ToggleContextProvider";
 import { Link } from "react-router";
+import Flex from "../common/Flex";
 import logopurple from "../../assets/logopurple.png";
 import { FaInfo, FaTimes, FaUserAlt } from "react-icons/fa";
 import { FaCartShopping, FaShop } from "react-icons/fa6";
 
-const MenuSidebar = ({ isOpen, setIsOpen }) => {
+const MenuSidebar = () => {
+  const { menuToggle, setMenuToggle } = useContext(ToggleContext);
+  const sidebarRef = useRef(null);
+
+  // Close sidebar when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setMenuToggle(false);
+      }
+    };
+
+    if (menuToggle) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [menuToggle]);
+
   return (
     <aside
-      className={` bg-white p-3 h-screen w-full lg:w-2/12 fixed top-0 duration-300 ease-in-out ${
-        isOpen ? "left-0" : "left-[-200%]"
+      ref={sidebarRef}
+      className={` bg-white p-3 h-screen w-full lg:w-3/12 xl:w-2/12 fixed top-0 duration-300 ease-in-out ${
+        menuToggle ? "left-0" : "left-[-200%]"
       } z-[99999999999999]`}
     >
       <Flex>
         <FaTimes
           className=" text-3xl cursor-pointer text-purple-600"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => setMenuToggle(!menuToggle)}
         />
       </Flex>
       <ul className=" mt-10">

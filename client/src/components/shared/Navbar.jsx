@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Container from "../common/Container";
 import Flex from "../common/Flex";
 import {
@@ -11,6 +11,7 @@ import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import CartSidebar from "../reusable/CartSidebar";
 import MenuSidebar from "../reusable/MenuSidebar";
+import { ToggleContext } from "../../context/ToggleContextProvider";
 import { useDispatch, useSelector } from "react-redux";
 import { BannerReducer } from "../../redux/slices/BannerSlice";
 import { CategoryReducer } from "../../redux/slices/CategorySlice";
@@ -21,6 +22,8 @@ import logopurple from "../../assets/logopurple.png";
 import logowhite from "../../assets/logowhite.png";
 import { FaHome, FaTimes } from "react-icons/fa";
 const Navbar = () => {
+  const { menuToggle, setMenuToggle, cartToggle, setCartToggle } =
+    useContext(ToggleContext);
   const user = useSelector((state) => state.account.account); // user
   const cart = useSelector((state) => state.cart.cart); // cart
   const { handleLogout } = useAuth();
@@ -94,7 +97,7 @@ const Navbar = () => {
           <Flex className="items-center justify-between lg:px-8">
             <div className=" w-1/2 lg:w-1/3 order-2 lg:order-1 text-right">
               <FaBarsStaggered
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={() => setMenuToggle(!menuToggle)}
                 className={`text-3xl cursor-pointer ml-auto lg:me-auto lg:ml-0 ${
                   scrolled ? "text-black" : "text-white"
                 }`}
@@ -120,7 +123,7 @@ const Navbar = () => {
                     />
                   </div>
                   <div
-                    onClick={() => setIsCartOpen(!isCartOpen)}
+                    onClick={() => setCartToggle(!cartToggle)}
                     className="relative cursor-pointer"
                   >
                     <span
@@ -190,9 +193,9 @@ const Navbar = () => {
         </Container>
       </nav>
 
-      <MenuSidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+      <MenuSidebar />
 
-      <CartSidebar isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} />
+      <CartSidebar />
 
       <section className=" block lg:hidden fixed w-full p-2 z-[99999999999999] left-0 bottom-0 bg-purple-800">
         <Flex className="items-center justify-center gap-10">

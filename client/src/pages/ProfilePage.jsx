@@ -1,16 +1,16 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import Container from "../components/common/Container";
 import BreadCrumb from "../components/common/BreadCrumb";
 import Flex from "../components/common/Flex";
-import { useSelector } from "react-redux";
+import AllOrders from "../components/screens/Account/AllOrders";
+import EditProfile from "../components/screens/Account/EditProfile";
+import ChangePassword from "../components/screens/Account/ChangePassword";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import AllOrders from "../components/screens/Account/AllOrders";
 import { FaCartShopping } from "react-icons/fa6";
 import { FaUserEdit } from "react-icons/fa";
 import { MdPassword } from "react-icons/md";
-import EditProfile from "../components/screens/Account/EditProfile";
-import ChangePassword from "../components/screens/Account/ChangePassword";
 
 const ProfilePage = () => {
   const user = useSelector((state) => state.account.account); // user
@@ -27,7 +27,7 @@ const ProfilePage = () => {
             </div>
           ) : (
             <Flex className="items-center gap-5">
-              <div className="w-3/12 xl:w-1/12">
+              <div className="w-4/12 lg:w-2/12  xl:w-[10%]">
                 <img
                   src={
                     user.photo
@@ -38,7 +38,7 @@ const ProfilePage = () => {
                   alt=""
                 />
               </div>
-              <div className="w-9/12 xl:w-11/12">
+              <div className="w-8/12 lg:w-10/12 xl:w-[90%]">
                 <h4>Hello,</h4>
                 <h2 className=" font-bold text-lg lg:text-xl text-black">
                   {user.name}
