@@ -58,17 +58,13 @@ router.patch(
 
 /**
  * Change Password Route
- * http://localhost:5000/api/v1/auth/changepassword/:email
+ * http://localhost:5000/api/v1/auth/changepassword/:id
  */
-router.patch(
-  "/auth/changepassword/:email",
-  checkUserMiddleware,
-  changePassword
-);
+router.patch("/auth/changepassword/:id", checkUserMiddleware, changePassword);
 
 /**
  * Forget Password Route
- * http://localhost:5000/api/v1/auth/forgetpassword/:id
+ * http://localhost:5000/api/v1/auth/forgetpassword/:email
  */
 router.patch("/auth/forgetpassword/:email", forgetPassword);
 

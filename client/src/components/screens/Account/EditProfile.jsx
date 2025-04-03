@@ -34,10 +34,10 @@ const EditProfile = () => {
   }, [user]);
   return (
     <section>
-      <Flex className="flex-wrap gap-5">
+      <Flex className="flex-wrap gap-5 md:flex-row md:flex-nowrap">
         <div className=" w-full md:w-4/12 xl:w-3/12">
           <img
-            className=" w-[80px] h-[80px] md:w-[120px] md:h-[120px] rounded-full"
+            className=" w-[80px] h-[80px] md:w-[120px] md:h-[120px] lg:w-[150px] lg:h-[150px] xl:w-[200px] xl:h-[200px] rounded-full"
             // src={user.photo ? user.photo : displayImage}
             src={displayImage ? displayImage : user.photo}
             alt="profile"
@@ -106,7 +106,7 @@ const EditProfile = () => {
           <button
             onClick={() => handleProfileUpdate(user.id, data)}
             disabled={isLoading}
-            className=" px-5 py-1 rounded-lg bg-purple-700 hover:bg-purple-800 text-white mt-10"
+            className="  bg-purple-700 hover:bg-purple-800 px-4 py-3 rounded-md text-white text-sm font-medium  mt-10"
           >
             {isLoading ? "Updating..." : "Update Profile"}
           </button>

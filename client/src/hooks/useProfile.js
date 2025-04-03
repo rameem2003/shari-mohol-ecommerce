@@ -69,7 +69,66 @@ const useProfile = () => {
     }
   };
 
-  return { handleProfileUpdate, isLoading };
+  // handle password change
+  const handlePasswordChange = async (userID, data) => {
+    setIsLoading(true);
+    try {
+      let res = await axios.patch(
+        `${import.meta.env.VITE_API}/auth/changepassword/${userID}`,
+        data,
+        {
+          withCredentials: true,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Cookie: `accessToken=${accessToken};sessionToken=${sessionToken}`,
+          },
+        }
+      );
+
+      setIsLoading(false);
+
+      Swal.fire({
+        title: res.data.msg,
+        showConfirmButton: true,
+        confirmButtonText: "Ok",
+        confirmButtonColor: "green",
+        icon: "success",
+      });
+      // .then((result) => {
+      //   if (result.isConfirmed) {
+      //     handleLogout(admin.id);
+      //   }
+      // })
+      // .finally(() => {
+      //   handleLogout(admin.id);
+      // });
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+
+      Swal.fire({
+        title: error.response.data.msg,
+        showConfirmButton: false,
+        showCancelButton: true,
+        cancelButtonText: "Ok",
+        cancelButtonColor: "red",
+        icon: "error",
+      })
+        .then((result) => {
+          if (result.isDismissed) {
+            location.reload();
+          }
+        })
+        .finally(() => {
+          location.reload();
+          setIsLoading(false);
+        });
+    }
+  };
+
+  return { handleProfileUpdate, handlePasswordChange, isLoading };
 };
 
 export default useProfile;

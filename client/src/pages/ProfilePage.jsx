@@ -10,6 +10,7 @@ import { FaCartShopping } from "react-icons/fa6";
 import { FaUserEdit } from "react-icons/fa";
 import { MdPassword } from "react-icons/md";
 import EditProfile from "../components/screens/Account/EditProfile";
+import ChangePassword from "../components/screens/Account/ChangePassword";
 
 const ProfilePage = () => {
   const user = useSelector((state) => state.account.account); // user
@@ -97,6 +98,7 @@ const ProfilePage = () => {
 
           <div className=" mt-10">{activeTab === 1 && <AllOrders />}</div>
           <div className=" mt-10">{activeTab === 2 && <EditProfile />}</div>
+          <div className=" mt-10">{activeTab === 3 && <ChangePassword />}</div>
         </section>
       </Container>
     </main>
