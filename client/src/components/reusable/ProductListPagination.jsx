@@ -21,7 +21,7 @@ const ProductListPagination = ({ itemsPerPage, products }) => {
             currentItems.map((item, i) => (
               <ProductCard
                 key={i}
-                className="mb-10 w-full lg:w-1/2"
+                className="mb-10 w-full md:w-1/2"
                 data={item}
               />
             ))}

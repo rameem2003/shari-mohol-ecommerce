@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import ShopBanner from "../components/screens/shop/ShopBanner";
 import Container from "../components/common/Container";
 import Flex from "../components/common/Flex";
-import { Link } from "react-router";
-import { FaHome } from "react-icons/fa";
+import { FaFilter } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import PrizeRangeSlider from "../components/screens/shop/PrizeRangeSlider";
 import axios from "axios";
@@ -11,13 +10,13 @@ import ProductListPagination from "../components/reusable/ProductListPagination"
 import BreadCrumb from "../components/common/BreadCrumb";
 
 const Shop = () => {
+  const [filterPanel, setFilterPanel] = useState(false);
   const [range, setRange] = useState(500000);
   const categories = useSelector((state) => state.category.category); // get all categories
   const allProducts = useSelector((state) => state.allproducts.products); // get all products
   const [filter, setFilter] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubCategory, setSelectedSubCategory] = useState(null);
-  console.log(filter);
 
   // function for filter products by price and category
   const filterProducts = async (price, category, subcategory) => {
@@ -75,10 +74,21 @@ const Shop = () => {
 
       <section className=" mt-10 my-20">
         <Container>
-          <BreadCrumb path={"Shop"} />
+          <Flex className={" items-center justify-between"}>
+            <BreadCrumb path={"Shop"} />
 
-          <Flex className="items-start gap-4 mt-10">
-            <div className="xl:w-3/12">
+            <FaFilter
+              onClick={() => setFilterPanel(!filterPanel)}
+              className=" block lg:hidden text-2xl hover:text-purple-700 cursor-pointer"
+            />
+          </Flex>
+
+          <Flex className="items-start relative gap-4 mt-10">
+            <div
+              className={` duration-200 absolute top-0 ${
+                filterPanel ? "left-0" : "left-[-200%]"
+              }  z-50 bg-white p-2 lg:p-0 lg:static lg:w-4/12 xl:w-3/12`}
+            >
               <div className="rounded-md p-10 shadow-md">
                 <h2 className="mb-5 text-xl font-bold">All Categories</h2>
 
@@ -117,7 +127,7 @@ const Shop = () => {
               </div>
               <PrizeRangeSlider handleFilter={handleFilter} range={range} />{" "}
             </div>
-            <div className="xl:w-9/12">
+            <div className=" w-full lg:w-8/12 xl:w-9/12">
               <ProductListPagination itemsPerPage={4} products={filter} />
             </div>
           </Flex>

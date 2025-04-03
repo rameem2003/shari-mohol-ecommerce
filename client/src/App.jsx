@@ -15,6 +15,7 @@ import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentFail from "./pages/PaymentFail";
 import PaymentCancel from "./pages/PaymentCancel";
 import ProfilePage from "./pages/ProfilePage";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 const App = () => {
   return (
@@ -34,7 +35,14 @@ const App = () => {
           <Route path="/payment/cancel/:orderId" element={<PaymentCancel />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/account" element={<ProfilePage />} />
+          <Route
+            path="/account"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/verify-otp" element={<OTP />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
         </Route>

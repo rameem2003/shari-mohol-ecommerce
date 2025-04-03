@@ -27,7 +27,7 @@ const ProfilePage = () => {
             </div>
           ) : (
             <Flex className="items-center gap-5">
-              <div className="w-4/12 lg:w-2/12  xl:w-[10%]">
+              <div className="w-4/12 md:w-2/12  xl:w-[10%]">
                 <img
                   src={
                     user.photo
@@ -38,7 +38,7 @@ const ProfilePage = () => {
                   alt=""
                 />
               </div>
-              <div className="w-8/12 lg:w-10/12 xl:w-[90%]">
+              <div className="w-8/12 md:w-10/12 xl:w-[90%]">
                 <h4>Hello,</h4>
                 <h2 className=" font-bold text-lg lg:text-xl text-black">
                   {user.name}

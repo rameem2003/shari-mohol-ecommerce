@@ -20,10 +20,12 @@ import { Link } from "react-router";
 import { IoIosSearch } from "react-icons/io";
 import logopurple from "../../assets/logopurple.png";
 import logowhite from "../../assets/logowhite.png";
-import { FaHome, FaTimes } from "react-icons/fa";
+import { FaHome, FaSearch, FaTimes } from "react-icons/fa";
+import Search from "../common/Search";
 const Navbar = () => {
   const { menuToggle, setMenuToggle, cartToggle, setCartToggle } =
     useContext(ToggleContext);
+  const [searchBox, setSearchBox] = useState(false);
   const user = useSelector((state) => state.account.account); // user
   const cart = useSelector((state) => state.cart.cart); // cart
   const { handleLogout } = useAuth();
@@ -117,7 +119,8 @@ const Navbar = () => {
                 <Flex className="items-center justify-end gap-2">
                   <div className="relative">
                     <IoIosSearch
-                      className={` text-3xl ${
+                      onClick={() => setSearchBox(true)}
+                      className={` text-3xl cursor-pointer ${
                         scrolled ? "text-black" : "text-white"
                       }`}
                     />
@@ -197,8 +200,12 @@ const Navbar = () => {
 
       <CartSidebar />
 
+      {searchBox && (
+        <Search setSearchBox={setSearchBox} searchBox={searchBox} />
+      )}
+
       <section className=" block lg:hidden fixed w-full p-2 z-[99999999999999] left-0 bottom-0 bg-purple-800">
-        <Flex className="items-center justify-center gap-10">
+        <Flex className="items-center justify-center gap-8">
           <Link
             to="/"
             className=" flex flex-col items-center justify-center gap-2"
@@ -223,14 +230,27 @@ const Navbar = () => {
           >
             <FaCartShopping className=" text-white text-lg" />
             <span className=" font-serif text-[10px] uppercase text-white">
-              Cart (1)
+              Cart ({cart?.length})
             </span>
           </Link>
+          <div
+            onClick={() => setSearchBox(true)}
+            className=" flex flex-col items-center justify-center gap-2"
+          >
+            <FaSearch className=" text-white text-lg" />
+            <span className=" font-serif text-[10px] uppercase text-white">
+              Search
+            </span>
+          </div>
           <Link
             to="/account"
             className=" flex flex-col items-center justify-center gap-2"
           >
-            <FaUser className=" text-white text-lg" />
+            {user ? (
+              <img className=" w-5 h-5 rounded-full" src={user.photo} alt="" />
+            ) : (
+              <FaUser className=" text-white text-lg" />
+            )}
             <span className=" font-serif text-[10px] uppercase text-white">
               Account
             </span>
