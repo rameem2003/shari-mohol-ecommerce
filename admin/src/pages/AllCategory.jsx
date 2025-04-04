@@ -150,7 +150,7 @@ const AllCategory = () => {
               <tr className="border-t border-gray-200" key={item._id}>
                 <td className="p-3 text-black dark:text-white">
                   <Image
-                    src={item.thumb}
+                    src={`${import.meta.env.VITE_MEDIA}/${item.thumb}`}
                     className="h-10 w-10"
                     alt={item.thumb}
                   />

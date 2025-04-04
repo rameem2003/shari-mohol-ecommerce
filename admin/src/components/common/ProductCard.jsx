@@ -137,7 +137,11 @@ const ProductCard = ({
             </label>
           </div>
         </Flex>
-        <img src={data.images[0]} alt="icecream" className="h-[150px] w-full" />
+        <img
+          src={`${import.meta.env.VITE_MEDIA}/${data.images[0]}`}
+          alt={data.name}
+          className="h-[150px] w-full"
+        />
 
         <div className="p-4">
           <p className="text-[1rem] text-gray-700 dark:text-white">

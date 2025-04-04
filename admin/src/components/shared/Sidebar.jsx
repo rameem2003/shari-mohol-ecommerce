@@ -414,7 +414,7 @@ const ResponsiveSidebar = () => {
       >
         <div className="flex items-center gap-[10px]">
           <img
-            src={admin?.photo}
+            src={`${import.meta.env.VITE_MEDIA}/${admin?.photo}`}
             alt="avatar"
             className="h-[30px] w-[30px] cursor-pointer rounded-full object-cover"
           />

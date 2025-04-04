@@ -57,12 +57,14 @@ const ViewProfile = () => {
         <div className="w-full lg:w-4/12">
           <div className="w-full rounded bg-white shadow-lg dark:bg-slate-800">
             <div
-              style={{ backgroundImage: `url(${user.photo})` }}
+              style={{
+                backgroundImage: `url(${import.meta.env.VITE_MEDIA}/${user.photo})`,
+              }}
               className={`relative h-[150px] w-full rounded-t-md bg-[url('${"https://img.freepik.com/premium-vector/content-writer-vector-colored-round-line-illustration_104589-2571.jpg"}')] bg-center`}
             >
               <img
                 src={
-                  user.photo ||
+                  `${import.meta.env.VITE_MEDIA}/${user.photo}` ||
                   "https://images.pexels.com/photos/3772623/pexels-photo-3772623.jpeg"
                 }
                 alt=""
@@ -91,9 +93,7 @@ const ViewProfile = () => {
 
               <div className="flex flex-col items-center justify-center">
                 <p className="text-[0.9rem] font-bold text-[#424242] dark:text-white">
-                  {user.isVarified
-                    ? "Verified Account"
-                    : "Not Verified Account"}
+                  {user.isVarify ? "Verified Account" : "Not Verified Account"}
                 </p>
               </div>
 
@@ -140,7 +140,7 @@ const ViewProfile = () => {
                   <Flex className="items-center gap-5">
                     <Image
                       className="h-20 w-20"
-                      src={item?.product?.images[0]}
+                      src={`${import.meta.env.VITE_MEDIA}/${item?.product?.images[0]}`}
                       alt={item?.product?.name}
                     />
 

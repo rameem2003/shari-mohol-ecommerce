@@ -337,8 +337,8 @@ const AdvertisementPage = () => {
               key={i}
             >
               <img
-                src={b.banner}
-                alt="image"
+                src={`${import.meta.env.VITE_MEDIA}/${b.banner}`}
+                alt={b.banner}
                 className="h-[250px] w-full rounded-t-md object-cover"
               />
 
