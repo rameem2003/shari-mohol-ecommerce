@@ -33,7 +33,8 @@ const addNewBanner = async (req, res) => {
   if (filename) {
     try {
       let banner = new bannerModel({
-        banner: `${process.env.HOST_URL}${process.env.PORT}/${filename}`,
+        // banner: `${process.env.HOST_URL}${process.env.PORT}/${filename}`,
+        banner: filename,
         description,
         advertisementLink,
       });
@@ -69,11 +70,11 @@ const deleteBanner = async (req, res) => {
   try {
     let banner = await bannerModel.findOneAndDelete({ _id: id });
 
-    let imagePath = banner.banner.split("/");
-    let oldImagePath = imagePath[imagePath.length - 1];
+    // let imagePath = banner.banner.split("/");
+    // let oldImagePath = imagePath[imagePath.length - 1];
 
     try {
-      await deleteFile(`${path.join(__dirname, "../temp")}/${oldImagePath}`);
+      await deleteFile(`${path.join(__dirname, "../temp")}/${banner.banner}`);
       res.status(200).send({
         success: true,
         msg: "Banner Delete Success",

@@ -548,9 +548,9 @@ const updateUser = async (req, res) => {
   });
 
   if (req.file !== undefined) {
-    let imageLink = `${process.env.HOST_URL}${process.env.PORT}/${req.file.filename}`;
+    // let imageLink = `${process.env.HOST_URL}${process.env.PORT}/${req.file.filename}`;
 
-    updateFields.photo = imageLink;
+    updateFields.photo = req.file.filename;
   }
 
   try {
@@ -563,11 +563,13 @@ const updateUser = async (req, res) => {
 
     // If images were updated, delete the old image
     if (updateFields.photo && targetUser.photo) {
-      let imagePath = targetUser.photo.split("/");
-      let oldImage = imagePath[imagePath.length - 1];
+      // let imagePath = targetUser.photo.split("/");
+      // let oldImage = imagePath[imagePath.length - 1];
 
       try {
-        await deleteFile(`${path.join(__dirname, "../temp")}/${oldImage}`);
+        await deleteFile(
+          `${path.join(__dirname, "../temp")}/${targetUser.photo}`
+        );
       } catch (fileDeleteErr) {
         res.status(500).send({
           success: false,
@@ -634,11 +636,13 @@ const deleteUser = async (req, res) => {
     let targetUser = await authModel.findOneAndDelete({ _id: id });
 
     if (targetUser.photo) {
-      let imagePath = targetUser.photo.split("/");
-      let oldImage = imagePath[imagePath.length - 1];
+      // let imagePath = targetUser.photo.split("/");
+      // let oldImage = imagePath[imagePath.length - 1];
 
       try {
-        await deleteFile(`${path.join(__dirname, "../temp")}/${oldImage}`);
+        await deleteFile(
+          `${path.join(__dirname, "../temp")}/${targetUser.photo}`
+        );
       } catch (fileDeleteErr) {
         res.status(500).send({
           success: false,

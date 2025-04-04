@@ -36,7 +36,8 @@ const createNewCategory = async (req, res) => {
         name,
         description,
         subCategories: subcategoryArray,
-        thumb: `${process.env.HOST_URL}${process.env.PORT}/${filename}`,
+        // thumb: `${process.env.HOST_URL}${process.env.PORT}/${filename}`,
+        thumb: filename,
       });
 
       await newCategory.save();
@@ -109,9 +110,9 @@ const updateCategory = async (req, res) => {
   }
 
   if (req.file !== undefined) {
-    let imageLink = `${process.env.HOST_URL}${process.env.PORT}/${req.file.filename}`;
+    // let imageLink = `${process.env.HOST_URL}${process.env.PORT}/${req.file.filename}`;
 
-    updateFields.thumb = imageLink;
+    updateFields.thumb = req.file.filename;
   }
 
   try {
@@ -124,11 +125,13 @@ const updateCategory = async (req, res) => {
 
     // If images were updated, delete the old image
     if (updateFields.thumb) {
-      let imagePath = targetCategory.thumb.split("/");
-      let oldImage = imagePath[imagePath.length - 1];
+      // let imagePath = targetCategory.thumb.split("/");
+      // let oldImage = imagePath[imagePath.length - 1];
 
       try {
-        await deleteFile(`${path.join(__dirname, "../temp")}/${oldImage}`);
+        await deleteFile(
+          `${path.join(__dirname, "../temp")}/${targetCategory.thumb}`
+        );
       } catch (fileDeleteErr) {
         res.status(500).send({
           success: false,
@@ -159,11 +162,11 @@ const deleteCategory = async (req, res) => {
 
   try {
     let category = await categoryModel.findOneAndDelete({ _id: id });
-    let imagePath = category.thumb.split("/");
-    let oldimage = imagePath[imagePath.length - 1];
+    // let imagePath = category.thumb.split("/");
+    // let oldimage = imagePath[imagePath.length - 1];
 
     try {
-      await deleteFile(`${path.join(__dirname, "../temp")}/${oldimage}`);
+      await deleteFile(`${path.join(__dirname, "../temp")}/${category.thumb}`);
       res.status(200).send({
         success: true,
         msg: "Category deleted",

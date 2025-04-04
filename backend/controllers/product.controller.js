@@ -154,9 +154,7 @@ const createNewProduct = async (req, res) => {
     hotSell,
   } = req.body;
 
-  const imagesLink = req.files.map(
-    (file) => `${process.env.HOST_URL}${process.env.PORT}/${file.filename}`
-  );
+  const imagesLink = req.files.map((file) => file.filename);
 
   const productColors = colors
     ? colors.split(",").map((col) => col.trim())
@@ -247,9 +245,7 @@ const updateProduct = async (req, res) => {
 
   // Handle images separately if they are present in the request
   if (req.files && req.files.length > 0) {
-    const imagesLink = req.files.map(
-      (file) => `${process.env.HOST_URL}${process.env.PORT}/${file.filename}`
-    );
+    const imagesLink = req.files.map((file) => file.filename);
     updateFields.images = imagesLink;
   }
 
@@ -266,15 +262,15 @@ const updateProduct = async (req, res) => {
       let productImages = targetProduct.images;
 
       productImages.forEach(async (item) => {
-        let imagePath = item.split("/");
-        let oldImagePath = imagePath[imagePath.length - 1];
+        // let imagePath = item.split("/");
+        // let oldImagePath = imagePath[imagePath.length - 1];
 
         try {
-          await deleteFile(
-            `${path.join(__dirname, "../temp")}/${oldImagePath}`
-          );
+          await deleteFile(`${path.join(__dirname, "../temp")}/${item}`);
         } catch (fileDeleteErr) {
-          res.status(500).send({
+          // console.log(fileDeleteErr);
+
+          return res.status(500).send({
             success: false,
             msg: "Internal Server Error",
             fileDeleteErr,
@@ -309,11 +305,11 @@ const deleteProduct = async (req, res) => {
     let productImages = targetProduct.images;
 
     productImages.forEach(async (item) => {
-      let imagePath = item.split("/");
-      let oldImagePath = imagePath[imagePath.length - 1];
+      // let imagePath = item.split("/");
+      // let oldImagePath = imagePath[imagePath.length - 1];
 
       try {
-        await deleteFile(`${path.join(__dirname, "../temp")}/${oldImagePath}`);
+        await deleteFile(`${path.join(__dirname, "../temp")}/${item}`);
       } catch (fileDeleteErr) {
         res.status(500).send({
           success: false,
