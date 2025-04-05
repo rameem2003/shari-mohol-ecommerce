@@ -13,7 +13,7 @@ const ProductImagePreview = ({ data }) => {
             <img
               key={i}
               onClick={() => setImg(i)}
-              src={img}
+              src={`${import.meta.env.VITE_MEDIA}/${img}`}
               className="mx-auto h-[138px] w-[170px] cursor-pointer"
             />
           ))}
@@ -21,9 +21,11 @@ const ProductImagePreview = ({ data }) => {
       </div>
       <div className="w-full lg:w-8/12">
         <PhotoProvider>
-          <PhotoView src={data?.images?.[img]}>
+          <PhotoView
+            src={`${import.meta.env.VITE_MEDIA}/${data?.images?.[img]}`}
+          >
             <img
-              src={data?.images?.[img]}
+              src={`${import.meta.env.VITE_MEDIA}/${data?.images?.[img]}`}
               className="h-full w-full object-cover"
             />
           </PhotoView>

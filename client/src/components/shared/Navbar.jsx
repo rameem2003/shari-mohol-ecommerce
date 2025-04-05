@@ -151,7 +151,7 @@ const Navbar = () => {
                         className="w-8 h-8 rounded-full"
                         src={
                           user.photo
-                            ? user.photo
+                            ? `${import.meta.env.VITE_MEDIA}/${user.photo}`
                             : "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
                         }
                         alt=""
@@ -247,7 +247,11 @@ const Navbar = () => {
             className=" flex flex-col items-center justify-center gap-2"
           >
             {user ? (
-              <img className=" w-5 h-5 rounded-full" src={user.photo} alt="" />
+              <img
+                className=" w-5 h-5 rounded-full"
+                src={`${import.meta.env.VITE_MEDIA}/${user.photo}`}
+                alt=""
+              />
             ) : (
               <FaUser className=" text-white text-lg" />
             )}

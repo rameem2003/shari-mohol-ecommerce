@@ -10,7 +10,7 @@ const ProductCard = ({ className, data }) => {
       <a href="#">
         <img
           className="p-8 rounded-t-lg h-auto w-full"
-          src={data?.images[0]}
+          src={`${import.meta.env.VITE_MEDIA}/${data?.images[0]}`}
           alt={data?.name}
         />
       </a>

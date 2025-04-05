@@ -80,7 +80,7 @@ const PremiumCategories = () => {
               </div>
               <img
                 className=" w-full h-full group-hover:scale-[1.2] duration-200"
-                src={saree[0]?.thumb}
+                src={`${import.meta.env.VITE_MEDIA}/${saree[0]?.thumb}`}
                 alt={saree[0]?.name}
               />
             </div>
@@ -150,7 +150,7 @@ const PremiumCategories = () => {
               </div>
               <img
                 className=" w-full h-full group-hover:scale-[1.2] duration-200"
-                src={threePcs[0]?.thumb}
+                src={`${import.meta.env.VITE_MEDIA}/${threePcs[0]?.thumb}`}
                 alt={threePcs[0]?.name}
               />
             </div>

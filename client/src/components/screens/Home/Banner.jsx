@@ -84,11 +84,13 @@ const Banner = () => {
               key={i}
               className="relative test flex items-center justify-center py-[120px] lg:py-[300px] bg-black"
               style={{
-                background: `url('${b.banner}') no-repeat center center /cover`,
+                background: `url('${import.meta.env.VITE_MEDIA}/${
+                  b.banner
+                }') no-repeat center center /cover`,
               }}
             >
               <img
-                src={b.banner}
+                src={`${import.meta.env.VITE_MEDIA}/${b.banner}`}
                 className=" absolute top-0 left-0  h-full w-full"
                 alt=""
               />

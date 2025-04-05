@@ -332,7 +332,7 @@ const Checkout = () => {
                   <div className="flex items-center space-x-4">
                     <div className="flex-shrink-0">
                       <img
-                        src={item?.images[0]}
+                        src={`${import.meta.env.VITE_MEDIA}/${item?.images[0]}`}
                         alt={item?.name}
                         className="w-[50px] h-[50px] object-cover"
                       />

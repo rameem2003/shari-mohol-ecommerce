@@ -7,7 +7,11 @@ const CartMainCard = ({ data }) => {
     <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-smmd:p-6">
       <div className="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
         <a href="#" className="shrink-0 md:order-1">
-          <img className="h-20 w-20 " src={data?.images[0]} alt={data?.name} />
+          <img
+            className="h-20 w-20 "
+            src={`${import.meta.env.VITE_MEDIA}/${data.images[0]}`}
+            alt={data?.name}
+          />
         </a>
         <label htmlFor="counter-input" className="sr-only">
           Choose quantity:

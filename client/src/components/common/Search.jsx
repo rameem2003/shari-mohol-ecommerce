@@ -61,7 +61,7 @@ const Search = ({ setSearchBox, searchBox }) => {
               <Flex>
                 <Flex>
                   <img
-                    src={item.images[0]}
+                    src={`${import.meta.env.VITE_MEDIA}/${item.images[0]}`}
                     className=" w-16 h-16"
                     alt={item.name}
                   />

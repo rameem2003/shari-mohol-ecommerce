@@ -7,7 +7,11 @@ const CartCard = ({ data }) => {
     <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm mb-5 mx-2">
       <div className="  flex items-center gap-5">
         <a href="#" className="shrink-0">
-          <img className="h-20 w-20 " src={data.images[0]} alt="imac image" />
+          <img
+            className="h-20 w-20 "
+            src={`${import.meta.env.VITE_MEDIA}/${data.images[0]}`}
+            alt={data.name}
+          />
         </a>
         <a
           href="#"
