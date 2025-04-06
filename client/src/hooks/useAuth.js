@@ -62,7 +62,11 @@ const useAuth = () => {
   const handleLogout = async (id) => {
     try {
       let res = await axios.post(
-        `${import.meta.env.VITE_API}/auth/logout/${id}`
+        `${import.meta.env.VITE_API}/auth/logout/${id}`,
+        {},
+        {
+          withCredentials: true,
+        }
       );
 
       console.log(res);

@@ -259,9 +259,23 @@ const logoutUser = async (req, res) => {
   const { id } = req.params;
 
   try {
-    res.clearCookie("accessToken");
-    res.clearCookie("sessionToken");
     await authModel.findOneAndUpdate({ _id: id }, { sessionToken: null });
+
+    // Clear both cookies server-side
+    res.clearCookie("accessToken", {
+      httpOnly: true,
+      secure: process.env.SYSTEM_ENV === "production",
+      sameSite: process.env.SYSTEM_ENV === "production" ? "None" : "Strict",
+      path: "/",
+    });
+
+    res.clearCookie("sessionToken", {
+      httpOnly: true,
+      secure: process.env.SYSTEM_ENV === "production",
+      sameSite: process.env.SYSTEM_ENV === "production" ? "None" : "Strict",
+      path: "/",
+    });
+
     return res.status(200).send({
       success: true,
       msg: "User Logout success",
