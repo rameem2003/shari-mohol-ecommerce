@@ -168,14 +168,18 @@ const loginUser = async (req, res) => {
 
           res.cookie("sessionToken", sessionToken, {
             httpOnly: true,
-            secure: process.env.SYSTEM_ENV === "production",
-            sameSite: "None",
+            secure: process.env.SYSTEM_ENV === "production" || false,
+            // secure: false,
+            sameSite:
+              process.env.SYSTEM_ENV === "production" ? "None" : "Strict",
             maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
           });
           res.cookie("accessToken", accessToken, {
             httpOnly: true,
-            secure: process.env.SYSTEM_ENV === "production",
-            sameSite: "None",
+            secure: process.env.SYSTEM_ENV === "production" || false,
+            // secure: false,
+            sameSite:
+              process.env.SYSTEM_ENV === "production" ? "None" : "Strict",
             maxAge: 900000, // 15 min
           });
           return res.status(200).send({
@@ -204,15 +208,19 @@ const loginUser = async (req, res) => {
 
           res.cookie("sessionToken", sessionToken, {
             httpOnly: true,
-            secure: process.env.SYSTEM_ENV === "production",
-            sameSite: "None",
+            secure: process.env.SYSTEM_ENV === "production" || false,
+            // secure: false,
+            sameSite:
+              process.env.SYSTEM_ENV === "production" ? "None" : "Strict",
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
           });
 
           res.cookie("accessToken", accessToken, {
             httpOnly: true,
-            secure: process.env.SYSTEM_ENV === "production",
-            sameSite: "None",
+            secure: process.env.SYSTEM_ENV === "production" || false,
+            // secure: false,
+            sameSite:
+              process.env.SYSTEM_ENV === "production" ? "None" : "Strict",
             maxAge: 900000, // 15 min
           });
           return res.status(200).send({

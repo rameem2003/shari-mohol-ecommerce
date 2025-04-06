@@ -29,7 +29,6 @@ const EditProfile = () => {
       name: user.name,
       phone: user.phone,
       address: user.address,
-      photo: user.photo,
     });
   }, [user]);
   return (

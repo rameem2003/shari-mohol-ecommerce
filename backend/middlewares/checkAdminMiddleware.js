@@ -82,8 +82,9 @@ const checkAdminMiddleware = (req, res, next) => {
 
       res.cookie("accessToken", accessToken, {
         httpOnly: true,
-        secure: process.env.SYSTEM_ENV === "production",
-        sameSite: "None",
+        secure: process.env.SYSTEM_ENV === "production" || false,
+        // secure: false,
+        sameSite: process.env.SYSTEM_ENV === "production" ? "None" : "Strict",
         maxAge: 900000,
       });
 

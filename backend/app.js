@@ -9,6 +9,7 @@ const router = require("./routes");
 const app = express();
 
 connectDB(); // mongodb connect
+console.log(process.env.SYSTEM_ENV);
 
 // apply middlewares
 app.use(
@@ -32,8 +33,9 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: process.env.SYSTEM_ENV === "production",
-      sameSite: "None",
+      secure: process.env.SYSTEM_ENV === "production" || false,
+      // secure: false,
+      sameSite: process.env.SYSTEM_ENV === "production" ? "None" : "Strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     },
   })
