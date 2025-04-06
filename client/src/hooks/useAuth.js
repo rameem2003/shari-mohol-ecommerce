@@ -68,11 +68,11 @@ const useAuth = () => {
       console.log(res);
       Cookies.remove("accessToken", {
         path: "/",
-        domain: "shari-mohol.vercel.app",
+        domain: "shari-mohol-ecommerce-server.onrender.com",
       });
       Cookies.remove("sessionToken", {
         path: "/",
-        domain: "shari-mohol.vercel.app",
+        domain: "shari-mohol-ecommerce-server.onrender.com",
       });
       dispatch(AccountReducer(""));
       location.reload();
