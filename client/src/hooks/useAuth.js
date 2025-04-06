@@ -66,8 +66,14 @@ const useAuth = () => {
       );
 
       console.log(res);
-      Cookies.remove("accessToken");
-      Cookies.remove("sessionToken");
+      Cookies.remove("accessToken", {
+        path: "/",
+        domain: "shari-mohol.vercel.app",
+      });
+      Cookies.remove("sessionToken", {
+        path: "/",
+        domain: "shari-mohol.vercel.app",
+      });
       dispatch(AccountReducer(""));
       location.reload();
     } catch (error) {

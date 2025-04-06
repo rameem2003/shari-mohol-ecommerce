@@ -84,11 +84,12 @@ const checkUserMiddleware = (req, res, next) => {
       // await user.save();
 
       res.cookie("accessToken", accessToken, {
-        httpOnly: true,
+        // httpOnly: true,
         secure: process.env.SYSTEM_ENV === "production" || false,
         // secure: false,
         sameSite: process.env.SYSTEM_ENV === "production" ? "None" : "Strict",
         maxAge: 900000,
+        path: "/",
       });
 
       next();

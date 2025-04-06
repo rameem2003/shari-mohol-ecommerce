@@ -32,7 +32,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      httpOnly: true,
+      // httpOnly: true,
       secure: process.env.SYSTEM_ENV === "production" || false,
       // secure: false,
       sameSite: process.env.SYSTEM_ENV === "production" ? "None" : "Strict",
