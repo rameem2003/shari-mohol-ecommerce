@@ -39,7 +39,11 @@ const EditProfile = () => {
           <img
             className=" w-[80px] h-[80px] md:w-[120px] md:h-[120px] lg:w-[150px] lg:h-[150px] xl:w-[200px] xl:h-[200px] rounded-full"
             // src={user.photo ? user.photo : displayImage}
-            src={displayImage ? displayImage : user.photo}
+            src={
+              displayImage
+                ? displayImage
+                : `${import.meta.env.VITE_MEDIA}/${user.photo}`
+            }
             alt="profile"
           />
           <input

@@ -31,7 +31,7 @@ const ProfilePage = () => {
                 <img
                   src={
                     user.photo
-                      ? user.photo
+                      ? `${import.meta.env.VITE_MEDIA}/${user.photo}`
                       : "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
                   }
                   className=" w-[80px] h-[80px] mx-auto lg:w-[120px] lg:h-[120px] rounded-full"

@@ -56,7 +56,9 @@ const AllOrders = () => {
               <Flex className="items-center gap-5">
                 <img
                   className="h-20 w-20"
-                  src={item?.product?.images[0]}
+                  src={`${import.meta.env.VITE_MEDIA}/${
+                    item?.product?.images[0]
+                  }`}
                   alt={item?.product?.name}
                 />
 
