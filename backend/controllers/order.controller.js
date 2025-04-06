@@ -117,9 +117,18 @@ const placeOrder = async (req, res) => {
         total_amount: grandTotal,
         currency: "BDT",
         tran_id: transactionID, // use unique tran_id for each api call
-        success_url: `${process.env.HOST_URL}${process.env.PORT}${process.env.BASE_URL}/order/success/${order._id}`,
-        fail_url: `${process.env.HOST_URL}${process.env.PORT}${process.env.BASE_URL}/order/fail/${order._id}`,
-        cancel_url: `${process.env.HOST_URL}${process.env.PORT}${process.env.BASE_URL}/order/cancel/${order._id}`,
+        success_url:
+          process.env.SYSTEM_ENV === "production"
+            ? `https://shari-mohol-ecommerce-server.onrender.com/api/v1/order/success/${order._id}`
+            : `${process.env.HOST_URL}${process.env.PORT}${process.env.BASE_URL}/order/success/${order._id}`,
+        fail_url:
+          process.env.SYSTEM_ENV === "production"
+            ? `https://shari-mohol-ecommerce-server.onrender.com/api/v1/order/fail/${order._id}`
+            : `${process.env.HOST_URL}${process.env.PORT}${process.env.BASE_URL}/order/fail/${order._id}`,
+        cancel_url:
+          process.env.SYSTEM_ENV === "production"
+            ? `https://shari-mohol-ecommerce-server.onrender.com/api/v1/order/cancel/${order._id}`
+            : `${process.env.HOST_URL}${process.env.PORT}${process.env.BASE_URL}/order/cancel/${order._id}`,
         ipn_url: "http://localhost:3030/ipn",
         shipping_method: "Courier",
         product_name: "Computer.",
@@ -228,7 +237,13 @@ const paymentSuccess = async (req, res) => {
   //     await cartModel.findOneAndDelete({ _id: item.cartId });
   //   });
 
-  return res.redirect(`http://localhost:5173/payment/success/${orderId}`);
+  if (process.env.SYSTEM_ENV === "production") {
+    return res.redirect(
+      `https://shari-mohol.vercel.app/payment/success/${orderId}`
+    );
+  } else {
+    return res.redirect(`http://localhost:5173/payment/success/${orderId}`);
+  }
 };
 
 /**
@@ -240,7 +255,13 @@ const paymentFail = async (req, res) => {
 
   await orderModel.findByIdAndDelete({ _id: orderId });
 
-  return res.redirect(`http://localhost:5173/payment/fail/${orderId}`);
+  if (process.env.SYSTEM_ENV === "production") {
+    return res.redirect(
+      `https://shari-mohol.vercel.app/payment/fail/${orderId}`
+    );
+  } else {
+    return res.redirect(`http://localhost:5173/payment/fail/${orderId}`);
+  }
 };
 
 /**
@@ -252,7 +273,13 @@ const paymentCancel = async (req, res) => {
 
   await orderModel.findByIdAndDelete({ _id: orderId });
 
-  return res.redirect(`http://localhost:5173/payment/cancel/${orderId}`);
+  if (process.env.SYSTEM_ENV === "production") {
+    return res.redirect(
+      `https://shari-mohol.vercel.app/payment/cancel/${orderId}`
+    );
+  } else {
+    return res.redirect(`http://localhost:5173/payment/cancel/${orderId}`);
+  }
 };
 
 module.exports = {
