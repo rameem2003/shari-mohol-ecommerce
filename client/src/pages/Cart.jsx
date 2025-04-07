@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Container from "../components/common/Container";
 import { Link } from "react-router";
 import { useSelector } from "react-redux";
@@ -10,6 +10,14 @@ const Cart = () => {
     (total, item) => total + item.quantity * item.discountPrice,
     0
   );
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   return (
     <main className=" py-[120px]">
       <Container>

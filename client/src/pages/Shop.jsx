@@ -68,6 +68,13 @@ const Shop = () => {
   useEffect(() => {
     setFilter(allProducts);
   }, [allProducts]);
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
   return (
     <main>
       <ShopBanner />

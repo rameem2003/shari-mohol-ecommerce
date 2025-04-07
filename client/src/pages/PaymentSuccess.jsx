@@ -9,6 +9,13 @@ const PaymentSuccess = () => {
     productCartClear();
   }, []);
 
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   return (
     <div className="flex flex-col items-center justify-center bg-green-50 py-40">
       <div className="flex flex-col items-center rounded-2xl bg-white p-8 shadow-xl">

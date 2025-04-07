@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Container from "../components/common/Container";
 import useAuth from "../hooks/useAuth";
 import { Link } from "react-router";
@@ -12,6 +12,13 @@ const Register = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm(); // react hook form
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
 
   return (
     <main className=" py-[100px]">

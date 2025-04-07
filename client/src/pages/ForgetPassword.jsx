@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { stepsData } from "../libs/formStep";
 import axios from "axios";
 // react icons
@@ -80,6 +80,12 @@ const ForgetPassword = () => {
     }
   };
 
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
   return (
     <main className="py-[150px]">
       <div className="w-full sm:w-full max-w-[700px] mx-auto">

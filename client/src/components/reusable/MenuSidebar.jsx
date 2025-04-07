@@ -32,7 +32,7 @@ const MenuSidebar = () => {
   return (
     <aside
       ref={sidebarRef}
-      className={` bg-white p-3 h-screen w-full lg:w-3/12 xl:w-2/12 fixed top-0 duration-300 ease-in-out ${
+      className={` bg-white p-3 h-screen w-[90%] lg:w-3/12 xl:w-2/12 fixed top-0 duration-300 ease-in-out ${
         menuToggle ? "left-0" : "left-[-200%]"
       } z-[99999999999999]`}
     >
@@ -42,7 +42,7 @@ const MenuSidebar = () => {
           onClick={() => setMenuToggle(!menuToggle)}
         />
       </Flex>
-      <ul className=" mt-10">
+      <ul onClick={() => setMenuToggle(false)} className=" mt-10">
         <li className=" rounded-md mb-2 bg-purple-50">
           <Link
             className=" flex items-center gap-4  duration-150 hover:ml-2 p-2 text-black hover:text-purple-600 text-lg font-medium hover:font-semibold"
@@ -73,7 +73,7 @@ const MenuSidebar = () => {
         <li className=" rounded-md mb-2 bg-purple-50">
           <Link
             className=" flex items-center gap-4 duration-150 hover:ml-2  p-2 text-black hover:text-purple-600 text-lg font-medium hover:font-semibold"
-            to="/account"
+            to="/contact"
           >
             <FaInfo />
             Contact

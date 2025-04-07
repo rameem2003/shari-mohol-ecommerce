@@ -82,6 +82,13 @@ const OTP = () => {
       navigate("/");
     }
   }, []);
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
   return (
     <main className=" py-[150px]">
       <Container>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Container from "../components/common/Container";
 import BreadCrumb from "../components/common/BreadCrumb";
@@ -15,6 +15,14 @@ import { MdPassword } from "react-icons/md";
 const ProfilePage = () => {
   const user = useSelector((state) => state.account.account); // user
   const [activeTab, setActiveTab] = useState(1); // active tab
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   return (
     <main className=" py-[120px]">
       <Container>

@@ -46,6 +46,13 @@ const Checkout = () => {
     setValue("grandTotal", grandTotal);
     setValue("cartItems", cart);
   }, [grandTotal]);
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
   return (
     <main className=" py-[120px]">
       <Container>
