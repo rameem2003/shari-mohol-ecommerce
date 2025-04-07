@@ -119,15 +119,15 @@ const placeOrder = async (req, res) => {
         tran_id: transactionID, // use unique tran_id for each api call
         success_url:
           process.env.SYSTEM_ENV === "production"
-            ? `https://shari-mohol-ecommerce-server.onrender.com/api/v1/order/success/${order._id}`
+            ? `${process.env.RENDER_HOST_URL}/order/success/${order._id}`
             : `${process.env.HOST_URL}${process.env.PORT}${process.env.BASE_URL}/order/success/${order._id}`,
         fail_url:
           process.env.SYSTEM_ENV === "production"
-            ? `https://shari-mohol-ecommerce-server.onrender.com/api/v1/order/fail/${order._id}`
+            ? `${process.env.RENDER_HOST_URL}/order/fail/${order._id}`
             : `${process.env.HOST_URL}${process.env.PORT}${process.env.BASE_URL}/order/fail/${order._id}`,
         cancel_url:
           process.env.SYSTEM_ENV === "production"
-            ? `https://shari-mohol-ecommerce-server.onrender.com/api/v1/order/cancel/${order._id}`
+            ? `${process.env.RENDER_HOST_URL}/order/cancel/${order._id}`
             : `${process.env.HOST_URL}${process.env.PORT}${process.env.BASE_URL}/order/cancel/${order._id}`,
         ipn_url: "http://localhost:3030/ipn",
         shipping_method: "Courier",
@@ -239,7 +239,7 @@ const paymentSuccess = async (req, res) => {
 
   if (process.env.SYSTEM_ENV === "production") {
     return res.redirect(
-      `https://shari-mohol.vercel.app/payment/success/${orderId}`
+      `${process.env.VERCEL_HOST_URL}/payment/success/${orderId}`
     );
   } else {
     return res.redirect(`http://localhost:5173/payment/success/${orderId}`);
@@ -257,7 +257,7 @@ const paymentFail = async (req, res) => {
 
   if (process.env.SYSTEM_ENV === "production") {
     return res.redirect(
-      `https://shari-mohol.vercel.app/payment/fail/${orderId}`
+      `${process.env.VERCEL_HOST_URL}/payment/fail/${orderId}`
     );
   } else {
     return res.redirect(`http://localhost:5173/payment/fail/${orderId}`);
@@ -275,7 +275,7 @@ const paymentCancel = async (req, res) => {
 
   if (process.env.SYSTEM_ENV === "production") {
     return res.redirect(
-      `https://shari-mohol.vercel.app/payment/cancel/${orderId}`
+      `${process.env.VERCEL_HOST_URL}/payment/cancel/${orderId}`
     );
   } else {
     return res.redirect(`http://localhost:5173/payment/cancel/${orderId}`);
