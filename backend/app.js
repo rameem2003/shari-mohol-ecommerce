@@ -5,6 +5,9 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const connectDB = require("./config/db.config");
+const swaggerUi = require("swagger-ui-express");
+const YAML = require("yamljs");
+const swaggerDocument = YAML.load("./api.yaml");
 const router = require("./routes");
 const app = express();
 
@@ -41,6 +44,7 @@ app.use(
   })
 );
 app.use(router);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 /**
  * Welcome Route
