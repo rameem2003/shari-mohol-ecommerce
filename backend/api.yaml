@@ -101,8 +101,8 @@ info:
     management, and payment.
   version: 1.0.0
 servers:
-  - url: http://localhost:5000/api
-  - url: http://localhost:5000/
+  - url: https://shari-mohol-ecommerce-server.onrender.com/api
+  - url: https://shari-mohol-ecommerce-server.onrender.com/
 components:
   securitySchemes:
     noauthAuth:
