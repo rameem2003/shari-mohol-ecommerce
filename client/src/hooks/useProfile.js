@@ -2,8 +2,11 @@ import { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { AccountReducer } from "../redux/slices/AccountSlice";
 
 const useProfile = () => {
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const accessToken = Cookies.get("accessToken"); // access token
   const sessionToken = Cookies.get("sessionToken"); // access token
@@ -35,7 +38,7 @@ const useProfile = () => {
         }
       );
 
-      //   await fetchUpdateUser();
+      await fetchUserUpdate(userID);
 
       setIsLoading(false);
       Swal.fire({
@@ -125,6 +128,21 @@ const useProfile = () => {
           location.reload();
           setIsLoading(false);
         });
+    }
+  };
+
+  // handle fetch update user
+  const fetchUserUpdate = async (userID) => {
+    try {
+      let res = await axios.get(
+        `${import.meta.env.VITE_API}/auth/user/${userID}`
+      );
+
+      console.log(res);
+      dispatch(AccountReducer(res.data.user));
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
     }
   };
 

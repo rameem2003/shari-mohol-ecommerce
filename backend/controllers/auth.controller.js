@@ -628,12 +628,23 @@ const updateUser = async (req, res) => {
 const singleUser = async (req, res) => {
   const { id } = req.params;
   try {
-    let user = await authModel.findOne({ _id: id });
+    let user = await authModel.findOne({ _id: id }).select("-password");
+
+    let updateUser = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      phone: user.phone,
+      address: user.address,
+      photo: user.photo,
+      verified: user.isVarify,
+    };
 
     res.status(200).send({
       success: true,
       msg: "User Fetched success",
-      user,
+      user: updateUser,
     });
   } catch (error) {
     res.status(500).send({
