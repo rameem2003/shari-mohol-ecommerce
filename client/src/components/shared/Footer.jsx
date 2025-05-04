@@ -62,7 +62,8 @@ const Footer = () => {
 
           <div className="border-t border-gray-200 pt-[20px] flex items-center w-full flex-wrap gap-[20px] justify-center">
             <p className="text-[0.8rem] sm:text-[0.9rem] text-gray-200">
-              © 2025 ROL Studio Bangladesh || All Rights Reserved
+              © 2025 ROL Studio Bangladesh || Developer: Mahmood Hassan Rameem
+              || All Rights Reserved
             </p>
           </div>
         </div>
