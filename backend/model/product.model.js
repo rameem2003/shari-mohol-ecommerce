@@ -67,9 +67,15 @@ const productSchema = new mongoose.Schema(
         ref: "review",
       },
     ],
+
+    ratingAverage: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
   }
 );
+
 module.exports = mongoose.model("product", productSchema);

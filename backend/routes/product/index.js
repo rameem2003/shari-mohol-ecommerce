@@ -8,8 +8,10 @@ const {
   deleteProduct,
   getProductBySubCategory,
   getProductByCategory,
+  sendReview,
 } = require("../../controllers/product.controller");
 const checkAdminMiddleware = require("../../middlewares/checkAdminMiddleware");
+const checkUserMiddleware = require("../../middlewares/checkUserMiddleware");
 const errorHandleMiddleware = require("../../middlewares/errorHandleMiddleware");
 const upload = require("../../middlewares/fileupload");
 
@@ -80,5 +82,11 @@ router.patch(
  * http://localhost:5000/api/v1/product/delete/:id
  */
 router.delete("/product/delete/:id", checkAdminMiddleware, deleteProduct);
+
+/**
+ * Send review for a product
+ * http://localhost:5000/api/v1/product/review/
+ */
+router.post("/product/send-review", sendReview);
 
 module.exports = router;

@@ -2,13 +2,17 @@ const deleteFile = require("../helpers/deleteFile");
 const path = require("path");
 const productModel = require("../model/product.model");
 const categoryModel = require("../model/category.model");
+const reviewModel = require("../model/review.model");
 
 /**
  * All Products
  */
 const allProducts = async (req, res) => {
   try {
-    let allProduct = await productModel.find().populate("category");
+    let allProduct = await productModel
+      .find()
+      .populate("category")
+      .populate("reviews");
     res.status(200).send({
       success: true,
       msg: "All Products Fetched Success",
@@ -31,7 +35,8 @@ const getFeaturedProducts = async (req, res) => {
   try {
     let featuredProducts = await productModel
       .find({ featured: true })
-      .populate("category");
+      .populate("category")
+      .populate("reviews");
     res.status(200).send({
       success: true,
       msg: "All Featured Products Fetched Success",
@@ -53,7 +58,8 @@ const getHotSellProducts = async (req, res) => {
   try {
     let hotSellProducts = await productModel
       .find({ hotSell: true })
-      .populate("category");
+      .populate("category")
+      .populate("reviews");
     res.status(200).send({
       success: true,
       msg: "All Hot Sell Products Fetched Success",
@@ -74,7 +80,10 @@ const getHotSellProducts = async (req, res) => {
 const getProductByCategory = async (req, res) => {
   const { category } = req.params;
   try {
-    let products = await productModel.find({ category }).populate("category");
+    let products = await productModel
+      .find({ category })
+      .populate("category")
+      .populate("reviews");
     res.status(200).send({
       success: true,
       msg: `${category} Products Fetched Success`,
@@ -97,7 +106,8 @@ const getProductBySubCategory = async (req, res) => {
   try {
     let products = await productModel
       .find({ subCategory })
-      .populate("category");
+      .populate("category")
+      .populate("reviews");
     res.status(200).send({
       success: true,
       msg: `${subCategory} Products Fetched Success`,
@@ -118,7 +128,10 @@ const getProductBySubCategory = async (req, res) => {
 const singleProduct = async (req, res) => {
   const { id } = req.params;
   try {
-    let product = await productModel.findOne({ _id: id }).populate("category");
+    let product = await productModel
+      .findOne({ _id: id })
+      .populate("category")
+      .populate("reviews");
     res.status(200).send({
       success: true,
       msg: "Product Fetched Success",
@@ -343,12 +356,46 @@ const deleteProduct = async (req, res) => {
       );
     }
 
+    if (targetProduct.reviews && targetProduct.reviews.length > 0) {
+      // await reviewModel.deleteMany({ _id: { $in: targetProduct.reviews } });
+      await reviewModel.deleteMany({ product: targetProduct._id }); // Delete reviews associated with the product
+    }
+
     res.status(200).send({
       success: true,
       msg: "Product Deleted Successfully",
     });
   } catch (error) {
     console.log(error);
+    res.status(500).send({
+      success: false,
+      msg: "Internal Server Error",
+      error,
+    });
+  }
+};
+
+const sendReview = async (req, res) => {
+  const { user, product, rating, comment } = req.body;
+
+  try {
+    let newReview = new reviewModel({ user, product, rating, comment });
+
+    await newReview.save();
+
+    await productModel.findByIdAndUpdate(
+      { _id: product },
+      {
+        $push: { reviews: newReview._id },
+      },
+      { new: true }
+    );
+    res.status(201).send({
+      success: true,
+      msg: "Review Added Successfully",
+      data: newReview,
+    });
+  } catch (error) {
     res.status(500).send({
       success: false,
       msg: "Internal Server Error",
@@ -367,4 +414,5 @@ module.exports = {
   createNewProduct,
   updateProduct,
   deleteProduct,
+  sendReview,
 };
