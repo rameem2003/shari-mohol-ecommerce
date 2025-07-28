@@ -21,9 +21,6 @@ const authSchema = new mongoose.Schema(
       enum: ["user", "admin"],
       default: "user",
     },
-    otp: {
-      type: Number,
-    },
     isVarify: {
       type: Boolean,
       default: false,

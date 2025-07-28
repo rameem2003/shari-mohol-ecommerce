@@ -36,7 +36,7 @@ router.post("/auth/login", loginUser);
  * Logout Route
  * http://localhost:5000/api/v1/auth/logout/:id
  */
-router.post("/auth/logout/:id", logoutUser);
+router.post("/auth/logout/:id", checkUserMiddleware, logoutUser);
 
 /**
  * Single User Info

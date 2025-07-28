@@ -4,6 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+const requestIp = require("request-ip");
 const connectDB = require("./config/db.config");
 const swaggerUi = require("swagger-ui-express");
 const YAML = require("yamljs");
@@ -29,6 +30,7 @@ app.use(express.static("temp"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(requestIp.mw());
 app.use(
   session({
     secret: process.env.SESSION_SECRET,

@@ -1,8 +1,12 @@
 const jwt = require("jsonwebtoken");
 const authModel = require("../model/auth.model");
+const sessionModel = require("../model/session.model");
 
 const checkUserMiddleware = (req, res, next) => {
   const { accessToken, sessionToken } = req.cookies;
+
+  res.user = null; // Initialize res.user
+
   // if token found
   if (accessToken) {
     // token verify
@@ -20,6 +24,7 @@ const checkUserMiddleware = (req, res, next) => {
           // if decoded and user email is exist
           const existUser = await authModel.findOne({ email: decoded.email });
           if (existUser) {
+            req.user = decoded; // Set req.user to the existing user
             next();
           }
           // if not matched
@@ -48,8 +53,11 @@ const checkUserMiddleware = (req, res, next) => {
           .status(403)
           .json({ success: false, msg: "Invalid Session Token" });
 
-      const user = await authModel.findOne({ email: decoded.email });
-      if (!user || user.sessionToken !== sessionToken) {
+      const currentSession = await sessionModel.findOne({
+        _id: decoded.sessionId,
+      });
+      const user = await authModel.findOne({ _id: currentSession.userId });
+      if (!user || !currentSession) {
         return res
           .status(403)
           .json({ success: false, msg: "Invalid Session Token" });
@@ -64,6 +72,7 @@ const checkUserMiddleware = (req, res, next) => {
         address: user.address,
         photo: user.photo,
         verified: user.isVarify,
+        session: currentSession._id,
       };
 
       // Create Access Token (Short-lived)

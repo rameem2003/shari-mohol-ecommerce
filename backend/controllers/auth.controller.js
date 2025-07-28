@@ -7,6 +7,7 @@ const generateOTP = require("../helpers/generateOTP");
 const deleteFile = require("../helpers/deleteFile");
 const authModel = require("../model/auth.model");
 const otpModel = require("../model/otp.model");
+const sessionModel = require("../model/session.model");
 
 /**
  * user register
@@ -139,6 +140,13 @@ const loginUser = async (req, res) => {
       }
       // if password matched
       if (result) {
+        const session = new sessionModel({
+          userId: user._id,
+          userAgent: req.headers["user-agent"],
+          ip: req.ip,
+        });
+        await session.save();
+
         let existUser = {
           id: user._id,
           name: user.name,
@@ -150,21 +158,33 @@ const loginUser = async (req, res) => {
           verified: user.isVarify,
         };
 
+        let tokenStructure = {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          phone: user.phone,
+          address: user.address,
+          photo: user.photo,
+          verified: user.isVarify,
+          session: session._id,
+        };
+
         // if admin
         if (existUser.role === "admin") {
           let sessionToken = jwt.sign(
-            { email: existUser.email },
+            { sessionId: session._id },
             process.env.JWT_SECRET,
             {
               expiresIn: "1d",
             }
           );
-          let accessToken = jwt.sign(existUser, process.env.JWT_SECRET, {
+          let accessToken = jwt.sign(tokenStructure, process.env.JWT_SECRET, {
             expiresIn: "15m",
           });
 
-          user.sessionToken = sessionToken;
-          await user.save();
+          // user.sessionToken = sessionToken;
+          // await user.save();
 
           res.cookie("sessionToken", sessionToken, {
             // httpOnly: true,
@@ -195,18 +215,18 @@ const loginUser = async (req, res) => {
         // if user
         else if (existUser.role === "user") {
           let sessionToken = jwt.sign(
-            { email: existUser.email },
+            { sessionId: session._id },
             process.env.JWT_SECRET,
             {
               expiresIn: "7d",
             }
           );
-          let accessToken = jwt.sign(existUser, process.env.JWT_SECRET, {
+          let accessToken = jwt.sign(tokenStructure, process.env.JWT_SECRET, {
             expiresIn: "15m",
           });
 
-          user.sessionToken = sessionToken;
-          await user.save();
+          // user.sessionToken = sessionToken;
+          // await user.save();
 
           res.cookie("sessionToken", sessionToken, {
             // httpOnly: true,
@@ -259,7 +279,7 @@ const logoutUser = async (req, res) => {
   const { id } = req.params;
 
   try {
-    await authModel.findOneAndUpdate({ _id: id }, { sessionToken: null });
+    await sessionModel.findOneAndDelete({ _id: req.user.session });
 
     // Clear both cookies server-side
     res.clearCookie("accessToken", {
@@ -476,9 +496,6 @@ const resendOTP = async (req, res) => {
     await otpModel.deleteOne({ email });
     let otp = generateOTP(); // generate otp
 
-    existingUser.otp = otp;
-    await existingUser.save();
-
     await otpModel.create({ email, otp });
 
     sendOtpEmail(email, otp, (resend = true)); // send an otp email
@@ -519,6 +536,9 @@ const forgetPassword = async (req, res) => {
           } else {
             targetUser.password = hash;
             await targetUser.save();
+
+            await otpModel.deleteOne({ email }); // delete otp
+
             res.status(200).send({
               success: true,
               msg: "Password Reset Successful",
