@@ -5,7 +5,7 @@ const sessionModel = require("../model/session.model");
 const checkUserMiddleware = (req, res, next) => {
   const { accessToken, sessionToken } = req.cookies;
 
-  res.user = null; // Initialize res.user
+  req.user = null; // Initialize res.user
 
   // if token found
   if (accessToken) {

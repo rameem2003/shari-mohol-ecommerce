@@ -29,6 +29,10 @@ const ResponsiveSidebar = () => {
     try {
       let res = await axios.post(
         `${import.meta.env.VITE_API}/auth/logout/${id}`,
+        {},
+        {
+          withCredentials: true,
+        },
       );
 
       Cookies.remove("accessToken");

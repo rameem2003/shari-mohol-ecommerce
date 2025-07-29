@@ -1,8 +1,11 @@
 const jwt = require("jsonwebtoken");
 const authModel = require("../model/auth.model");
+const sessionModel = require("../model/session.model");
 
 const checkAdminMiddleware = (req, res, next) => {
   const { accessToken, sessionToken } = req.cookies;
+
+  req.admin = null; // Initialize res.admin
 
   // if token found
   if (accessToken) {
@@ -22,6 +25,7 @@ const checkAdminMiddleware = (req, res, next) => {
           const existAdmin = await authModel.findOne({ email: decoded.email });
           if (existAdmin) {
             if (decoded.role == "admin") {
+              req.admin = decoded; // Set req.admin to the existing admin
               next();
             } else {
               res.status(401).send({
@@ -57,8 +61,11 @@ const checkAdminMiddleware = (req, res, next) => {
           .json({ success: false, msg: "Invalid Session Token" });
       }
 
-      const user = await authModel.findOne({ email: decoded.email });
-      if (!user || user.sessionToken !== sessionToken) {
+      const currentSession = await sessionModel.findOne({
+        _id: decoded.sessionId,
+      });
+      const user = await authModel.findOne({ email: currentSession.userId });
+      if (!user || !currentSession) {
         return res.status(403).json({ success: false, msg: "Invalid Admin" });
       }
 
@@ -71,6 +78,7 @@ const checkAdminMiddleware = (req, res, next) => {
         address: user.address,
         photo: user.photo,
         verified: user.isVarify,
+        session: currentSession._id,
       };
 
       // Create Access Token (Short-lived)
