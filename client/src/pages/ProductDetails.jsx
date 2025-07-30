@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import moment from "moment";
 import { Link, useParams } from "react-router";
 import { useSelector } from "react-redux";
 import axios from "axios";
@@ -15,6 +16,7 @@ import { FaHome } from "react-icons/fa";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 import { BsTruck } from "react-icons/bs";
 import { PiToolboxLight } from "react-icons/pi";
+import StarRating from "../components/common/StarRating";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -26,6 +28,7 @@ const ProductDetails = () => {
   const [color, setColor] = useState(""); // state for store the product color
   const [selectedSize, setSelectedSize] = useState(null); // state for color select button indicator
   const [size, setSize] = useState(""); // state for store the product size
+  const [reviews, setReviews] = useState([]); // state for product reviews
   const settings = {
     dots: false,
     infinite: true,
@@ -63,8 +66,8 @@ const ProductDetails = () => {
       let res = await axios.get(
         `${import.meta.env.VITE_API}/product/single/${id}`
       );
-      //   console.log(res);
       setProduct(res.data.data);
+      setReviews(res.data.data.reviews);
     } catch (error) {
       console.log(error);
     }
@@ -72,14 +75,20 @@ const ProductDetails = () => {
 
   // fetch product by category
   const fetchProductByCategory = async () => {
-    console.log(product?.category?._id);
-
     try {
       let res = await axios.get(`
         ${import.meta.env.VITE_API}/product/category/${
         product?.category?._id
       }`);
       setRelatedProducts(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // send product review
+  const sendProductReview = async () => {
+    try {
     } catch (error) {
       console.log(error);
     }
@@ -96,6 +105,7 @@ const ProductDetails = () => {
   useEffect(() => {
     fetchProductByCategory();
   }, [product?.category?._id]);
+  console.log(reviews);
 
   return (
     <main className=" py-[120px]">
@@ -244,6 +254,46 @@ const ProductDetails = () => {
               </div>
             </div>
           </Flex>
+        </section>
+
+        <section>
+          <h2 className=" text-2xl font-bold mt-10">
+            Product Reviews ({reviews.length})
+          </h2>
+
+          {reviews.length == 0 && (
+            <h4 className=" text-2xl font-bold">No reviews yet</h4>
+          )}
+
+          <div className="mt-5">
+            {reviews.map((review) => (
+              <Flex
+                className=" max-w-[500px] items-start gap-2 mb-2 border-b-[1px] border-gray-200 p-3
+                rounded"
+                key={review._id}
+              >
+                <div className=" w-[50px] h-[50px]">
+                  <img
+                    src={`${import.meta.env.VITE_MEDIA}/${review?.user?.photo}`}
+                    alt={review?.user?.name}
+                    className="h-full w-full rounded-full object-cover"
+                  />
+                </div>
+                <div>
+                  <Flex className="items-center gap-1">
+                    <h3 className=" text-xs font-bold">{review?.user?.name}</h3>
+                    <StarRating rating={review?.rating} className="text-xs" />
+                  </Flex>
+                  <p className="text-base font-medium text-gray-800">
+                    {review?.comment}
+                  </p>
+                  <span className=" text-xs text-gray-500">
+                    {moment(review?.createdAt).fromNow()}
+                  </span>
+                </div>
+              </Flex>
+            ))}
+          </div>
         </section>
 
         <section className=" mt-10 my-20">

@@ -131,7 +131,13 @@ const singleProduct = async (req, res) => {
     let product = await productModel
       .findOne({ _id: id })
       .populate("category")
-      .populate("reviews");
+      .populate("reviews")
+      .populate({
+        path: "reviews",
+        populate: {
+          path: "user",
+        },
+      });
     res.status(200).send({
       success: true,
       msg: "Product Fetched Success",
