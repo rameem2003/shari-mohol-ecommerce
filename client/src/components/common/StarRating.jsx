@@ -9,7 +9,10 @@ const StarRating = ({ rating, className }) => {
     return (
       <div key={index}>
         {rating >= index + 1 ? (
-          <FaStar className={` text-yellow-500 ${className}`} />
+          <FaStar
+            onClick={() => setRating(index + 1)}
+            className={` text-yellow-500 ${className}`}
+          />
         ) : rating > number ? (
           <FaStarHalfAlt className={` text-yellow-500 ${className}`} />
         ) : (

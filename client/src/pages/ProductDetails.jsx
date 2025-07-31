@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import ProductImagePreview from "../components/screens/product-details/ProductImagePreview";
@@ -17,11 +17,22 @@ import { FaMinus, FaPlus } from "react-icons/fa6";
 import { BsTruck } from "react-icons/bs";
 import { PiToolboxLight } from "react-icons/pi";
 import StarRating from "../components/common/StarRating";
+import StartRatingInput from "../components/common/StartRatingInput";
+import useProduct from "../hooks/useProduct";
+import { useForm } from "react-hook-form";
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const cart = useSelector((state) => state.cart.cart);
+  const navigate = useNavigate();
+  const { fetchProduct, sendProductReview, msg } = useProduct();
   const { addToCart, updateCart } = useCart(); // cart hook
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm(); // react hook form
+  const cart = useSelector((state) => state.cart.cart);
   const [product, setProduct] = useState({}); // state for product
   const [relatedProducts, setRelatedProducts] = useState([]); // state for related products
   const [selectedColor, setSelectedColor] = useState(null); // state for color select button indicator
@@ -29,6 +40,9 @@ const ProductDetails = () => {
   const [selectedSize, setSelectedSize] = useState(null); // state for color select button indicator
   const [size, setSize] = useState(""); // state for store the product size
   const [reviews, setReviews] = useState([]); // state for product reviews
+  const [rating, setRating] = useState(0); // state for product rating
+  const [comment, setComment] = useState(""); // state for product comment
+  const [isLoading, setIsLoading] = useState(true); // state for loading
   const settings = {
     dots: false,
     infinite: true,
@@ -61,11 +75,9 @@ const ProductDetails = () => {
   let matchToCart = cart.filter((item) => item._id == id);
 
   // fetch product
-  const fetchProduct = async () => {
+  const loadProduct = async () => {
     try {
-      let res = await axios.get(
-        `${import.meta.env.VITE_API}/product/single/${id}`
-      );
+      let res = await fetchProduct(id);
       setProduct(res.data.data);
       setReviews(res.data.data.reviews);
     } catch (error) {
@@ -86,26 +98,22 @@ const ProductDetails = () => {
     }
   };
 
-  // send product review
-  const sendProductReview = async () => {
-    try {
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
-    fetchProduct();
+    loadProduct();
   }, [id]);
 
   useEffect(() => {
     fetchProductByCategory();
   }, [product?.category?._id]);
-  console.log(reviews);
+
+  useEffect(() => {
+    setValue("rating", rating);
+    setValue("id", id);
+  }, [rating, id]);
 
   return (
     <main className=" py-[120px]">
@@ -261,8 +269,51 @@ const ProductDetails = () => {
             Product Reviews ({reviews.length})
           </h2>
 
+          <form
+            onSubmit={handleSubmit(sendProductReview)}
+            action=""
+            className=" mt-5 max-w-[500px]"
+          >
+            <div className="mt-5">
+              <label htmlFor="comment" className=" text-base font-bold">
+                Comment <span className=" text-red-600">*</span>
+              </label>
+              <textarea
+                name="comment"
+                id="comment"
+                {...register("comment", {
+                  required: "Comment is required",
+                })}
+                cols="30"
+                rows="5"
+                placeholder="Write your review here"
+                className=" w-full border-[1px] border-gray-200 p-3 rounded"
+              ></textarea>
+              {errors.comment && (
+                <p className="text-red-500">{errors.comment.message}</p>
+              )}
+            </div>
+
+            <div className="mt-5">
+              <label htmlFor="rating" className=" text-base font-bold">
+                Rating
+              </label>
+              {/* <StarRating rating={rating} setRating={setRating} /> */}
+              <StartRatingInput setValue={setRating} />
+            </div>
+
+            <div className="mt-5">
+              <button
+                disabled={isSubmitting}
+                className=" w-full flex items-center justify-center gap-2 border-[2px] border-purple-600 py-3 px-5 text-white hover:text-purple-600 bg-purple-600 hover:bg-white"
+              >
+                {isSubmitting ? "Please Wait..." : "Submit Review"}
+              </button>
+            </div>
+          </form>
+
           {reviews.length == 0 && (
-            <h4 className=" text-2xl font-bold">No reviews yet</h4>
+            <h4 className=" text-base font-bold">No reviews yet</h4>
           )}
 
           <div className="mt-5">

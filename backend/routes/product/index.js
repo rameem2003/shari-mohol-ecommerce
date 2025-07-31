@@ -87,6 +87,6 @@ router.delete("/product/delete/:id", checkAdminMiddleware, deleteProduct);
  * Send review for a product
  * http://localhost:5000/api/v1/product/review/
  */
-router.post("/product/send-review", sendReview);
+router.post("/product/send-review", checkUserMiddleware, sendReview);
 
 module.exports = router;
