@@ -7,31 +7,27 @@ import {
   FaShop,
   FaUser,
 } from "react-icons/fa6";
-import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import CartSidebar from "../reusable/CartSidebar";
 import MenuSidebar from "../reusable/MenuSidebar";
 import { ToggleContext } from "../../context/ToggleContextProvider";
-import { useDispatch, useSelector } from "react-redux";
-import { BannerReducer } from "../../redux/slices/BannerSlice";
-import { CategoryReducer } from "../../redux/slices/CategorySlice";
-import { allProducts } from "../../redux/slices/ProductSlice";
+import { useSelector } from "react-redux";
 import { Link } from "react-router";
 import { IoIosSearch } from "react-icons/io";
 import logopurple from "../../assets/logopurple.png";
 import logowhite from "../../assets/logowhite.png";
 import { FaHome, FaSearch, FaTimes } from "react-icons/fa";
+import { MdDone } from "react-icons/md";
 import Search from "../common/Search";
+import useProduct from "../../hooks/useProduct";
 const Navbar = () => {
   const { menuToggle, setMenuToggle, cartToggle, setCartToggle } =
     useContext(ToggleContext);
+  const { fetchBanners, fetchCategories, fetchAllProducts } = useProduct();
   const [searchBox, setSearchBox] = useState(false);
   const user = useSelector((state) => state.account.account); // user
   const cart = useSelector((state) => state.cart.cart); // cart
   const { handleLogout } = useAuth();
-  const dispatch = useDispatch(); // dispatch instance
-  const [isOpen, setIsOpen] = useState(false);
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const handleScroll = () => {
     const offset = window.scrollY;
@@ -51,36 +47,6 @@ const Navbar = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  // fetch all banners
-  const fetchBanners = async () => {
-    try {
-      let res = await axios.get(`${import.meta.env.VITE_API}/banner/all`);
-      dispatch(BannerReducer(res.data.data));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // fetch all categories
-  const fetchCategories = async () => {
-    try {
-      let res = await axios.get(`${import.meta.env.VITE_API}/category/all`);
-      dispatch(CategoryReducer(res.data.data));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // fetch all products
-  const fetchAllProducts = async () => {
-    try {
-      let res = await axios.get(`${import.meta.env.VITE_API}/product/all`);
-      dispatch(allProducts(res.data.data));
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
     fetchBanners();
@@ -158,9 +124,22 @@ const Navbar = () => {
                       />
 
                       <div className=" bg-white hidden group-hover:block p-2 rounded absolute top-8 right-0 min-w-[250px]">
-                        <h2 className="text-black font-semibold text-xl">
-                          {user.name}
-                        </h2>
+                        <Flex className="items-center gap-2">
+                          <h2 className="text-black font-semibold text-xl">
+                            {user.name}
+                          </h2>
+                          {user.verified ? (
+                            <div className="px-4 py-1  text-white bg-[#18c964] rounded-full text-[0.7rem] font-[500] flex items-center gap-1">
+                              <MdDone className="p-0.5 text-[1.1rem] rounded-full bg-white text-[#18c964]" />
+                              Verified
+                            </div>
+                          ) : (
+                            <div className="px-4 py-1  text-white bg-red-500 rounded-full text-[0.7rem] font-[500] flex items-center gap-1">
+                              <FaTimes className="p-0.5 text-[1.1rem] rounded-full bg-white text-red-500" />
+                              Not Verified
+                            </div>
+                          )}
+                        </Flex>
                         <h2 className="text-black font-medium text-base">
                           {user.email}
                         </h2>

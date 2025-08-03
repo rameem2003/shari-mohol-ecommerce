@@ -23,8 +23,8 @@ import { useForm } from "react-hook-form";
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const { fetchProduct, sendProductReview, msg } = useProduct();
+  const { fetchProduct, sendProductReview, msg, product, reviews } =
+    useProduct();
   const { addToCart, updateCart } = useCart(); // cart hook
   const {
     register,
@@ -33,16 +33,12 @@ const ProductDetails = () => {
     formState: { errors, isSubmitting },
   } = useForm(); // react hook form
   const cart = useSelector((state) => state.cart.cart);
-  const [product, setProduct] = useState({}); // state for product
   const [relatedProducts, setRelatedProducts] = useState([]); // state for related products
   const [selectedColor, setSelectedColor] = useState(null); // state for color select button indicator
   const [color, setColor] = useState(""); // state for store the product color
   const [selectedSize, setSelectedSize] = useState(null); // state for color select button indicator
   const [size, setSize] = useState(""); // state for store the product size
-  const [reviews, setReviews] = useState([]); // state for product reviews
   const [rating, setRating] = useState(0); // state for product rating
-  const [comment, setComment] = useState(""); // state for product comment
-  const [isLoading, setIsLoading] = useState(true); // state for loading
   const settings = {
     dots: false,
     infinite: true,
@@ -77,9 +73,7 @@ const ProductDetails = () => {
   // fetch product
   const loadProduct = async () => {
     try {
-      let res = await fetchProduct(id);
-      setProduct(res.data.data);
-      setReviews(res.data.data.reviews);
+      await fetchProduct(id);
     } catch (error) {
       console.log(error);
     }
@@ -292,6 +286,7 @@ const ProductDetails = () => {
               {errors.comment && (
                 <p className="text-red-500">{errors.comment.message}</p>
               )}
+              {msg && <p className="text-red-500 mt-2">{msg}</p>}
             </div>
 
             <div className="mt-5">

@@ -9,8 +9,8 @@ import ChangePassword from "../components/screens/Account/ChangePassword";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { FaCartShopping } from "react-icons/fa6";
-import { FaUserEdit } from "react-icons/fa";
-import { MdPassword } from "react-icons/md";
+import { FaTimes, FaUserEdit } from "react-icons/fa";
+import { MdDone, MdPassword } from "react-icons/md";
 
 const ProfilePage = () => {
   const user = useSelector((state) => state.account.account); // user
@@ -48,9 +48,23 @@ const ProfilePage = () => {
               </div>
               <div className="w-8/12 md:w-10/12 xl:w-[90%]">
                 <h4>Hello,</h4>
-                <h2 className=" font-bold text-lg lg:text-xl text-black">
-                  {user.name}
-                </h2>
+                <Flex className="items-center gap-2">
+                  <h2 className=" font-bold text-lg lg:text-xl text-black">
+                    {user.name}
+                  </h2>
+
+                  {user.verified ? (
+                    <div className="px-4 py-1  text-white bg-[#18c964] rounded-full text-[0.7rem] font-[500] flex items-center gap-1">
+                      <MdDone className="p-0.5 text-[1.1rem] rounded-full bg-white text-[#18c964]" />
+                      Verified
+                    </div>
+                  ) : (
+                    <div className="px-4 py-1  text-white bg-red-500 rounded-full text-[0.7rem] font-[500] flex items-center gap-1">
+                      <FaTimes className="p-0.5 text-[1.1rem] rounded-full bg-white text-red-500" />
+                      Not Verified
+                    </div>
+                  )}
+                </Flex>
                 <h2 className=" font-medium text-xs lg:text-lg text-black">
                   {user.email}
                 </h2>
