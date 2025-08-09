@@ -125,7 +125,7 @@ const Register = () => {
                   disabled={isSubmitting}
                   className="w-full shadow-xl py-2.5 px-4 text-sm font-semibold rounded text-white bg-purple-600 hover:bg-purple-700 focus:outline-none"
                 >
-                  Register
+                  {isSubmitting ? "Creating Account ......" : "Register"}
                 </button>
               </div>
             </form>

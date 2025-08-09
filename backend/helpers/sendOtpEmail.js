@@ -99,8 +99,8 @@ const sendOtpEmail = async (email, otp, resend = false) => {
   const info = await transporter.sendMail({
     from: "rameem.me@gmail.com", // sender address
     to: email, // list of receivers
-    subject: resend ? "OTP Resend MERN E-commerce" : "Account Verification", // Subject line
-    text: "MERN E-commerce", // plain text body
+    subject: resend ? "OTP Resend Shari Mohol" : "Account Verification", // Subject line
+    text: "Shari Mohol", // plain text body
     html: resend ? otp_resend_template : first_time_template, // html body
   });
 };

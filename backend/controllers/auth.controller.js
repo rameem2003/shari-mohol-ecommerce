@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const path = require("path");
 const checkEmailValid = require("../helpers/checkEmailValid");
 const sendOtpEmail = require("../helpers/sendOtpEmail");
+const sendWelcomeNoteEmail = require("../helpers/sendWelcomeNote");
 const generateOTP = require("../helpers/generateOTP");
 const deleteFile = require("../helpers/deleteFile");
 const authModel = require("../model/auth.model");
@@ -467,6 +468,8 @@ const verifyOTP = async (req, res) => {
         success: true,
         msg: "Account is verified",
       });
+
+      await sendWelcomeNoteEmail(email); // send welcome note email
     } else {
       // if otp not matched
       res.status(404).send({
