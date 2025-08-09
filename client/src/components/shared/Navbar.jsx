@@ -12,7 +12,7 @@ import CartSidebar from "../reusable/CartSidebar";
 import MenuSidebar from "../reusable/MenuSidebar";
 import { ToggleContext } from "../../context/ToggleContextProvider";
 import { useSelector } from "react-redux";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import { IoIosSearch } from "react-icons/io";
 import logopurple from "../../assets/logopurple.png";
 import logowhite from "../../assets/logowhite.png";
@@ -21,18 +21,18 @@ import { MdDone } from "react-icons/md";
 import Search from "../common/Search";
 import useProduct from "../../hooks/useProduct";
 const Navbar = () => {
+  const location = useLocation();
+  let route = location.pathname;
   const { menuToggle, setMenuToggle, cartToggle, setCartToggle } =
     useContext(ToggleContext);
+  const { handleLogout } = useAuth();
   const { fetchBanners, fetchCategories, fetchAllProducts } = useProduct();
   const [searchBox, setSearchBox] = useState(false);
   const user = useSelector((state) => state.account.account); // user
   const cart = useSelector((state) => state.cart.cart); // cart
-  const { handleLogout } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const handleScroll = () => {
     const offset = window.scrollY;
-    // console.log(offset);
-
     if (offset > 20) {
       setScrolled(true);
     } else {
@@ -58,7 +58,7 @@ const Navbar = () => {
     <>
       <nav
         className={`${
-          scrolled ? "bg-white" : "bg-black/20"
+          scrolled || route !== "/" ? "bg-white" : "bg-black/20"
         } py-7 fixed w-full z-[999]`}
       >
         <Container>
@@ -67,7 +67,7 @@ const Navbar = () => {
               <FaBarsStaggered
                 onClick={() => setMenuToggle(!menuToggle)}
                 className={`text-3xl cursor-pointer ml-auto lg:me-auto lg:ml-0 ${
-                  scrolled ? "text-black" : "text-white"
+                  scrolled || route !== "/" ? "text-black" : "text-white"
                 }`}
               />
             </div>
@@ -75,7 +75,7 @@ const Navbar = () => {
               <Link to="/">
                 <img
                   className=" w-[70%] md:w-[40%] lg:w-[40%] ml-0 lg:mx-auto"
-                  src={scrolled ? logopurple : logowhite}
+                  src={scrolled || route !== "/" ? logopurple : logowhite}
                   alt="logo"
                 />
               </Link>
@@ -87,7 +87,7 @@ const Navbar = () => {
                     <IoIosSearch
                       onClick={() => setSearchBox(true)}
                       className={` text-3xl cursor-pointer ${
-                        scrolled ? "text-black" : "text-white"
+                        scrolled || route !== "/" ? "text-black" : "text-white"
                       }`}
                     />
                   </div>
@@ -97,14 +97,15 @@ const Navbar = () => {
                   >
                     <span
                       className={`${
-                        scrolled && "border-[2px] border-black"
+                        scrolled ||
+                        (route !== "/" && "border-[2px] border-black")
                       } absolute top-[-10px] right-[-10px] inline-flex items-center justify-center h-5 w-5 text-xs font-bold leading-6 text-black bg-white rounded-full`}
                     >
                       {cart?.length}
                     </span>
                     <FaCartShopping
                       className={` text-2xl ${
-                        scrolled ? "text-black" : "text-white"
+                        scrolled || route !== "/" ? "text-black" : "text-white"
                       }`}
                     />
                   </div>
@@ -163,7 +164,9 @@ const Navbar = () => {
                     <Link to="/login" className="text-white">
                       <FaUser
                         className={` text-2xl ${
-                          scrolled ? "text-black" : "text-white"
+                          scrolled || route !== "/"
+                            ? "text-black"
+                            : "text-white"
                         }`}
                       />
                     </Link>
