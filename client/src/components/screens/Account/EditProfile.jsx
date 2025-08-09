@@ -35,16 +35,25 @@ const EditProfile = () => {
     <section>
       <Flex className="flex-wrap gap-5 md:flex-row md:flex-nowrap">
         <div className=" w-full md:w-4/12 xl:w-3/12">
-          <img
-            className=" w-[80px] h-[80px] md:w-[120px] md:h-[120px] lg:w-[150px] lg:h-[150px] xl:w-[200px] xl:h-[200px] rounded-full"
-            // src={user.photo ? user.photo : displayImage}
-            src={
-              displayImage
-                ? displayImage
-                : `${import.meta.env.VITE_MEDIA}/${user.photo}`
-            }
-            alt="profile"
-          />
+          {displayImage || user.photo ? (
+            <img
+              className=" w-[80px] h-[80px] md:w-[120px] md:h-[120px] lg:w-[150px] lg:h-[150px] xl:w-[200px] xl:h-[200px] rounded-full"
+              // src={user.photo ? user.photo : displayImage}
+              src={
+                displayImage
+                  ? displayImage
+                  : `${import.meta.env.VITE_MEDIA}/${user.photo}`
+              }
+              alt="profile"
+            />
+          ) : (
+            <img
+              className=" w-[80px] h-[80px] md:w-[120px] md:h-[120px] lg:w-[150px] lg:h-[150px] xl:w-[200px] xl:h-[200px] rounded-full"
+              // src={user.photo ? user.photo : displayImage}
+              src="https://plus.unsplash.com/premium_vector-1682269287900-d96e9a6c188b?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              alt="profile"
+            />
+          )}
           <input
             onChange={imageUpload}
             type="file"
@@ -81,6 +90,7 @@ const EditProfile = () => {
               Phone
             </label>
             <input
+              defaultValue=""
               value={data.phone}
               onChange={(e) => setData({ ...data, phone: e.target.value })}
               name="phone"
@@ -96,6 +106,7 @@ const EditProfile = () => {
               Address
             </label>
             <input
+              defaultValue=""
               value={data.address}
               onChange={(e) => setData({ ...data, address: e.target.value })}
               name="address"

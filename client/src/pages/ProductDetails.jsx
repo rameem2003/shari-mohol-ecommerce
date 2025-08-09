@@ -152,6 +152,14 @@ const ProductDetails = () => {
                 Sub Category: {product?.subCategory}
               </p>
 
+              <div className="flex items-center mt-2.5 mb-5">
+                <StarRating rating={product?.ratingAverage} />
+
+                <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-sm dark:bg-blue-200 dark:text-blue-800 ms-3">
+                  {product?.ratingAverage}
+                </span>
+              </div>
+
               <hr />
 
               {product?.sizes?.length > 0 && (

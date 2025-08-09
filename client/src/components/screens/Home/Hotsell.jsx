@@ -29,13 +29,13 @@ const Hotsell = () => {
     speed: 500,
     autoplay: true,
 
-    slidesToShow: 2,
-    slidesToScroll: 2,
+    slidesToShow: 3,
+    slidesToScroll: 3,
     arrows: false,
 
     responsive: [
       {
-        breakpoint: 600,
+        breakpoint: 800,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 2,
@@ -64,10 +64,13 @@ const Hotsell = () => {
         <div className="mt-[31px]">
           {hotsell.length == 0 && (
             <Flex className="gap-4">
-              <div className=" w-full md:w-1/2">
+              <div className=" w-full md:w-1/3">
                 <Skeleton inline={true} className="h-[400px]" />
               </div>
-              <div className="hidden md:block md:w-1/2">
+              <div className="hidden md:block md:w-1/3">
+                <Skeleton inline={true} className="h-[400px]" />
+              </div>
+              <div className="hidden md:block md:w-1/3">
                 <Skeleton inline={true} className="h-[400px]" />
               </div>
             </Flex>

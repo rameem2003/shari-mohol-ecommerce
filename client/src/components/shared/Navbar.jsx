@@ -1,25 +1,25 @@
 import React, { useContext, useEffect, useState } from "react";
 import Container from "../common/Container";
 import Flex from "../common/Flex";
+import useAuth from "../../hooks/useAuth";
+import CartSidebar from "../reusable/CartSidebar";
+import MenuSidebar from "../reusable/MenuSidebar";
+import Search from "../common/Search";
+import useProduct from "../../hooks/useProduct";
+import { ToggleContext } from "../../context/ToggleContextProvider";
+import { useSelector } from "react-redux";
+import { Link, useLocation } from "react-router";
+import { IoIosSearch } from "react-icons/io";
+import { FaHome, FaSearch, FaTimes } from "react-icons/fa";
+import { MdDone } from "react-icons/md";
 import {
   FaBarsStaggered,
   FaCartShopping,
   FaShop,
   FaUser,
 } from "react-icons/fa6";
-import useAuth from "../../hooks/useAuth";
-import CartSidebar from "../reusable/CartSidebar";
-import MenuSidebar from "../reusable/MenuSidebar";
-import { ToggleContext } from "../../context/ToggleContextProvider";
-import { useSelector } from "react-redux";
-import { Link, useLocation } from "react-router";
-import { IoIosSearch } from "react-icons/io";
-import logopurple from "../../assets/logopurple.png";
 import logowhite from "../../assets/logowhite.png";
-import { FaHome, FaSearch, FaTimes } from "react-icons/fa";
-import { MdDone } from "react-icons/md";
-import Search from "../common/Search";
-import useProduct from "../../hooks/useProduct";
+import logopurple from "../../assets/logopurple.png";
 const Navbar = () => {
   const location = useLocation();
   let route = location.pathname;
@@ -74,7 +74,7 @@ const Navbar = () => {
             <div className=" w-1/2 lg:w-1/3 order-1 lg:order-2">
               <Link to="/">
                 <img
-                  className=" w-[70%] md:w-[40%] lg:w-[40%] ml-0 lg:mx-auto"
+                  className=" w-[70%] sm:w-[40%] lg:w-[40%] ml-0 lg:mx-auto"
                   src={scrolled || route !== "/" ? logopurple : logowhite}
                   alt="logo"
                 />
@@ -97,9 +97,8 @@ const Navbar = () => {
                   >
                     <span
                       className={`${
-                        scrolled ||
-                        (route !== "/" && "border-[2px] border-black")
-                      } absolute top-[-10px] right-[-10px] inline-flex items-center justify-center h-5 w-5 text-xs font-bold leading-6 text-black bg-white rounded-full`}
+                        scrolled && "border-[2px] border-black"
+                      } absolute  top-[-10px] right-[-10px] inline-flex items-center justify-center h-5 w-5 text-xs font-bold leading-6 text-black bg-white rounded-full`}
                     >
                       {cart?.length}
                     </span>
@@ -119,7 +118,7 @@ const Navbar = () => {
                         src={
                           user.photo
                             ? `${import.meta.env.VITE_MEDIA}/${user.photo}`
-                            : "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                            : "https://plus.unsplash.com/premium_vector-1682269287900-d96e9a6c188b?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                         }
                         alt=""
                       />

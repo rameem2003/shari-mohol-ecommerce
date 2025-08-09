@@ -27,13 +27,13 @@ const FeaturedProducts = () => {
     speed: 500,
     autoplay: true,
 
-    slidesToShow: 2,
-    slidesToScroll: 2,
+    slidesToShow: 3,
+    slidesToScroll: 3,
     arrows: false,
 
     responsive: [
       {
-        breakpoint: 600,
+        breakpoint: 800,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 2,

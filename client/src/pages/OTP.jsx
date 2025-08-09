@@ -160,7 +160,7 @@ const OTP = () => {
                   type="text"
                   required=""
                   className="bg-slate-100 w-full text-sm text-slate-800 px-4 py-3 rounded-md outline-none border focus:border-purple-600 focus:bg-transparent"
-                  placeholder="Enter Name"
+                  placeholder="Enter 6 digit OTP"
                 />
 
                 {errors.otp && (
