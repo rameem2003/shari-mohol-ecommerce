@@ -1,11 +1,15 @@
 import React, { useEffect } from "react";
 import Container from "../components/common/Container";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { MdErrorOutline } from "react-icons/md";
 import useAuth from "../hooks/useAuth";
+import Cookies from "js-cookie";
 
 const Login = () => {
+  const accessToken = Cookies.get("accessToken"); // access token
+  const sessionToken = Cookies.get("sessionToken"); // access token
+  const navigate = useNavigate();
   const { login, msg } = useAuth();
   const {
     register,
@@ -18,6 +22,12 @@ const Login = () => {
       top: 0,
       behavior: "smooth",
     });
+  }, []);
+
+  useEffect(() => {
+    if (accessToken || sessionToken) {
+      navigate("/");
+    }
   }, []);
 
   return (
