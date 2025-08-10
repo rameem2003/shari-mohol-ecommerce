@@ -152,7 +152,7 @@ const Navbar = () => {
                         </Link>
 
                         <button
-                          onClick={() => handleLogout(user.id)}
+                          onClick={handleLogout}
                           className="text-black p-2 rounded border-[2px] border-black w-full block mt-2 text-center font-semibold"
                         >
                           Logout

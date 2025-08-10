@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import useAuth from "../hooks/useAuth";
 import Container from "../components/common/Container";
 import BreadCrumb from "../components/common/BreadCrumb";
 import Flex from "../components/common/Flex";
@@ -14,6 +15,7 @@ import { MdDone, MdPassword } from "react-icons/md";
 
 const ProfilePage = () => {
   const user = useSelector((state) => state.account.account); // user
+  const { handleLogout } = useAuth();
   const [activeTab, setActiveTab] = useState(1); // active tab
 
   useEffect(() => {
@@ -56,18 +58,25 @@ const ProfilePage = () => {
                   {user.verified ? (
                     <div className="px-4 py-1  text-white bg-[#18c964] rounded-full text-[0.7rem] font-[500] flex items-center gap-1">
                       <MdDone className="p-0.5 text-[1.1rem] rounded-full bg-white text-[#18c964]" />
-                      Verified
+                      <span className=" hidden md:block">Verified</span>
                     </div>
                   ) : (
                     <div className="px-4 py-1  text-white bg-red-500 rounded-full text-[0.7rem] font-[500] flex items-center gap-1">
                       <FaTimes className="p-0.5 text-[1.1rem] rounded-full bg-white text-red-500" />
-                      Not Verified
+                      <span className=" hidden md:block">Not Verified</span>
                     </div>
                   )}
                 </Flex>
                 <h2 className=" font-medium text-xs lg:text-lg text-black">
                   {user.email}
                 </h2>
+
+                <button
+                  onClick={handleLogout}
+                  className=" mt-2 px-4 py-1 rounded-full bg-red-500 text-white"
+                >
+                  Logout
+                </button>
               </div>
             </Flex>
           )}

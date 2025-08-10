@@ -1,12 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { AccountReducer } from "../redux/slices/AccountSlice";
 
 const useAuth = () => {
   const [msg, setMsg] = useState(null); // error message
+  const user = useSelector((state) => state.account.account); // user
   const dispatch = useDispatch(); // dispatch instance
   const navigate = useNavigate(); // navigation instance
 
@@ -59,10 +60,10 @@ const useAuth = () => {
   };
 
   // function for logout
-  const handleLogout = async (id) => {
+  const handleLogout = async () => {
     try {
       let res = await axios.post(
-        `${import.meta.env.VITE_API}/auth/logout/${id}`,
+        `${import.meta.env.VITE_API}/auth/logout/${user.id}`,
         {},
         {
           withCredentials: true,
