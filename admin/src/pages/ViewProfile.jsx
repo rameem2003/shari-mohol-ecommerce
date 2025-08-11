@@ -97,7 +97,7 @@ const ViewProfile = () => {
                 </p>
               </div>
 
-              <div className="flex hidden flex-col items-center justify-center">
+              <div className="hidden flex-col items-center justify-center">
                 <h2 className="text-[1.2rem] font-[600]">200k</h2>
                 <p className="text-[0.9rem] text-[#424242]">Followers</p>
               </div>

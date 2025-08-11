@@ -64,7 +64,7 @@ const checkAdminMiddleware = (req, res, next) => {
       const currentSession = await sessionModel.findOne({
         _id: decoded.sessionId,
       });
-      const user = await authModel.findOne({ email: currentSession.userId });
+      const user = await authModel.findOne({ _id: currentSession.userId });
       if (!user || !currentSession) {
         return res.status(403).json({ success: false, msg: "Invalid Admin" });
       }

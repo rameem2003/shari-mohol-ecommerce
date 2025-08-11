@@ -290,7 +290,11 @@ const ProfilePage = () => {
 
                     <img
                       // htmlFor="file-upload-profile"
-                      src={displayImage}
+                      src={
+                        displayImage.startsWith("blob", 0)
+                          ? displayImage
+                          : `${import.meta.env.VITE_MEDIA}/${displayImage}`
+                      }
                       alt="Preview"
                       className="h-[200px] w-[200px] rounded-lg object-cover"
                     />
