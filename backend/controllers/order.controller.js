@@ -1,4 +1,5 @@
 const sslcz = require("../helpers/paymentGateway");
+const sendPurchaseConfirmationEmail = require("../helpers/sendPurchaseConfirmationEmail");
 const orderModel = require("../model/order.model");
 
 /**
@@ -160,6 +161,18 @@ const placeOrder = async (req, res) => {
         // cartItems.map(async (item) => {
         //   await cartModel.findOneAndDelete({ _id: item.cartId });
         // });
+
+        let targetOrder = await orderModel
+          .findOne({ _id: order._id })
+          .populate({
+            path: "cartItems",
+            populate: {
+              path: "product",
+            },
+          });
+
+        await sendPurchaseConfirmationEmail(targetOrder);
+
         return res.status(201).send({
           success: true,
           msg: "Order Successful",
@@ -227,15 +240,24 @@ const responseDeliveryStatus = async (req, res) => {
 const paymentSuccess = async (req, res) => {
   const { orderId } = req.params;
 
-  let targetOrder = await orderModel.findByIdAndUpdate(
+  await orderModel.findByIdAndUpdate(
     { _id: orderId },
     { paymentStatus: "paid" },
     { new: true }
   );
 
+  let targetOrder = await orderModel.findOne({ _id: orderId }).populate({
+    path: "cartItems",
+    populate: {
+      path: "product",
+    },
+  });
   //   targetOrder.cartItems.map(async (item) => {
   //     await cartModel.findOneAndDelete({ _id: item.cartId });
   //   });
+
+  // console.log(targetOrder);
+  await sendPurchaseConfirmationEmail(targetOrder);
 
   if (process.env.SYSTEM_ENV === "production") {
     return res.redirect(

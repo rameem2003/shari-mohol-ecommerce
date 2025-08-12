@@ -393,10 +393,11 @@ const Checkout = () => {
                 </div>
 
                 <button
+                  disabled={isSubmitting}
                   onClick={handleSubmit(checkout)}
                   className="w-full bg-purple-700 text-white py-3 px-4 rounded-lg hover:bg-purple-700/90 transition-colors"
                 >
-                  PLACE ORDER
+                  {isSubmitting ? "Processing..." : "PLACE ORDER"}{" "}
                 </button>
               </div>
             </div>

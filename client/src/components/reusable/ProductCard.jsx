@@ -4,8 +4,6 @@ import { Link } from "react-router";
 import StarRating from "../common/StarRating";
 
 const ProductCard = ({ className, data }) => {
-  console.log(data);
-
   return (
     <div
       className={`${className} bg-white border border-gray-200  shadow-sm duration-150 hover:bg-purple-300 `}
