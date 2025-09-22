@@ -7,12 +7,15 @@ const orderModel = require("../model/order.model");
  */
 const getAllOrders = async (req, res) => {
   try {
-    let allOrders = await orderModel.find().populate({
-      path: "cartItems",
-      populate: {
-        path: "product",
-      },
-    });
+    let allOrders = await orderModel
+      .find()
+      .populate({
+        path: "cartItems",
+        populate: {
+          path: "product",
+        },
+      })
+      .sort({ createdAt: -1 });
     res.status(201).send({
       success: true,
       msg: "Order Fetched Success",
@@ -60,12 +63,15 @@ const getOrderByID = async (req, res) => {
 const getSingleUserOrder = async (req, res) => {
   const { email } = req.params;
   try {
-    let allOrders = await orderModel.find({ email }).populate({
-      path: "cartItems",
-      populate: {
-        path: "product",
-      },
-    });
+    let allOrders = await orderModel
+      .find({ email })
+      .populate({
+        path: "cartItems",
+        populate: {
+          path: "product",
+        },
+      })
+      .sort({ createdAt: -1 });
     res.status(201).send({
       success: true,
       msg: "Single User Order Fetched Success",
@@ -215,13 +221,25 @@ const responseDeliveryStatus = async (req, res) => {
     if (statusText == "delivered") {
       let order = await orderModel.findByIdAndUpdate(
         { _id: id },
-        { deliveryStatus: statusText },
+        { deliveryStatus: statusText, paymentStatus: "paid" },
         { new: true }
       );
 
       return res.status(200).send({
         success: true,
         msg: "Order Delivery Successful",
+        data: order,
+      });
+    } else if (statusText == "cancelled") {
+      let order = await orderModel.findByIdAndUpdate(
+        { _id: id },
+        { deliveryStatus: statusText },
+        { new: true }
+      );
+
+      return res.status(200).send({
+        success: true,
+        msg: "Order Cancelled Successfully",
         data: order,
       });
     }

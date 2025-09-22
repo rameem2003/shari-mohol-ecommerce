@@ -158,13 +158,24 @@ const ViewOrder = () => {
           </tbody>
         </table>
         <Flex className="mt-5 w-full items-center justify-between">
-          <button
-            onClick={() => handleDelivery("delivered")}
-            disabled={deliveryLoading}
-            className={`bg-red-500 px-4 py-2 text-lg font-semibold text-white disabled:bg-gray-400`}
-          >
-            {deliveryLoading ? "Pls Wait..." : "Go Delivery"}
-          </button>
+          {orderData?.deliveryStatus !== "delivered" && (
+            <Flex className={"gap-3"}>
+              <button
+                onClick={() => handleDelivery("delivered")}
+                disabled={deliveryLoading}
+                className={`bg-green-500 px-4 py-2 text-lg font-semibold text-white disabled:bg-gray-400`}
+              >
+                {deliveryLoading ? "Pls Wait..." : "Go Delivery"}
+              </button>
+              <button
+                onClick={() => handleDelivery("cancelled")}
+                disabled={deliveryLoading}
+                className={`bg-red-500 px-4 py-2 text-lg font-semibold text-white disabled:bg-gray-400`}
+              >
+                {deliveryLoading ? "Pls Wait..." : "Cancel Order"}
+              </button>
+            </Flex>
+          )}
           <h3 className="mt-5 text-right text-3xl font-bold text-black dark:text-white">
             Grand Total: ৳ {orderData?.grandTotal} BDT
           </h3>

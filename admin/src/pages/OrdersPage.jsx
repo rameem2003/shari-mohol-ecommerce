@@ -20,16 +20,8 @@ const OrdersPage = () => {
   // fetch orders
   const fetchOrders = async () => {
     let res = await axios.get(`${import.meta.env.VITE_API}/order/all`);
-    setFilterResult(
-      res.data.data.sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
-      ),
-    );
-    setOrders(
-      res.data.data.sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
-      ),
-    );
+    setFilterResult(res.data.data);
+    setOrders(res.data.data);
   };
   const toggleActionMenu = (id) => {
     setOpenActionMenuId(openActionMenuId === id ? null : id);
@@ -105,6 +97,9 @@ const OrdersPage = () => {
                 Payment Status
               </th>
               <th className="p-3 text-left font-medium text-black dark:text-white">
+                Payment Method
+              </th>
+              <th className="p-3 text-left font-medium text-black dark:text-white">
                 Delivery Status
               </th>
 
@@ -138,16 +133,19 @@ const OrdersPage = () => {
                     </div>
                   )}
                 </td>
+                <td className="p-3 capitalize text-black dark:text-white">
+                  {item.paymentMethod}
+                </td>
                 <td className="p-3 text-black dark:text-white">
                   {item.deliveryStatus == "delivered" ? (
-                    <div className="flex items-center justify-center gap-2 rounded-full bg-[#18c964] py-1.5 text-[0.9rem] font-[500] text-white">
+                    <div className="flex items-center justify-center gap-2 rounded-full bg-[#18c964] py-1.5 text-[0.9rem] font-[500] capitalize text-white">
                       <MdDone className="rounded-full bg-[#18c964] p-0.5 text-[1.4rem] text-[#fff]" />
-                      Delivered
+                      {item.deliveryStatus}
                     </div>
                   ) : (
-                    <div className="flex items-center justify-center gap-2 rounded-full bg-red-500 py-1.5 text-[0.9rem] font-[500] text-white">
+                    <div className="flex items-center justify-center gap-2 rounded-full bg-red-500 py-1.5 text-[0.9rem] font-[500] capitalize text-white">
                       <FaTimes className="rounded-full bg-red-500 p-0.5 text-[1.4rem] text-[#fff]" />
-                      Pending
+                      {item.deliveryStatus}
                     </div>
                   )}
                 </td>
