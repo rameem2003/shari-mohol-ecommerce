@@ -9,298 +9,113 @@ const deleteFile = require("../helpers/deleteFile");
 const authModel = require("../model/auth.model");
 const otpModel = require("../model/otp.model");
 const sessionModel = require("../model/session.model");
+const {
+  loginValidator,
+  registrationValidator,
+  changePasswordValidator,
+  emailVerificationValidator,
+} = require("../validator/auth.validator");
+const {
+  findUserByEmail,
+  verifyPassword,
+  authenticateUser,
+  clearSession,
+  createNewUser,
+  hashedPassword,
+  findUserById,
+  updateUserPassword,
+  createRandomToken,
+  saveVerificationToken,
+  createEmailLink,
+  validateVerificationToken,
+  findUserAndUpdateEmailVerification,
+  clearTokenSchema,
+} = require("../services/auth.service");
+const sendEmail = require("../utils/email");
 
 /**
- * user register
+ * user register complete
  */
 const registerUser = async (req, res) => {
-  const { name, email, password, role } = req.body;
+  // const { name, email, password, role } = req.body;
+  const { data, error } = registrationValidator.safeParse(req.body);
 
-  // if no name, email, password
-  if (!name || !email || !password) {
-    return res.status(400).send({
-      success: false,
-      msg: "Please Enter All Fields",
-    });
+  console.log(error);
+
+  if (error) {
+    return res
+      .status(400)
+      .json({ success: false, message: JSON.parse(error.message)[0].message });
   }
 
-  // password length is less than 6
-  if (password.length < 6) {
-    return res.status(400).send({
-      success: false,
-      msg: "Password Must Be Atleast 6 Characters",
-    });
+  let existUser = await findUserByEmail(data.email);
+
+  if (existUser) {
+    return res
+      .status(400)
+      .send({ success: false, message: "User already exist" });
   }
+  let hashPassword = await hashedPassword(data.password);
 
-  // if not an email
-  if (!checkEmailValid(email)) {
-    return res.status(400).send({
-      success: false,
-      msg: "Please Enter Valid Email",
-    });
-  }
+  let user = await createNewUser({
+    name: data.name,
+    email: data.email,
+    password: hashPassword,
+    role: data.role,
+    phone: data.phone,
+  });
 
-  // if email is exist
-  let existingUser = await authModel.findOne({ email });
-  if (existingUser) {
-    return res.status(400).send({
-      success: false,
-      msg: "Email Already Exist",
-    });
-  }
-
-  // new user create and send response
-  try {
-    await otpModel.deleteOne({ email });
-    let otp = generateOTP(); // generate an otp
-
-    // hashing the password
-    bcrypt.hash(
-      password,
-      parseInt(process.env.SALT),
-      async function (err, hash) {
-        if (err) {
-          console.log(err);
-          return res.status(500).send({
-            msg: "Something Went Wrong Please Try Again",
-            error: err,
-          });
-        }
-        let user = new authModel({
-          name,
-          email,
-          password: hash, // Store hash in your password DB.
-          role,
-          otp,
-        });
-        await user.save();
-
-        await otpModel.create({ email, otp });
-
-        sendOtpEmail(email, otp); // send an otp email
-        return res.status(201).send({
-          success: true,
-          msg: "New User Account Created",
-          user,
-        });
-      }
-    );
-  } catch (error) {
-    return res.status(500).send({
-      success: false,
-      msg: "Something Went Wrong Please Try Again",
-      error,
-    });
-  }
+  return res
+    .status(200)
+    .send({ success: true, message: "User created successfully", user });
 };
 
 /**
- * user login
+ * user login complete
  */
 const loginUser = async (req, res) => {
-  const { email, password } = req.body;
-
-  // if no email or password
-  if (!email || !password) {
-    return res.status(400).send({
-      success: false,
-      msg: "Please Enter All Fields",
-    });
+  const { data, error } = loginValidator.safeParse(req.body);
+  if (error) {
+    return res
+      .status(400)
+      .json({ success: false, message: JSON.parse(error.message)[0].message });
   }
 
-  // if not an email
-  if (!checkEmailValid(email)) {
-    return res.status(400).send({
-      success: false,
-      msg: "Please Enter Valid Email",
-    });
+  let user = await findUserByEmail(data.email);
+
+  if (!user) {
+    return res.status(400).send({ success: false, message: "User not found" });
   }
 
-  // send response, token, cookies
-  try {
-    let user = await authModel.findOne({ email });
+  let isPasswordMatch = await verifyPassword(data.password, user.password);
 
-    // if no user
-    if (!user) {
-      return res.status(400).send({
-        success: false,
-        msg: "User Not Found",
-      });
-    }
-
-    // password compare
-    bcrypt.compare(password, user.password, async function (err, result) {
-      // if password not matched
-      if (err) {
-        console.log(err);
-        return res.status(500).send({
-          success: false,
-          msg: "Something Went Wrong Please Try Again",
-          error: err,
-        });
-      }
-      // if password matched
-      if (result) {
-        const session = new sessionModel({
-          userId: user._id,
-          userAgent: req.headers["user-agent"],
-          ip: req.ip,
-        });
-        await session.save();
-
-        let existUser = {
-          id: user._id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          phone: user.phone,
-          address: user.address,
-          photo: user.photo,
-          verified: user.isVarify,
-        };
-
-        let tokenStructure = {
-          id: user._id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          phone: user.phone,
-          address: user.address,
-          photo: user.photo,
-          verified: user.isVarify,
-          session: session._id,
-        };
-
-        // if admin
-        if (existUser.role === "admin") {
-          let sessionToken = jwt.sign(
-            { sessionId: session._id },
-            process.env.JWT_SECRET,
-            {
-              expiresIn: "1d",
-            }
-          );
-          let accessToken = jwt.sign(tokenStructure, process.env.JWT_SECRET, {
-            expiresIn: "15m",
-          });
-
-          // user.sessionToken = sessionToken;
-          // await user.save();
-
-          res.cookie("sessionToken", sessionToken, {
-            // httpOnly: true,
-            secure: process.env.SYSTEM_ENV === "production" || false,
-            // secure: false,
-            sameSite:
-              process.env.SYSTEM_ENV === "production" ? "None" : "Strict",
-            maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
-            path: "/",
-          });
-          res.cookie("accessToken", accessToken, {
-            // httpOnly: true,
-            secure: process.env.SYSTEM_ENV === "production" || false,
-            // secure: false,
-            sameSite:
-              process.env.SYSTEM_ENV === "production" ? "None" : "Strict",
-            maxAge: 900000, // 15 min
-            path: "/",
-          });
-          return res.status(200).send({
-            success: true,
-            msg: "Admin Login Successfully",
-            user: existUser,
-            accessToken,
-            sessionToken,
-          });
-        }
-        // if user
-        else if (existUser.role === "user") {
-          let sessionToken = jwt.sign(
-            { sessionId: session._id },
-            process.env.JWT_SECRET,
-            {
-              expiresIn: "7d",
-            }
-          );
-          let accessToken = jwt.sign(tokenStructure, process.env.JWT_SECRET, {
-            expiresIn: "15m",
-          });
-
-          // user.sessionToken = sessionToken;
-          // await user.save();
-
-          res.cookie("sessionToken", sessionToken, {
-            // httpOnly: true,
-            secure: process.env.SYSTEM_ENV === "production" || false,
-            // secure: false,
-            sameSite:
-              process.env.SYSTEM_ENV === "production" ? "None" : "Strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-            path: "/",
-          });
-
-          res.cookie("accessToken", accessToken, {
-            // httpOnly: true,
-            secure: process.env.SYSTEM_ENV === "production" || false,
-            // secure: false,
-            sameSite:
-              process.env.SYSTEM_ENV === "production" ? "None" : "Strict",
-            maxAge: 900000, // 15 min
-            path: "/",
-          });
-          return res.status(200).send({
-            success: true,
-            msg: "User Login Successfully",
-            user: existUser,
-            accessToken,
-            sessionToken,
-          });
-        }
-      } // if password not matched
-      else {
-        return res.status(400).send({
-          success: false,
-          msg: "Invalid Credentials",
-        });
-      }
-    });
-  } catch (error) {
-    return res.status(500).send({
-      success: false,
-      msg: "Something Went Wrong Please Try Again",
-      error,
-    });
+  if (!isPasswordMatch) {
+    return res
+      .status(400)
+      .send({ success: false, message: "Invalid credentials" });
   }
+
+  let authdata = await authenticateUser({ req, res, user });
+
+  return res
+    .status(200)
+    .send({ success: true, message: "Login successful", data: authdata });
 };
 
 /**
- * user logout
+ * user logout complete
  */
 const logoutUser = async (req, res) => {
-  const { id } = req.params;
+  if (!req.user)
+    return res.status(400).send({ success: false, message: "User not found" });
 
   try {
-    await sessionModel.findOneAndDelete({ _id: req.user.session });
-
-    // Clear both cookies server-side
-    res.clearCookie("accessToken", {
-      httpOnly: true,
-      secure: process.env.SYSTEM_ENV === "production",
-      sameSite: process.env.SYSTEM_ENV === "production" ? "None" : "Strict",
-      path: "/",
-    });
-
-    res.clearCookie("sessionToken", {
-      httpOnly: true,
-      secure: process.env.SYSTEM_ENV === "production",
-      sameSite: process.env.SYSTEM_ENV === "production" ? "None" : "Strict",
-      path: "/",
-    });
-
-    return res.status(200).send({
-      success: true,
-      msg: "User Logout success",
-    });
+    await clearSession(req.user.session);
+    res.clearCookie("access_token");
+    res.clearCookie("refresh_token");
+    return res
+      .status(200)
+      .json({ success: true, message: "User logged out successfully" });
   } catch (error) {
     return res.status(500).send({
       success: false,
@@ -311,78 +126,132 @@ const logoutUser = async (req, res) => {
 };
 
 /**
- * Change Password
+ * Change Password Complete
  */
 const changePassword = async (req, res) => {
-  const { id } = req.params;
-  const { oldPassword, newPassword, conFirmPassword } = req.body;
+  if (!req.user) {
+    return res.status(401).send({ success: false, message: "Unauthorized" });
+  }
 
+  const { data, error } = changePasswordValidator.safeParse(req.body);
+
+  if (error) {
+    return res
+      .status(400)
+      .json({ success: false, message: JSON.parse(error.message)[0].message });
+  }
+
+  let userExist = await findUserById(req.user.id);
+
+  if (!userExist) {
+    return res.status(400).send({ success: false, message: "User not found" });
+  }
+
+  let isPasswordMatch = await verifyPassword(
+    data.oldPassword,
+    userExist.password
+  );
+
+  if (!isPasswordMatch) {
+    return res
+      .status(400)
+      .send({ success: false, message: "Invalid password" });
+  }
+
+  let hashPassword = await hashedPassword(data.newPassword);
+
+  await updateUserPassword(req.user.id, hashPassword);
+
+  return res
+    .status(200)
+    .send({ success: true, message: "Password changed successfully" });
+};
+
+/**
+ * Send email verification controller complete
+ */
+const sendEmailVerificationToken = async (req, res) => {
+  if (!req.user)
+    return res.status(400).send({ success: false, message: "User not found" });
+
+  if (req.user.isVerified)
+    return res
+      .status(400)
+      .send({ success: false, message: "User already verified" });
   try {
-    let user = await authModel.findOne({ _id: id });
+    const exist = await findUserById(req.user.id);
 
-    // if no user
-    if (!user) {
-      return res.status(400).send({
-        success: false,
-        msg: "User Not Found",
-      });
+    if (!exist) {
+      return res
+        .status(400)
+        .send({ success: false, message: "User not found" });
     }
+    let randomToken = createRandomToken();
 
-    if (newPassword == conFirmPassword) {
-      // password compare
-      bcrypt.compare(oldPassword, user.password, async function (err, result) {
-        // if password not matched
-        if (err) {
-          console.log(err);
-          return res.status(500).send({
-            success: false,
-            msg: "Something Went Wrong Please Try Again",
-            error: err,
-          });
-        }
-        // if password matched
-        if (result) {
-          bcrypt.hash(
-            newPassword,
-            parseInt(process.env.SALT),
-            async function (err, hash) {
-              if (err) {
-                return res.status(500).send({
-                  success: false,
-                  msg: "Something Went Wrong Please Try Again",
-                  error: err,
-                });
-              }
-              user.password = hash;
-              await user.save();
+    await saveVerificationToken(exist._id, randomToken);
 
-              return res
-                .status(200)
-                .send({ success: true, msg: "Password is changed" });
-            }
-          );
-        } // if password not matched
-        else {
-          return res.status(400).send({
-            success: false,
-            msg: "Wrong Password",
-          });
-        }
-      });
-    } else {
-      res.status(400).send({
-        success: false,
-        msg: "New Password and confirm password not matched",
-      });
-    }
+    let emailLink = createEmailLink(exist.email, randomToken);
+
+    let emailBody = `
+    <p>Click the link below to verify your email:</p>
+    <a href="${emailLink}">${emailLink}</a> or copy and paste it this code <b>${randomToken}</b> into your browser.`;
+
+    await sendEmail(exist.email, "Email Verification", emailBody);
+
+    return res
+      .status(200)
+      .send({ success: true, message: "Email sent successfully" });
   } catch (error) {
-    return res.status(500).send({
-      success: false,
-      msg: "Something Went Wrong Please Try Again",
-      error,
-    });
+    return res
+      .status(500)
+      .send({ success: false, message: "Internal server error" });
   }
 };
+
+/**
+ * Token verification controller complete
+ */
+const verifyEmailToken = async (req, res) => {
+  const { data, error } = emailVerificationValidator.safeParse(req.query);
+
+  if (error) {
+    return res
+      .status(400)
+      .json({ success: false, message: JSON.parse(error.message)[0].message });
+  }
+
+  try {
+    const userExist = await findUserByEmail(data.email);
+
+    if (!userExist) {
+      return res
+        .status(400)
+        .send({ success: false, message: "User not found" });
+    }
+
+    let validateToken = await validateVerificationToken(
+      userExist._id,
+      data.token
+    );
+
+    if (!validateToken) {
+      return res.status(400).send({ success: false, message: "Invalid token" });
+    }
+
+    await findUserAndUpdateEmailVerification(validateToken.userID);
+    await clearTokenSchema(validateToken._id);
+
+    return res
+      .status(200)
+      .send({ success: true, message: "Email verified successfully" });
+  } catch (error) {
+    return res
+      .status(500)
+      .send({ success: false, message: "Internal server error" });
+  }
+};
+
+// complete this point
 
 /**
  * refresh token
@@ -736,6 +605,8 @@ module.exports = {
   accessToken,
   registerUser,
   changePassword,
+  sendEmailVerificationToken,
+  verifyEmailToken,
   forgetPassword,
   logoutUser,
   verifyOTP,

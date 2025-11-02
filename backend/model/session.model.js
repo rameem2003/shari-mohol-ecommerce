@@ -4,7 +4,7 @@ const sessionSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "auth",
+      ref: "User",
       required: true,
     },
     userAgent: {
@@ -21,4 +21,4 @@ const sessionSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("session", sessionSchema);
+module.exports = mongoose.model("Session", sessionSchema);

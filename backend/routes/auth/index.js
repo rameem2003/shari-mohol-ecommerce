@@ -12,6 +12,8 @@ const {
   changePassword,
   deleteUser,
   forgetPassword,
+  sendEmailVerificationToken,
+  verifyEmailToken,
 } = require("../../controllers/auth.controller");
 const checkAdminMiddleware = require("../../middlewares/checkAdminMiddleware");
 const checkUserMiddleware = require("../../middlewares/checkUserMiddleware");
@@ -34,9 +36,27 @@ router.post("/auth/login", loginUser);
 
 /**
  * Logout Route
- * http://localhost:5000/api/v1/auth/logout/:id
+ * http://localhost:5000/api/v1/auth/logout
  */
-router.post("/auth/logout/:id", checkUserMiddleware, logoutUser);
+router.post("/auth/logout", checkUserMiddleware, logoutUser);
+
+/**
+ * Send email verification token route
+ * https://localhost:5000/api/v1/auth/send-email-verification
+ */
+router.post(
+  "/auth/send-email-verification",
+  checkUserMiddleware,
+  sendEmailVerificationToken
+);
+
+/**
+ * Verify email token route
+ * https://localhost:5000/api/v1/auth/verify-email
+ */
+router.get("/auth/verify-email", verifyEmailToken);
+
+// complete this point
 
 /**
  * Single User Info
@@ -60,7 +80,7 @@ router.patch(
  * Change Password Route
  * http://localhost:5000/api/v1/auth/changepassword/:id
  */
-router.patch("/auth/changepassword/:id", checkUserMiddleware, changePassword);
+router.patch("/auth/changepassword", checkUserMiddleware, changePassword);
 
 /**
  * Forget Password Route
