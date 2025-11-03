@@ -105,7 +105,7 @@ const authenticateUser = async ({ req, res, user }) => {
     email: user.email,
     role: user.role,
     isVerified: user.isVerified,
-    avatar: user.avatar,
+    photo: user.photo,
     session: session._id,
   });
 
@@ -157,12 +157,16 @@ const createAccessToken = ({
   email,
   role,
   isVerified,
-  avatar,
+  photo,
   session,
 }) => {
-  return jwt.sign({ id, name, email, session }, process.env.JWT_SECRET, {
-    expiresIn: ACCESS_TOKEN_EXPIRY / MILLISECONDS_PER_SECOND, //   expiresIn: "15m",
-  });
+  return jwt.sign(
+    { id, name, email, role, isVerified, photo, session },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: ACCESS_TOKEN_EXPIRY / MILLISECONDS_PER_SECOND, //   expiresIn: "15m",
+    }
+  );
 };
 
 const createRefreshToken = (sessionId) => {

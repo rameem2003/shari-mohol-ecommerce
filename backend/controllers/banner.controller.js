@@ -1,23 +1,27 @@
-const deleteFile = require("../helpers/deleteFile");
-const bannerModel = require("../model/banner.model");
-const path = require("path");
+const {
+  findAllBanners,
+  createBanner,
+  removeBanner,
+} = require("../services/banner.service");
+const deleteFile = require("../utils/fileDelete");
+const bannerUploadValidator = require("../validator/bannerData.validator");
 
 /**
  * All Banner
  */
 const allBanner = async (req, res) => {
   try {
-    let banners = await bannerModel.find({});
+    let banners = await findAllBanners();
 
     res.status(200).send({
       success: true,
-      msg: "Banner is fetch success",
+      message: "Banner is fetch success",
       data: banners,
     });
   } catch (error) {
     res.status(500).send({
       success: false,
-      msg: "Internal Server Error",
+      message: "Internal Server Error",
       error,
     });
   }
@@ -27,36 +31,44 @@ const allBanner = async (req, res) => {
  * Add New Banner
  */
 const addNewBanner = async (req, res) => {
-  const { description, advertisementLink } = req.body;
-  const { filename } = req.file;
+  if (!req.user) {
+    return res.status(401).send({ success: false, message: "Unauthorized" });
+  }
 
-  if (filename) {
-    try {
-      let banner = new bannerModel({
-        // banner: `${process.env.HOST_URL}${process.env.PORT}/${filename}`,
-        banner: filename,
-        description,
-        advertisementLink,
-      });
+  const { data, error } = bannerUploadValidator.safeParse(req.body);
 
-      await banner.save();
+  if (error) {
+    return res
+      .status(400)
+      .json({ success: false, message: JSON.parse(error.message)[0].message });
+  }
 
-      res.status(201).send({
-        success: true,
-        msg: "New Banner Uploaded",
-        data: banner,
-      });
-    } catch (error) {
-      res.status(500).send({
-        success: false,
-        msg: "Internal Server Error",
-        error,
-      });
-    }
-  } else {
-    res.status(404).send({
+  let filename = req?.file?.filename || "";
+
+  if (!filename || !req.file) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Banner image is required" });
+  }
+
+  try {
+    let newBanner = await createBanner(
+      data.description,
+      data.advertisementLink,
+      filename
+    );
+
+    return res.status(201).send({
+      success: true,
+      message: "Banner created successfully",
+      data: newBanner,
+    });
+  } catch (error) {
+    await deleteFile("../uploads/banners/", filename);
+    return res.status(500).send({
       success: false,
-      msg: "Please fill all fields",
+      message: "Internal Server Error",
+      error,
     });
   }
 };
@@ -65,31 +77,24 @@ const addNewBanner = async (req, res) => {
  * Delete The banner
  */
 const deleteBanner = async (req, res) => {
+  if (!req.user) {
+    return res.status(401).send({ success: false, message: "Unauthorized" });
+  }
+
   const { id } = req.params;
 
   try {
-    let banner = await bannerModel.findOneAndDelete({ _id: id });
+    let deletedBanner = await removeBanner(id);
 
-    // let imagePath = banner.banner.split("/");
-    // let oldImagePath = imagePath[imagePath.length - 1];
-
-    try {
-      await deleteFile(`${path.join(__dirname, "../temp")}/${banner.banner}`);
-      res.status(200).send({
-        success: true,
-        msg: "Banner Delete Success",
-      });
-    } catch (fileDeleteErr) {
-      return res.status(500).send({
-        success: false,
-        msg: "Internal Server Error",
-        fileDeleteErr,
-      });
-    }
+    res.status(200).send({
+      success: true,
+      message: "Banner deleted successfully",
+      data: deletedBanner,
+    });
   } catch (error) {
     res.status(500).send({
       success: false,
-      msg: "Internal Server Error",
+      message: "Internal Server Error",
       error,
     });
   }

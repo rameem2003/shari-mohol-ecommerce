@@ -6,7 +6,10 @@ const bannerSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    description: String,
+    description: {
+      type: String,
+      required: true,
+    },
     advertisementLink: {
       type: String,
       required: true,
