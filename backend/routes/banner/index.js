@@ -5,7 +5,8 @@ const {
 } = require("../../controllers/banner.controller");
 const checkAdminMiddleware = require("../../middlewares/checkAdminMiddleware");
 const errorHandleMiddleware = require("../../middlewares/errorHandleMiddleware");
-const upload = require("../../middlewares/fileupload");
+const createUploadMiddleware = require("../../middlewares/fileupload");
+const upload = createUploadMiddleware({ type: "banner" });
 
 const router = require("express").Router();
 

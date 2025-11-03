@@ -9,6 +9,7 @@ const {
 const emailVerifyTokenModel = require("../model/emailVerifyToken.model");
 const resetPasswordTokenModel = require("../model/resetPasswordToken.model");
 const sessionModel = require("../model/session.model");
+const deleteFile = require("../utils/fileDelete");
 
 const findUserById = async (id) => {
   try {
@@ -60,16 +61,23 @@ const findUserAndUpdateProfile = async (id, updateFields, avatarPath) => {
 
     await authModel.findOneAndUpdate(
       { _id: targetUser._id },
-      { $set: { ...updateFields, avatar: thumbImageGenerator(avatarPath) } }
+      {
+        $set: {
+          ...updateFields,
+          ...(avatarPath && { photo: avatarPath }),
+        },
+      }
     );
 
-    if (avatarPath && !targetUser.avatar.includes("flaticon")) {
-      let thumb = targetUser.avatar.split("/");
+    if (avatarPath && !targetUser.photo.includes("flaticon")) {
+      let thumb = targetUser.photo.split("/");
       let fileName = thumb[thumb.length - 1];
 
-      // await deleteFile(fileName);
+      await deleteFile("../uploads/avatars/", fileName);
     }
   } catch (error) {
+    console.log(error);
+
     throw new Error("Error updating course: " + error.message);
   }
 };

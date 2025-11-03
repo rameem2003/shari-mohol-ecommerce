@@ -13,7 +13,8 @@ const {
 const checkAdminMiddleware = require("../../middlewares/checkAdminMiddleware");
 const checkUserMiddleware = require("../../middlewares/checkUserMiddleware");
 const errorHandleMiddleware = require("../../middlewares/errorHandleMiddleware");
-const upload = require("../../middlewares/fileupload");
+const createUploadMiddleware = require("../../middlewares/fileupload");
+const upload = createUploadMiddleware({ type: "product" });
 
 const router = require("express").Router();
 

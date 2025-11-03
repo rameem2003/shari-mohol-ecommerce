@@ -1,104 +1,55 @@
-const jwt = require("jsonwebtoken");
-const authModel = require("../model/auth.model");
-const sessionModel = require("../model/session.model");
+const { verifyJWTToken, refreshTokens } = require("../services/auth.service");
+const {
+  ACCESS_TOKEN_EXPIRY,
+  REFRESH_TOKEN_EXPIRY,
+} = require("../constant/constant");
 
-const checkAdminMiddleware = (req, res, next) => {
-  const { accessToken, sessionToken } = req.cookies;
+const checkAdminMiddleware = async (req, res, next) => {
+  const accessToken = req.cookies.access_token;
+  const refreshToken = req.cookies.refresh_token;
 
-  req.admin = null; // Initialize res.admin
+  req.user = null;
 
-  // if token found
-  if (accessToken) {
-    // token verify
-    jwt.verify(
-      accessToken,
-      process.env.JWT_SECRET,
-      async function (err, decoded) {
-        // if error
-        if (err) {
-          res.status(400).send({
-            success: false,
-            msg: "Invalid Token",
-          });
-        } else {
-          // if decoded and user role is matched to admin
-          const existAdmin = await authModel.findOne({ email: decoded.email });
-          if (existAdmin) {
-            if (decoded.role == "admin") {
-              req.admin = decoded; // Set req.admin to the existing admin
-              next();
-            } else {
-              res.status(401).send({
-                success: false,
-                msg: "Admin Unauthorized",
-              });
-            }
-          }
-          // if not matched
-          else {
-            res.status(401).send({
-              success: false,
-              msg: "Admin Unauthorized",
-            });
-          }
-        }
-      }
-    );
+  if (!accessToken && !refreshToken) {
+    return res.status(401).send({ success: false, message: "Unauthorized" });
   }
-  // if token not found
-  else {
-    if (!sessionToken) {
-      return res.status(400).send({
-        success: false,
-        msg: "Admin Token Not Found, Please Login Again As An Admin",
-      });
+
+  if (accessToken) {
+    const decodedToken = await verifyJWTToken(accessToken);
+    if (decodedToken.role == "admin") {
+      req.user = decodedToken;
+      return next();
+    } else {
+      return res
+        .status(403)
+        .send({ success: false, message: "Forbidden: Admins only" });
     }
+  }
 
-    jwt.verify(sessionToken, process.env.JWT_SECRET, async (err, decoded) => {
-      if (err) {
-        return res
-          .status(403)
-          .json({ success: false, msg: "Invalid Session Token" });
-      }
-
-      const currentSession = await sessionModel.findOne({
-        _id: decoded.sessionId,
-      });
-      const user = await authModel.findOne({ _id: currentSession.userId });
-      if (!user || !currentSession) {
-        return res.status(403).json({ success: false, msg: "Invalid Admin" });
-      }
-
-      let existUser = {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        phone: user.phone,
-        address: user.address,
-        photo: user.photo,
-        verified: user.isVarify,
-        session: currentSession._id,
-      };
-
-      // Create Access Token (Short-lived)
-      const accessToken = jwt.sign(
-        existUser,
-        process.env.JWT_SECRET,
-        { expiresIn: "15m" } // Expires in 15 minutes
+  if (refreshToken) {
+    try {
+      const { newAccessToken, newRefreshToken, user } = await refreshTokens(
+        refreshToken
       );
 
-      res.cookie("accessToken", accessToken, {
-        // httpOnly: true,
-        secure: process.env.SYSTEM_ENV === "production" || false,
-        // secure: false,
-        sameSite: process.env.SYSTEM_ENV === "production" ? "None" : "Strict",
-        maxAge: 900000,
-        path: "/",
+      req.user = user;
+
+      const baseConfig = { httpOnly: true, secure: true };
+
+      res.cookie("access_token", newAccessToken, {
+        ...baseConfig,
+        maxAge: ACCESS_TOKEN_EXPIRY,
       });
 
-      next();
-    });
+      res.cookie("refresh_token", newRefreshToken, {
+        ...baseConfig,
+        maxAge: REFRESH_TOKEN_EXPIRY,
+      });
+
+      return next();
+    } catch (error) {
+      console.log(error.message);
+    }
   }
 };
 
