@@ -1,74 +1,41 @@
-const deleteFile = require("../helpers/deleteFile");
-const path = require("path");
-const productModel = require("../model/product.model");
-const categoryModel = require("../model/category.model");
-const reviewModel = require("../model/review.model");
+const {
+  productSegmentSchema,
+  newProductValidationSchema,
+  productReviewValidationSchema,
+} = require("../validator/product.validator");
+const {
+  findAllProducts,
+  findProductsByCategory,
+  findProductsBySubCategory,
+  findSingleProductById,
+  addNewProduct,
+  updateExistingProduct,
+  deleteExistingProduct,
+  reviewTheProduct,
+} = require("../services/product.service");
 
 /**
  * All Products
  */
 const allProducts = async (req, res) => {
+  const { data, error } = productSegmentSchema.safeParse(req.query);
+  if (error) {
+    return res
+      .status(400)
+      .send({ success: false, message: JSON.parse(error.message)[0].message });
+  }
   try {
-    let allProduct = await productModel
-      .find()
-      .populate("category")
-      .populate("reviews");
+    let allProduct = await findAllProducts(data.segment);
     res.status(200).send({
       success: true,
-      msg: "All Products Fetched Success",
+      message: "All Products Fetched Success",
       data: allProduct,
     });
   } catch (error) {
     console.log(error);
     res.status(500).send({
       success: false,
-      msg: "Internal Server Error",
-      error,
-    });
-  }
-};
-
-/**
- * Get All Feature Products
- */
-const getFeaturedProducts = async (req, res) => {
-  try {
-    let featuredProducts = await productModel
-      .find({ featured: true })
-      .populate("category")
-      .populate("reviews");
-    res.status(200).send({
-      success: true,
-      msg: "All Featured Products Fetched Success",
-      data: featuredProducts,
-    });
-  } catch (error) {
-    res.status(500).send({
-      success: false,
-      msg: "Internal Server Error",
-      error,
-    });
-  }
-};
-
-/**
- * Get All Hot Sell Products
- */
-const getHotSellProducts = async (req, res) => {
-  try {
-    let hotSellProducts = await productModel
-      .find({ hotSell: true })
-      .populate("category")
-      .populate("reviews");
-    res.status(200).send({
-      success: true,
-      msg: "All Hot Sell Products Fetched Success",
-      data: hotSellProducts,
-    });
-  } catch (error) {
-    res.status(500).send({
-      success: false,
-      msg: "Internal Server Error",
+      message: "Internal Server Error",
       error,
     });
   }
@@ -80,19 +47,16 @@ const getHotSellProducts = async (req, res) => {
 const getProductByCategory = async (req, res) => {
   const { category } = req.params;
   try {
-    let products = await productModel
-      .find({ category })
-      .populate("category")
-      .populate("reviews");
+    let products = await findProductsByCategory(category);
     res.status(200).send({
       success: true,
-      msg: `${category} Products Fetched Success`,
+      message: `${category} Products Fetched Success`,
       data: products,
     });
   } catch (error) {
     res.status(500).send({
       success: false,
-      msg: "Internal Server Error",
+      message: "Internal Server Error",
       error,
     });
   }
@@ -104,19 +68,16 @@ const getProductByCategory = async (req, res) => {
 const getProductBySubCategory = async (req, res) => {
   const { subCategory } = req.query;
   try {
-    let products = await productModel
-      .find({ subCategory })
-      .populate("category")
-      .populate("reviews");
+    let products = await findProductsBySubCategory(subCategory);
     res.status(200).send({
       success: true,
-      msg: `${subCategory} Products Fetched Success`,
+      message: `${subCategory} Products Fetched Success`,
       data: products,
     });
   } catch (error) {
     res.status(500).send({
       success: false,
-      msg: "Internal Server Error",
+      message: "Internal Server Error",
       error,
     });
   }
@@ -128,25 +89,16 @@ const getProductBySubCategory = async (req, res) => {
 const singleProduct = async (req, res) => {
   const { id } = req.params;
   try {
-    let product = await productModel
-      .findOne({ _id: id })
-      .populate("category")
-      .populate("reviews")
-      .populate({
-        path: "reviews",
-        populate: {
-          path: "user",
-        },
-      });
+    let product = await findSingleProductById(id);
     res.status(200).send({
       success: true,
-      msg: "Product Fetched Success",
+      message: "Product Fetched Success",
       data: product,
     });
   } catch (error) {
     res.status(500).send({
       success: false,
-      msg: "Internal Server Error",
+      message: "Internal Server Error",
       error,
     });
   }
@@ -156,67 +108,62 @@ const singleProduct = async (req, res) => {
  * Create New Product
  */
 const createNewProduct = async (req, res) => {
-  const {
-    name,
-    description,
-    sellingPrice,
-    discountPrice,
-    colors,
-    sizes,
-    stock,
-    category,
-    subCategory,
-    store,
-    ratings,
-    reviews,
-    featured,
-    hotSell,
-  } = req.body;
+  if (!req.user) {
+    return res.status(401).send({ success: false, message: "Unauthorized" });
+  }
 
-  const imagesLink = req.files.map((file) => file.filename);
+  const { data, error } = newProductValidationSchema.safeParse(req.body);
 
-  const productColors = colors
-    ? colors.split(",").map((col) => col.trim())
+  if (error) {
+    return res
+      .status(400)
+      .json({ success: false, message: JSON.parse(error.message)[0].message });
+  }
+
+  const images = req?.files?.map((file) => file.filename);
+
+  const productColors = data.colors
+    ? data.colors.split(",").map((col) => col.trim())
     : [];
-  const productSizes = sizes ? sizes.split(",").map((size) => size.trim()) : [];
+  const productSizes = data.sizes
+    ? data.sizes.split(",").map((size) => size.trim())
+    : [];
 
   try {
-    const newProduct = new productModel({
-      name,
-      description,
-      sellingPrice,
-      discountPrice,
-      colors: productColors,
-      sizes: productSizes,
-      stock,
-      store,
-      category,
-      subCategory: subCategory.toLowerCase(),
-      ratings,
-      reviews,
-      images: imagesLink,
-      featured,
-      hotSell,
-    });
+    if (images.length > 0) {
+      let newProduct = {
+        name: data.name,
+        description: data.description,
+        sellingPrice: data.sellingPrice,
+        discountPrice: data.discountPrice,
+        colors: productColors,
+        sizes: productSizes,
+        stock: data.stock,
+        category: data.category,
+        subCategory: data.subCategory.toLowerCase(),
+        images: images,
+        featured: data.featured,
+        hotSell: data.hotSell,
+      };
 
-    await newProduct.save();
+      let product = await addNewProduct(newProduct);
 
-    await categoryModel.findOneAndUpdate(
-      { _id: category },
-      { $push: { products: newProduct._id } },
-      { new: true }
-    );
-
-    res.status(201).send({
-      success: true,
-      msg: "New Product",
-      newProduct,
-    });
+      res.status(201).send({
+        success: true,
+        message: "New Product",
+        data: product,
+      });
+    } else {
+      res.status(400).send({
+        success: false,
+        message: "At least one product image is required",
+      });
+    }
   } catch (error) {
     console.log(error);
     res.status(500).send({
       success: false,
-      msg: "Internal Server Error",
+      message: "Internal Server Error",
       error,
     });
   }
@@ -226,6 +173,10 @@ const createNewProduct = async (req, res) => {
  * Update Product
  */
 const updateProduct = async (req, res) => {
+  if (!req.user) {
+    return res.status(401).send({ success: false, message: "Unauthorized" });
+  }
+
   const { id } = req.params;
   const updateFields = {};
 
@@ -238,14 +189,11 @@ const updateProduct = async (req, res) => {
     "colors",
     "sizes",
     "stock",
-    "category",
-    "subCategory",
-    "store",
-    "ratings",
-    "reviews",
     "featured",
     "hotSell",
   ];
+
+  let images = null;
 
   fields.forEach((field) => {
     if (req.body[field] !== undefined) {
@@ -264,49 +212,22 @@ const updateProduct = async (req, res) => {
 
   // Handle images separately if they are present in the request
   if (req.files && req.files.length > 0) {
-    const imagesLink = req.files.map((file) => file.filename);
-    updateFields.images = imagesLink;
+    images = req.files.map((file) => file.filename);
   }
 
   try {
-    const targetProduct = await productModel.findOneAndUpdate(
-      { _id: id },
-      {
-        $set: updateFields,
-      }
-    );
-
-    // If images were updated, delete the old images
-    if (updateFields.images) {
-      let productImages = targetProduct.images;
-
-      productImages.forEach(async (item) => {
-        // let imagePath = item.split("/");
-        // let oldImagePath = imagePath[imagePath.length - 1];
-
-        try {
-          await deleteFile(`${path.join(__dirname, "../temp")}/${item}`);
-        } catch (fileDeleteErr) {
-          // console.log(fileDeleteErr);
-
-          return res.status(500).send({
-            success: false,
-            msg: "Internal Server Error",
-            fileDeleteErr,
-          });
-        }
-      });
-    }
+    let targetProduct = await updateExistingProduct(id, updateFields, images);
 
     res.status(200).send({
       success: true,
-      msg: "Product is update",
+      message: "Product is update",
+      data: targetProduct,
     });
   } catch (error) {
     console.log(error);
     res.status(500).send({
       success: false,
-      msg: "Internal Server Error",
+      message: "Internal Server Error",
       error,
     });
   }
@@ -316,95 +237,56 @@ const updateProduct = async (req, res) => {
  * Product Delete
  */
 const deleteProduct = async (req, res) => {
+  if (!req.user) {
+    return res.status(401).send({ success: false, message: "Unauthorized" });
+  }
+
   const { id } = req.params;
 
   try {
-    let targetProduct = await productModel.findByIdAndDelete({ _id: id });
-
-    let productImages = targetProduct.images;
-
-    productImages.forEach(async (item) => {
-      // let imagePath = item.split("/");
-      // let oldImagePath = imagePath[imagePath.length - 1];
-
-      try {
-        await deleteFile(`${path.join(__dirname, "../temp")}/${item}`);
-      } catch (fileDeleteErr) {
-        res.status(500).send({
-          success: false,
-          msg: "Internal Server Error",
-          fileDeleteErr,
-        });
-      }
-    });
-
-    await categoryModel.findByIdAndUpdate(
-      {
-        _id: targetProduct.category,
-      },
-      {
-        $pull: {
-          products: targetProduct._id,
-        },
-      }
-    );
-
-    if (targetProduct.store) {
-      await storeModel.findByIdAndUpdate(
-        {
-          _id: targetProduct.store,
-        },
-        {
-          $pull: {
-            products: targetProduct._id,
-          },
-        }
-      );
-    }
-
-    if (targetProduct.reviews && targetProduct.reviews.length > 0) {
-      // await reviewModel.deleteMany({ _id: { $in: targetProduct.reviews } });
-      await reviewModel.deleteMany({ product: targetProduct._id }); // Delete reviews associated with the product
-    }
+    let targetProduct = await deleteExistingProduct(id);
 
     res.status(200).send({
       success: true,
-      msg: "Product Deleted Successfully",
+      message: "Product Deleted Successfully",
+      data: targetProduct,
     });
   } catch (error) {
     console.log(error);
     res.status(500).send({
       success: false,
-      msg: "Internal Server Error",
+      message: "Internal Server Error",
       error,
     });
   }
 };
 
 const sendReview = async (req, res) => {
-  const { user, product, rating, comment } = req.body;
+  if (!req.user) {
+    return res.status(401).send({ success: false, message: "Unauthorized" });
+  }
+  const { data, error } = productReviewValidationSchema.safeParse(req.body);
+
+  if (error) {
+    console.log(error);
+
+    return res
+      .status(400)
+      .json({ success: false, message: JSON.parse(error.message)[0].message });
+  }
 
   try {
-    let newReview = new reviewModel({ user, product, rating, comment });
+    let newReview = await reviewTheProduct({ ...data, user: req.user.id });
 
-    await newReview.save();
-
-    await productModel.findByIdAndUpdate(
-      { _id: product },
-      {
-        $push: { reviews: newReview._id },
-      },
-      { new: true }
-    );
     res.status(201).send({
       success: true,
-      msg: "Review Added Successfully",
+      message: "Review Added Successfully",
       data: newReview,
     });
   } catch (error) {
     res.status(500).send({
       success: false,
-      msg: "Internal Server Error",
+      message: "Internal Server Error",
       error,
     });
   }
@@ -412,8 +294,6 @@ const sendReview = async (req, res) => {
 
 module.exports = {
   allProducts,
-  getFeaturedProducts,
-  getHotSellProducts,
   getProductByCategory,
   getProductBySubCategory,
   singleProduct,

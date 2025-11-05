@@ -1,9 +1,9 @@
 const {
   allCategory,
-  singleCategory,
   createNewCategory,
   updateCategory,
   deleteCategory,
+  getSingleCategory,
 } = require("../../controllers/category.controller");
 const checkAdminMiddleware = require("../../middlewares/checkAdminMiddleware");
 const errorHandleMiddleware = require("../../middlewares/errorHandleMiddleware");
@@ -22,7 +22,7 @@ router.get("/category/all", allCategory);
  * Get single category
  * http://localhost:5000/api/v1/category/single/:id
  */
-router.get("/category/single/:id", singleCategory);
+router.get("/category/single/:id", getSingleCategory);
 
 /**
  * Create new category

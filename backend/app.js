@@ -27,6 +27,10 @@ app.use(
   })
 );
 app.use(express.static("temp"));
+app.use(express.static("uploads/avatars"));
+app.use(express.static("uploads/banners"));
+app.use(express.static("uploads/categories"));
+app.use(express.static("uploads/products"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());

@@ -22,19 +22,7 @@ const router = require("express").Router();
  * Get all products
  * http://localhost:5000/api/v1/product/all
  */
-router.get("/product/all", allProducts);
-
-/**
- * Get all featured products
- * http://localhost:5000/api/v1/product/featured
- */
-router.get("/product/featured", getFeaturedProducts);
-
-/**
- * Get all hot sell products
- * http://localhost:5000/api/v1/product/hotsell
- */
-router.get("/product/hotsell", getHotSellProducts);
+router.get("/products", allProducts);
 
 /**
  * Get products by category

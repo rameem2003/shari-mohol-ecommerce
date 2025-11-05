@@ -1,20 +1,51 @@
-const path = require("path");
-const deleteFile = require("../helpers/deleteFile");
-const categoryModel = require("../model/category.model");
+const {
+  getAllCategories,
+  findCategoryById,
+  uploadNewCategory,
+  updateExistingCategory,
+  deleteExistingCategory,
+} = require("../services/category.service");
+const categoryUploadValidator = require("../validator/category.validator");
+const deleteFile = require("../utils/fileDelete");
 
+/**
+ * Get all category
+ */
 const allCategory = async (req, res) => {
   try {
-    let allCategory = await categoryModel.find().populate("products");
+    let allCategory = await getAllCategories();
     res.status(200).send({
       success: true,
-      msg: "All Category Fetched Success",
+      message: "All Category Fetched Success",
       data: allCategory,
     });
   } catch (error) {
     res.status(500).send({
       success: false,
-      msg: "Internal Server Error",
+      message: "Internal Server Error",
       error,
+    });
+  }
+};
+
+/**
+ * Get single category controller
+ */
+const getSingleCategory = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    let data = await findCategoryById(id);
+    res.status(200).send({
+      success: true,
+      message: "Category fetched successfully",
+      data,
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Error fetching category",
+      error: error.message,
     });
   }
 };
@@ -23,63 +54,44 @@ const allCategory = async (req, res) => {
  * Create new category
  */
 const createNewCategory = async (req, res) => {
-  const { name, description, subCategories } = req.body;
-  const { filename } = req.file;
+  if (!req.user) {
+    return res.status(401).send({ success: false, message: "Unauthorized" });
+  }
+  const { data, error } = categoryUploadValidator.safeParse(req.body);
+  if (error) {
+    return res
+      .status(400)
+      .json({ success: false, message: JSON.parse(error.message)[0].message });
+  }
+  const filename = req?.file?.filename || "";
 
-  const subcategoryArray = subCategories
-    ? subCategories.split(",").map((sub) => sub.trim())
+  const subcategoryArray = data.subCategories
+    ? data.subCategories.split(",").map((sub) => sub.trim())
     : [];
 
-  if (name && filename) {
-    try {
-      let newCategory = new categoryModel({
-        name,
-        description,
-        subCategories: subcategoryArray,
-        // thumb: `${process.env.HOST_URL}${process.env.PORT}/${filename}`,
-        thumb: filename,
-      });
-
-      await newCategory.save();
-
-      res.status(201).send({
+  try {
+    if (filename) {
+      let newCategory = await uploadNewCategory(
+        data.name,
+        data.description,
+        subcategoryArray,
+        filename
+      );
+      return res.status(201).send({
         success: true,
-        msg: "New Category Is Created",
+        message: "New Category Is Created",
         newCategory,
       });
-    } catch (error) {
-      res.status(500).send({
+    } else {
+      return res.status(404).send({
         success: false,
-        msg: "Internal Server Error",
-        error,
+        message: "Please fill all fields",
       });
     }
-  } else {
-    res.status(404).send({
-      success: false,
-      msg: "Please fill all fields",
-    });
-  }
-};
-
-/**
- * Single Category
- */
-const singleCategory = async (req, res) => {
-  const { id } = req.params;
-  try {
-    let category = await categoryModel
-      .findOne({ _id: id })
-      .populate("products");
-    res.status(200).send({
-      success: true,
-      msg: "Category Fetched Success",
-      data: category,
-    });
   } catch (error) {
-    res.status(500).send({
+    return res.status(500).send({
       success: false,
-      msg: "Internal Server Error",
+      message: "Internal Server Error",
       error,
     });
   }
@@ -89,6 +101,9 @@ const singleCategory = async (req, res) => {
  * Update Category
  */
 const updateCategory = async (req, res) => {
+  if (!req.user) {
+    return res.status(401).send({ success: false, message: "Unauthorized" });
+  }
   const { id } = req.params;
 
   const updateFields = {};
@@ -109,46 +124,23 @@ const updateCategory = async (req, res) => {
     updateFields.subCategories = subcategoryArray;
   }
 
-  if (req.file !== undefined) {
-    // let imageLink = `${process.env.HOST_URL}${process.env.PORT}/${req.file.filename}`;
-
-    updateFields.thumb = req.file.filename;
-  }
-
   try {
-    const targetCategory = await categoryModel.findOneAndUpdate(
-      { _id: id },
-      {
-        $set: updateFields,
-      }
+    let targetCategory = await updateExistingCategory(
+      id,
+      updateFields,
+      req?.file?.filename
     );
 
-    // If images were updated, delete the old image
-    if (updateFields.thumb) {
-      // let imagePath = targetCategory.thumb.split("/");
-      // let oldImage = imagePath[imagePath.length - 1];
-
-      try {
-        await deleteFile(
-          `${path.join(__dirname, "../temp")}/${targetCategory.thumb}`
-        );
-      } catch (fileDeleteErr) {
-        res.status(500).send({
-          success: false,
-          msg: "Internal Server Error",
-          fileDeleteErr,
-        });
-      }
-    }
-
-    res.status(200).send({
+    return res.status(200).send({
       success: true,
-      msg: "Category is update",
+      message: "Category is update",
+      targetCategory,
     });
   } catch (error) {
-    res.status(500).send({
+    await deleteFile("../uploads/categories/", req?.file?.filename);
+    return res.status(500).send({
       success: false,
-      msg: "Internal Server Error",
+      message: "Internal Server Error",
       error,
     });
   }
@@ -158,31 +150,23 @@ const updateCategory = async (req, res) => {
  * Delete category
  */
 const deleteCategory = async (req, res) => {
+  if (!req.user) {
+    return res.status(401).send({ success: false, message: "Unauthorized" });
+  }
   const { id } = req.params;
 
   try {
-    let category = await categoryModel.findOneAndDelete({ _id: id });
-    // let imagePath = category.thumb.split("/");
-    // let oldimage = imagePath[imagePath.length - 1];
+    let targetCategory = await deleteExistingCategory(id);
 
-    try {
-      await deleteFile(`${path.join(__dirname, "../temp")}/${category.thumb}`);
-      res.status(200).send({
-        success: true,
-        msg: "Category deleted",
-        data: category,
-      });
-    } catch (fileDeleteErr) {
-      res.status(500).send({
-        success: false,
-        msg: "Internal Server Error",
-        fileDeleteErr,
-      });
-    }
+    return res.status(200).send({
+      success: true,
+      message: "Category is deleted",
+      targetCategory,
+    });
   } catch (error) {
     res.status(500).send({
       success: false,
-      msg: "Internal Server Error",
+      message: "Internal Server Error",
       error,
     });
   }
@@ -191,7 +175,7 @@ const deleteCategory = async (req, res) => {
 module.exports = {
   allCategory,
   createNewCategory,
-  singleCategory,
+  getSingleCategory,
   updateCategory,
   deleteCategory,
 };
