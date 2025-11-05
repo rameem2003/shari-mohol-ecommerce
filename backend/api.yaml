@@ -101,8 +101,7 @@ info:
     management, and payment.
   version: 1.0.0
 servers:
-  - url: https://shari-mohol-ecommerce-server.onrender.com/api
-  - url: https://shari-mohol-ecommerce-server.onrender.com/
+  - url: http://{{host}}api
 components:
   securitySchemes:
     noauthAuth:
@@ -115,10 +114,10 @@ tags:
     description: E-commerce banner api endpoints
   - name: Category
     description: Category endpoints
-  - name: Order
-    description: Order endpoints
   - name: Product
     description: Product endpoints
+  - name: Order
+    description: Order endpoints
 paths:
   /v1/auth/users:
     get:
@@ -128,43 +127,6 @@ paths:
       description: Return all users information
       security:
         - noauthAuth: []
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json: {}
-  /v1/auth/user/67cfb60b159cddcaa1bc95af:
-    get:
-      tags:
-        - Auth
-      summary: Single User
-      description: Return singer user information by user ID
-      security:
-        - noauthAuth: []
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json: {}
-  /v1/auth/register:
-    post:
-      tags:
-        - Auth
-      summary: Register
-      description: |-
-        Create a user
-
-        Use a valid user email.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              example:
-                name: Test1
-                email: info.bd@gmail.com
-                password: "123456"
-                role: admin
       responses:
         "200":
           description: Successful response
@@ -191,40 +153,32 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  /v1/auth/otp-verify:
+  /v1/auth/register:
     post:
       tags:
         - Auth
-      summary: OTP Verify
-      description: Sent otp email for email verification
+      summary: Register
+      description: |-
+        Create a user
+
+        Use a valid user email.
       requestBody:
         content:
           application/json:
             schema:
               type: object
-              example:
-                email: info.rolstudio.bd@gmail.com
-                otp: "638185"
-      security:
-        - noauthAuth: []
+              example: "{\r\n    \"name\" : \"Test1\",\r\n    \"email\" : \"republicoflegends2022@gmail.com\",\r\n    \"password\" : \"123456\",\r\n    \"phone\": \"01409029641\"\r\n    // \"role\" : \"admin\"\r\n}"
       responses:
         "200":
           description: Successful response
           content:
             application/json: {}
-  /v1/auth/otp-resend:
-    post:
+  /v1/auth/user:
+    get:
       tags:
         - Auth
-      summary: OTP Resend
-      description: OTP resend endpoint
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              example:
-                email: info.rolstudio.bd@gmail.com
+      summary: User Profile
+      description: Return singer user information by user ID
       security:
         - noauthAuth: []
       responses:
@@ -232,22 +186,7 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  /api/v1/auth/logout/67cfb60b159cddcaa1bc95af:
-    post:
-      tags:
-        - Auth
-      summary: Logout User
-      description: User logout endpoint
-      requestBody:
-        content: {}
-      security:
-        - noauthAuth: []
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json: {}
-  /v1/auth/update/67cfb60b159cddcaa1bc95af:
+  /v1/auth/update:
     patch:
       tags:
         - Auth
@@ -264,7 +203,7 @@ paths:
                   example: Rameem
                 phone:
                   type: integer
-                  example: "01409029641"
+                  example: "01310346825"
                 address:
                   type: string
                   example: Mirpur, Dhaka
@@ -278,25 +217,7 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  /v1/auth/forgetpassword/info.rolstudio.bd@gmail.com:
-    patch:
-      tags:
-        - Auth
-      summary: Forget Password
-      description: User forget password endpoint
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              example:
-                newPassword: "654321"
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json: {}
-  /v1/auth/changepassword/67e378c2ed428a996fcbc3ab:
+  /v1/auth/changepassword:
     patch:
       tags:
         - Auth
@@ -308,9 +229,9 @@ paths:
             schema:
               type: object
               example:
-                oldPassword: "123456"
-                newPassword: "654321"
-                conFirmPassword: "654321"
+                oldPassword: "12345678"
+                newPassword: "123456"
+                confirmPassword: "123456"
       security:
         - noauthAuth: []
       responses:
@@ -318,12 +239,108 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  /v1/auth/delete/id:
-    delete:
+  /v1/auth/logout:
+    post:
       tags:
         - Auth
-      summary: Delete User
-      description: Admin can delete a user
+      summary: Logout User
+      description: User logout endpoint
+      requestBody:
+        content: {}
+      security:
+        - noauthAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/auth/reset-password:
+    post:
+      tags:
+        - Auth
+      summary: Send Reset Password Token LInk
+      description: User forget password endpoint
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: republicoflegends2022@gmail.com
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/auth/reset-password-verify/766756:
+    get:
+      tags:
+        - Auth
+      summary: Verify Reset Password Token
+      description: User forget password endpoint
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/auth/reset-password/354992:
+    post:
+      tags:
+        - Auth
+      summary: Reset Password
+      description: User forget password endpoint
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                newPassword: "12345678"
+                confirmPassword: "12345678"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/auth/send-email-verification:
+    post:
+      tags:
+        - Auth
+      summary: Send Email Verification Link
+      description: OTP resend endpoint
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: info.rolstudio.bd@gmail.com
+      security:
+        - noauthAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/auth/verify-email:
+    get:
+      tags:
+        - Auth
+      summary: Verify Email
+      description: OTP resend endpoint
+      security:
+        - noauthAuth: []
+      parameters:
+        - name: token
+          in: query
+          schema:
+            type: integer
+          example: "331533"
+        - name: email
+          in: query
+          schema:
+            type: string
+          example: republicoflegends2022@gmail.com
       responses:
         "200":
           description: Successful response
@@ -342,7 +359,7 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  /api/v1/banner/create:
+  /v1/banner/create:
     post:
       tags:
         - Banner
@@ -359,16 +376,17 @@ paths:
                   format: binary
                 description:
                   type: string
-                  example: Test
+                  example: Test d
                 advertisementLink:
                   type: string
-                  example: Test
+                  example: >-
+                    https://www.facebook.com/photo?fbid=2874752386028465&set=a.164996177004113
       responses:
         "200":
           description: Successful response
           content:
             application/json: {}
-  /v1/banner/delete/67ce5e5afe19ba81b603c254:
+  /v1/banner/delete/69082aab3abe6f221104c314:
     delete:
       tags:
         - Banner
@@ -436,7 +454,7 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  /v1/category/update/67ef539ceecb006a9192cf99:
+  /v1/category/update/690aadf299d3019f8c425f10:
     patch:
       tags:
         - Category
@@ -450,7 +468,7 @@ paths:
               properties:
                 name:
                   type: string
-                  example: Shari
+                  example: Test Category
                 description:
                   type: string
                   example: Shari
@@ -467,12 +485,218 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  /v1/category/delete/67ef539ceecb006a9192cf99:
+  /v1/category/delete/690aaecdf0425b024b5f3b29:
     delete:
       tags:
         - Category
       summary: Delete Category
       description: Delete category by category ID
+      security:
+        - noauthAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/products:
+    get:
+      tags:
+        - Product
+      summary: All Products
+      description: Return all products
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/product/single/690ac347eb1c70b9159423ce:
+    get:
+      tags:
+        - Product
+      summary: Get Single Product
+      description: Get single product information by ID
+      security:
+        - noauthAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/product/category/67e413553ab2056d3f68333a:
+    get:
+      tags:
+        - Product
+      summary: Get Products by Category
+      description: Return products by category
+      security:
+        - noauthAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/product/subcategory:
+    get:
+      tags:
+        - Product
+      summary: Get Products by Sub Category
+      description: Return products by sub category
+      security:
+        - noauthAuth: []
+      parameters:
+        - name: subCategory
+          in: query
+          schema:
+            type: string
+          example: jamdani
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/product/create:
+    post:
+      tags:
+        - Product
+      summary: Add New Product
+      description: Create new product
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Natural Dye SKD (03126-20)
+                description:
+                  type: string
+                  example: Natural Dye SKD (03126-20)
+                sellingPrice:
+                  type: integer
+                  example: "15000"
+                discountPrice:
+                  type: integer
+                  example: "14000"
+                colors:
+                  type: string
+                  example: red,green, blue
+                sizes:
+                  type: string
+                  example: l,xl,xxl
+                stock:
+                  type: integer
+                  example: "200"
+                category:
+                  type: string
+                  example: 67e416853ab2056d3f683342
+                subCategory:
+                  type: string
+                  example: jamdani
+                ratings:
+                  type: string
+                reviews:
+                  type: string
+                images:
+                  type: string
+                  format: binary
+                featured:
+                  type: boolean
+                  example: "false"
+                hotSell:
+                  type: boolean
+                  example: "false"
+      security:
+        - noauthAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/product/send-review:
+    post:
+      tags:
+        - Product
+      summary: Send Review
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                product: 690ac347eb1c70b9159423ce
+                rating: 4
+                comment: WOW
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/product/update/690abd04262d0004644a8229:
+    patch:
+      tags:
+        - Product
+      summary: Update Product
+      description: Update product
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Katan Saree
+                description:
+                  type: string
+                  example: Best Saree
+                sellingPrice:
+                  type: integer
+                  example: "15000"
+                discountPrice:
+                  type: integer
+                  example: "14000"
+                colors:
+                  type: string
+                  example: red,green, blue
+                sizes:
+                  type: string
+                  example: m, l, xl
+                stock:
+                  type: integer
+                  example: "200"
+                category:
+                  type: string
+                  example: 67ce997af6ffcc14532779b1
+                subCategory:
+                  type: string
+                  example: Katan
+                ratings:
+                  type: string
+                reviews:
+                  type: string
+                images:
+                  type: string
+                  format: binary
+                featured:
+                  type: boolean
+                  example: "false"
+                hotSell:
+                  type: boolean
+                  example: "false"
+      security:
+        - noauthAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/product/delete/690abd04262d0004644a8229:
+    delete:
+      tags:
+        - Product
+      summary: Delete Products
+      description: Delete product by ID
       security:
         - noauthAuth: []
       responses:
@@ -565,219 +789,6 @@ paths:
           schema:
             type: string
           example: delivered
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json: {}
-  /v1/product/all:
-    get:
-      tags:
-        - Product
-      summary: All Products
-      description: Return all products
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json: {}
-  /v1/product/single/67ce9bcf5d42c1e447dc7db7:
-    get:
-      tags:
-        - Product
-      summary: Get Single Product
-      description: Get single product information by ID
-      security:
-        - noauthAuth: []
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json: {}
-  /v1/product/featured:
-    get:
-      tags:
-        - Product
-      summary: Get Featured Products
-      description: Return all featured products
-      security:
-        - noauthAuth: []
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json: {}
-  /v1/product/hotsell:
-    get:
-      tags:
-        - Product
-      summary: Get Hotsell Products
-      description: Return all hot sell products
-      security:
-        - noauthAuth: []
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json: {}
-  /v1/product/subcategory:
-    get:
-      tags:
-        - Product
-      summary: Get Products by Sub Category
-      description: Return products by sub category
-      security:
-        - noauthAuth: []
-      parameters:
-        - name: subCategory
-          in: query
-          schema:
-            type: string
-          example: katan
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json: {}
-  /v1/product/category/67e416853ab2056d3f683342:
-    get:
-      tags:
-        - Product
-      summary: Get Products by Category
-      description: Return products by category
-      security:
-        - noauthAuth: []
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json: {}
-  /v1/product/create:
-    post:
-      tags:
-        - Product
-      summary: Add New Product
-      description: Create new product
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  example: Natural Dye SKD (03126-20)
-                description:
-                  type: string
-                  example: Natural Dye SKD (03126-20)
-                sellingPrice:
-                  type: integer
-                  example: "15000"
-                discountPrice:
-                  type: integer
-                  example: "14000"
-                colors:
-                  type: string
-                  example: red,green, blue
-                sizes:
-                  type: string
-                  example: l,xl,xxl
-                stock:
-                  type: integer
-                  example: "200"
-                category:
-                  type: string
-                  example: 67e416853ab2056d3f683342
-                subCategory:
-                  type: string
-                  example: jamdani
-                ratings:
-                  type: string
-                reviews:
-                  type: string
-                images:
-                  type: string
-                  format: binary
-                featured:
-                  type: boolean
-                  example: "false"
-                hotSell:
-                  type: boolean
-                  example: "false"
-      security:
-        - noauthAuth: []
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json: {}
-  /v1/product/update/67ef5834a1959086d70ab625:
-    patch:
-      tags:
-        - Product
-      summary: Update Product
-      description: Update product
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  example: Katan Saree
-                description:
-                  type: string
-                  example: Best Saree
-                sellingPrice:
-                  type: integer
-                  example: "15000"
-                discountPrice:
-                  type: integer
-                  example: "14000"
-                colors:
-                  type: string
-                  example: red,green, blue
-                sizes:
-                  type: string
-                  example: m, l, xl
-                stock:
-                  type: integer
-                  example: "200"
-                category:
-                  type: string
-                  example: 67ce997af6ffcc14532779b1
-                subCategory:
-                  type: string
-                  example: Katan
-                ratings:
-                  type: string
-                reviews:
-                  type: string
-                images:
-                  type: string
-                  format: binary
-                featured:
-                  type: boolean
-                  example: "false"
-                hotSell:
-                  type: boolean
-                  example: "false"
-      security:
-        - noauthAuth: []
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json: {}
-  /v1/product/delete/67ef5834a1959086d70ab625:
-    delete:
-      tags:
-        - Product
-      summary: Delete Products
-      description: Delete product by ID
-      security:
-        - noauthAuth: []
       responses:
         "200":
           description: Successful response

@@ -1,12 +1,13 @@
 // import all packages
 require("dotenv").config();
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./config/swagger.config");
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const requestIp = require("request-ip");
 const connectDB = require("./config/db.config");
-const swaggerUi = require("swagger-ui-express");
 const YAML = require("yamljs");
 const swaggerDocument = YAML.load("./api.yaml");
 const router = require("./routes");
@@ -50,7 +51,8 @@ app.use(
   })
 );
 app.use(router);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 /**
  * Welcome Route
