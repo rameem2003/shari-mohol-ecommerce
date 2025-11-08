@@ -3,6 +3,7 @@ const auth = require("./auth");
 const banner = require("./banner");
 const category = require("./category");
 const product = require("./product");
+const cart = require("./cart");
 const order = require("./order");
 const base = process.env.BASE_URL;
 
@@ -28,6 +29,13 @@ router.use(base, category);
  * http:localhost:5000/api/v1/product
  */
 router.use(base, product);
+
+/**
+ * Cart Route
+ * http:localhost:5000/api/v1/cart
+ */
+
+router.use(base, cart);
 
 /**
  * Order Route
