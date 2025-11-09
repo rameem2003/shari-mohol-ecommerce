@@ -1,30 +1,35 @@
 const sslcz = require("../helpers/paymentGateway");
 const sendPurchaseConfirmationEmail = require("../helpers/sendPurchaseConfirmationEmail");
 const orderModel = require("../model/order.model");
+const { findCartItemsByUser } = require("../services/cart.service");
+const {
+  findAllOrders,
+  findOrderById,
+  storeOrder,
+  findOrderByUser,
+} = require("../services/order.service");
+const orderValidatorSchema = require("../validator/order.validator");
 
 /**
  * Get all orders
  */
 const getAllOrders = async (req, res) => {
+  if (!req.user) {
+    return res
+      .status(404)
+      .send({ success: false, message: "Unauthorized User" });
+  }
   try {
-    let allOrders = await orderModel
-      .find()
-      .populate({
-        path: "cartItems",
-        populate: {
-          path: "product",
-        },
-      })
-      .sort({ createdAt: -1 });
+    let allOrders = await findAllOrders();
     res.status(201).send({
       success: true,
-      msg: "Order Fetched Success",
+      message: "Order Fetched Success",
       data: allOrders,
     });
   } catch (error) {
     res.status(500).send({
       success: false,
-      msg: "Internal Server Error",
+      message: "Internal Server Error",
       error,
     });
   }
@@ -34,24 +39,24 @@ const getAllOrders = async (req, res) => {
  * Get order info by id
  */
 const getOrderByID = async (req, res) => {
+  if (!req.user) {
+    return res
+      .status(404)
+      .send({ success: false, message: "Unauthorized User" });
+  }
   const { id } = req.params;
 
   try {
-    let orders = await orderModel.findOne({ _id: id }).populate({
-      path: "cartItems",
-      populate: {
-        path: "product",
-      },
-    });
+    let orders = await findOrderById(id);
     res.status(201).send({
       success: true,
-      msg: "Order Fetched Success",
+      message: "Order Fetched Success",
       data: orders,
     });
   } catch (error) {
     res.status(500).send({
       success: false,
-      msg: "Internal Server Error",
+      message: "Internal Server Error",
       error,
     });
   }
@@ -61,26 +66,22 @@ const getOrderByID = async (req, res) => {
  * Get Orders by single user
  */
 const getSingleUserOrder = async (req, res) => {
-  const { email } = req.params;
+  if (!req.user) {
+    return res
+      .status(404)
+      .send({ success: false, message: "Unauthorized User" });
+  }
   try {
-    let allOrders = await orderModel
-      .find({ email })
-      .populate({
-        path: "cartItems",
-        populate: {
-          path: "product",
-        },
-      })
-      .sort({ createdAt: -1 });
+    let allOrders = await findOrderByUser(req.user.id);
     res.status(201).send({
       success: true,
-      msg: "Single User Order Fetched Success",
+      message: "Single User Order Fetched Success",
       data: allOrders,
     });
   } catch (error) {
     res.status(500).send({
       success: false,
-      msg: "Internal Server Error",
+      message: "Internal Server Error",
       error,
     });
   }
@@ -90,121 +91,96 @@ const getSingleUserOrder = async (req, res) => {
  * Place a new Order
  */
 const placeOrder = async (req, res) => {
-  const {
-    name,
-    email,
-    address,
-    city,
-    postCode,
-    phone,
-    cartItems,
+  if (!req.user) {
+    return res
+      .status(404)
+      .send({ success: false, message: "Unauthorized User" });
+  }
+
+  let transactionID = Date.now().toString();
+  let cartData = await findCartItemsByUser(req.user.id);
+
+  let grandTotal = cartData.reduce((total, cartItem) => {
+    const price = cartItem?.item?.discountPrice
+      ? cartItem?.item?.discountPrice
+      : cartItem?.item?.sellingPrice || 0;
+    const quantity = cartItem?.quantity || 0;
+    return total + price * quantity;
+  }, 0);
+
+  let orderItems = cartData.map((cartItem) => ({
+    product: cartItem.item._id.toString(),
+    color: cartItem.color || "",
+    size: cartItem.size || "",
+    quantity: cartItem.quantity,
+  }));
+  // console.log(orderItems);
+
+  const { data, error } = orderValidatorSchema.safeParse({
+    ...req.body,
+    userId: req.user.id,
+    cartItems: orderItems,
     grandTotal,
-    paymentMethod,
-  } = req.body;
+    transactionID,
+  });
+  console.log(transactionID);
+
+  if (error) {
+    return res
+      .status(400)
+      .json({ success: false, message: JSON.parse(error.message)[0].message });
+  }
+
+  // return res.status(200).send({ success: true, message: "Order Placed" });
 
   try {
-    if (city && phone && address && email) {
-      let transactionID = Date.now();
-      let order = new orderModel({
-        name,
-        email,
-        address,
-        city,
-        postCode,
-        phone,
-        cartItems,
-        grandTotal,
-        transactionID,
-        paymentMethod,
-      });
+    let newOrder = await storeOrder(data);
 
-      await order.save();
-
-      const data = {
+    if (data.paymentMethod === "COD") {
+    } else if (data.paymentMethod === "online") {
+      const object = {
         total_amount: grandTotal,
         currency: "BDT",
         tran_id: transactionID, // use unique tran_id for each api call
-        success_url:
-          process.env.SYSTEM_ENV === "production"
-            ? `${process.env.RENDER_HOST_URL}/order/success/${order._id}`
-            : `${process.env.HOST_URL}${process.env.PORT}${process.env.BASE_URL}/order/success/${order._id}`,
-        fail_url:
-          process.env.SYSTEM_ENV === "production"
-            ? `${process.env.RENDER_HOST_URL}/order/fail/${order._id}`
-            : `${process.env.HOST_URL}${process.env.PORT}${process.env.BASE_URL}/order/fail/${order._id}`,
-        cancel_url:
-          process.env.SYSTEM_ENV === "production"
-            ? `${process.env.RENDER_HOST_URL}/order/cancel/${order._id}`
-            : `${process.env.HOST_URL}${process.env.PORT}${process.env.BASE_URL}/order/cancel/${order._id}`,
+        success_url: `${req.protocol}://${req.host}${process.env.BASE_URL}/order/success/${newOrder._id}`,
+        fail_url: `${req.protocol}://${req.host}${process.env.BASE_URL}/order/fail/${newOrder._id}`,
+        cancel_url: `${req.protocol}://${req.host}${process.env.BASE_URL}/order/cancel/${newOrder._id}`,
         ipn_url: "http://localhost:3030/ipn",
         shipping_method: "Courier",
         product_name: "Computer.",
         product_category: "Electronic",
         product_profile: "general",
-        cus_name: name,
-        cus_email: email,
-        cus_add1: address,
-        cus_add2: address,
-        cus_city: city,
-        cus_state: city,
-        cus_postcode: postCode,
+        cus_name: req.user.name,
+        cus_email: req.user.email,
+        cus_add1: data.address,
+        cus_add2: data.address,
+        cus_city: data.city,
+        cus_state: data.state,
+        cus_postcode: data.postCode,
         cus_country: "Bangladesh",
-        cus_phone: phone,
-        cus_fax: phone,
+        cus_phone: data.phone,
+        cus_fax: data.phone,
         ship_name: "Customer Name",
-        ship_add1: address,
-        ship_add2: address,
-        ship_city: city,
-        ship_state: city,
+        ship_add1: data.address,
+        ship_add2: data.address,
+        ship_city: data.city,
+        ship_state: data.state,
         ship_postcode: 1000,
         ship_country: "Bangladesh",
       };
 
-      if (paymentMethod == "COD") {
-        order.paymentStatus = "COD";
-        await order.save();
-
-        // cartItems.map(async (item) => {
-        //   await cartModel.findOneAndDelete({ _id: item.cartId });
-        // });
-
-        let targetOrder = await orderModel
-          .findOne({ _id: order._id })
-          .populate({
-            path: "cartItems",
-            populate: {
-              path: "product",
-            },
-          });
-
-        await sendPurchaseConfirmationEmail(targetOrder);
-
-        return res.status(201).send({
-          success: true,
-          msg: "Order Successful",
-          data: order,
-          url: `http://localhost:5173/payment/success/${order._id}`,
-        });
-      } else if (paymentMethod == "online") {
-        let apiRes = await sslcz.init(data);
-        return res.status(201).send({
-          success: true,
-          msg: "Order Successful",
-          data: order,
-          url: apiRes.GatewayPageURL,
-        });
-      }
-    } else {
-      res.status(404).send({
-        success: false,
-        msg: "Some Information Needed",
-        error,
+      let apiRes = await sslcz.init(object);
+      return res.status(201).send({
+        success: true,
+        message: "Order Successful",
+        data: newOrder,
+        url: apiRes.GatewayPageURL,
       });
     }
   } catch (error) {
     res.status(500).send({
       success: false,
-      msg: "Internal Server Error",
+      message: "Internal Server Error",
       error,
     });
   }
@@ -227,7 +203,7 @@ const responseDeliveryStatus = async (req, res) => {
 
       return res.status(200).send({
         success: true,
-        msg: "Order Delivery Successful",
+        message: "Order Delivery Successful",
         data: order,
       });
     } else if (statusText == "cancelled") {
@@ -239,14 +215,14 @@ const responseDeliveryStatus = async (req, res) => {
 
       return res.status(200).send({
         success: true,
-        msg: "Order Cancelled Successfully",
+        message: "Order Cancelled Successfully",
         data: order,
       });
     }
   } catch (error) {
     res.status(500).send({
       success: false,
-      msg: "Internal Server Error",
+      message: "Internal Server Error",
       error,
     });
   }
@@ -264,26 +240,15 @@ const paymentSuccess = async (req, res) => {
     { new: true }
   );
 
-  let targetOrder = await orderModel.findOne({ _id: orderId }).populate({
-    path: "cartItems",
-    populate: {
-      path: "product",
-    },
-  });
+  let targetOrder = await findOrderById(orderId);
   //   targetOrder.cartItems.map(async (item) => {
   //     await cartModel.findOneAndDelete({ _id: item.cartId });
   //   });
 
-  // console.log(targetOrder);
+  console.log(targetOrder);
   await sendPurchaseConfirmationEmail(targetOrder);
 
-  if (process.env.SYSTEM_ENV === "production") {
-    return res.redirect(
-      `${process.env.VERCEL_HOST_URL}/payment/success/${orderId}`
-    );
-  } else {
-    return res.redirect(`http://localhost:5173/payment/success/${orderId}`);
-  }
+  res.send("Payment Successful");
 };
 
 /**

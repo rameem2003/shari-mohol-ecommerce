@@ -92,7 +92,7 @@ const sendPurchaseConfirmationEmail = async (order) => {
 
       <!-- Body -->
       <div class="content">
-        <p class="greeting">Hi ${order?.name},</p>
+        <p class="greeting">Hi ${order?.userId?.name},</p>
         <p class="muted">Thanks for your order! We've received payment and your items are being prepared. Below is a summary of your purchase.</p>
 
         <div class="invoice-meta" aria-hidden="false" role="table">
@@ -215,7 +215,7 @@ const sendPurchaseConfirmationEmail = async (order) => {
 
   const info = await transporter.sendMail({
     from: "rameem.me@gmail.com", // sender address
-    to: order?.email, // list of receivers
+    to: order?.userId?.email, // list of receivers
     subject: "Thank you for joining Shari Mohol", // Subject line
     text: "Shari Mohol", // plain text body
     html, // html body

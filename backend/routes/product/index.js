@@ -32,9 +32,9 @@ router.get("/product/category/:category", getProductByCategory);
 
 /**
  * Get products by sub category
- * http://localhost:5000/api/v1/product/subcategory?:subCategory
+ * http://localhost:5000/api/v1/product/subcategory
  */
-router.get("/product/subcategory?:subCategory", getProductBySubCategory);
+router.get("/product/subcategory", getProductBySubCategory);
 
 /**
  * Get single product

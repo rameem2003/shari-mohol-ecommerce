@@ -2,16 +2,7 @@ const { default: mongoose } = require("mongoose");
 
 const orderSchema = new mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      trim: true,
-    },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "auth" },
     address: {
       type: String,
       required: true,
@@ -20,7 +11,14 @@ const orderSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    postCode: String,
+    postCode: {
+      type: String,
+      required: true,
+    },
+    state: {
+      type: String,
+      required: true,
+    },
     phone: {
       type: String,
       required: true,
@@ -28,8 +26,14 @@ const orderSchema = new mongoose.Schema(
     cartItems: [
       {
         product: { type: mongoose.Schema.Types.ObjectId, ref: "product" },
-        color: String,
-        size: String,
+        color: {
+          type: String,
+          default: "",
+        },
+        size: {
+          type: String,
+          default: "",
+        },
         quantity: { type: Number, default: 1 },
       },
     ],
@@ -42,11 +46,6 @@ const orderSchema = new mongoose.Schema(
     paymentMethod: {
       type: String,
       enum: ["COD", "online"],
-    },
-    paymentStatus: {
-      type: String,
-      enum: ["paid", "unpaid", "COD"],
-      default: "unpaid",
     },
     deliveryStatus: {
       type: String,

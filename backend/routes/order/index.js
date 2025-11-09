@@ -8,6 +8,8 @@ const {
   paymentFail,
   paymentCancel,
 } = require("../../controllers/order.controller");
+const checkAdminMiddleware = require("../../middlewares/checkAdminMiddleware");
+const checkUserMiddleware = require("../../middlewares/checkUserMiddleware");
 
 const router = require("express").Router();
 
@@ -15,31 +17,35 @@ const router = require("express").Router();
  * Get all orders
  * http://localhost:5000/api/v1/order/all
  */
-router.get("/order/all", getAllOrders);
+router.get("/order/all", checkUserMiddleware, getAllOrders);
 
 /**
  * Get order by id
  * http://localhost:5000/api/v1/order/singlebyid/:id
  */
-router.get("/order/singlebyid/:id", getOrderByID);
+router.get("/order/single/:id", checkUserMiddleware, getOrderByID);
 
 /**
  * Get single user orders
  * http://localhost:5000/api/v1/order/single/:email
  */
-router.get("/order/single/:email", getSingleUserOrder);
+router.get("/order", checkUserMiddleware, getSingleUserOrder);
 
 /**
  * Place Order
  * http://localhost:5000/api/v1/order/place
  */
-router.post("/order/place", placeOrder);
+router.post("/order/place", checkUserMiddleware, placeOrder);
 
 /**
  * Response for delivery status
  * http://localhost:5000/api/v1/order/response/:id?statusText
  */
-router.patch("/order/response/:id", responseDeliveryStatus);
+router.patch(
+  "/order/response/:id",
+  checkAdminMiddleware,
+  responseDeliveryStatus
+);
 
 /**
  * Order success
