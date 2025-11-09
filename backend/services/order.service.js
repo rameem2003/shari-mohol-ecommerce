@@ -68,9 +68,39 @@ const storeOrder = async (orderData) => {
   }
 };
 
+const updateDeliveryStatusByOrderId = async (orderId, status) => {
+  try {
+    let order = await orderModel.findOneAndUpdate(
+      { _id: orderId },
+      { deliveryStatus: status },
+      { new: true }
+    );
+    return order;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Error updating order: " + error.message);
+  }
+};
+
+const updateOrderStatusByOrderId = async (orderId) => {
+  try {
+    let order = await orderModel.findOneAndUpdate(
+      { _id: orderId },
+      { orderIsCancelled: true },
+      { new: true }
+    );
+    return order;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Error updating order: " + error.message);
+  }
+};
+
 module.exports = {
   findAllOrders,
   findOrderById,
   findOrderByUser,
+  updateOrderStatusByOrderId,
+  updateDeliveryStatusByOrderId,
   storeOrder,
 };

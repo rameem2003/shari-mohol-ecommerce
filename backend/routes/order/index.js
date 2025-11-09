@@ -7,6 +7,7 @@ const {
   paymentSuccess,
   paymentFail,
   paymentCancel,
+  getSpecificUserOrder,
 } = require("../../controllers/order.controller");
 const checkAdminMiddleware = require("../../middlewares/checkAdminMiddleware");
 const checkUserMiddleware = require("../../middlewares/checkUserMiddleware");
@@ -20,16 +21,22 @@ const router = require("express").Router();
 router.get("/order/all", checkUserMiddleware, getAllOrders);
 
 /**
+ * Get Logged in user orders
+ * http://localhost:5000/api/v1/order
+ */
+router.get("/order", checkUserMiddleware, getSingleUserOrder);
+
+/**
+ * Get Logged in user orders
+ * http://localhost:5000/api/v1/order/user/:id
+ */
+router.get("/order/user/:id", checkAdminMiddleware, getSpecificUserOrder);
+
+/**
  * Get order by id
  * http://localhost:5000/api/v1/order/singlebyid/:id
  */
 router.get("/order/single/:id", checkUserMiddleware, getOrderByID);
-
-/**
- * Get single user orders
- * http://localhost:5000/api/v1/order/single/:email
- */
-router.get("/order", checkUserMiddleware, getSingleUserOrder);
 
 /**
  * Place Order
@@ -64,23 +71,5 @@ router.post("/order/fail/:orderId", paymentFail);
  * http://localhost:5000/api/v1/order/cancel/:orderId
  */
 router.post("/order/cancel/:orderId", paymentCancel);
-
-router.get("/order/get", async (req, res) => {
-  try {
-    let data = await orderModel.find({}).populate({
-      path: "cartItems",
-      populate: {
-        path: "product",
-      },
-    });
-    res.send(data);
-  } catch (error) {
-    res.status(500).send({
-      success: false,
-      msg: "Internal Server Error",
-      error,
-    });
-  }
-});
 
 module.exports = router;

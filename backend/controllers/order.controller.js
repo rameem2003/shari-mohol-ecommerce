@@ -1,13 +1,17 @@
 const sslcz = require("../helpers/paymentGateway");
-const sendPurchaseConfirmationEmail = require("../helpers/sendPurchaseConfirmationEmail");
-const orderModel = require("../model/order.model");
-const { findCartItemsByUser } = require("../services/cart.service");
+const {
+  findCartItemsByUser,
+  removeCartItemById,
+} = require("../services/cart.service");
 const {
   findAllOrders,
   findOrderById,
   storeOrder,
   findOrderByUser,
+  updateDeliveryStatusByOrderId,
+  updateOrderStatusByOrderId,
 } = require("../services/order.service");
+const sendPurchaseConfirmationEmail = require("../utils/sendPurchaseConfirmationEmail");
 const orderValidatorSchema = require("../validator/order.validator");
 
 /**
@@ -88,6 +92,33 @@ const getSingleUserOrder = async (req, res) => {
 };
 
 /**
+ * Get Specific User Order
+ */
+const getSpecificUserOrder = async (req, res) => {
+  if (!req.user) {
+    return res
+      .status(404)
+      .send({ success: false, message: "Unauthorized User" });
+  }
+  const { id } = req.params;
+
+  try {
+    let orders = await findOrderByUser(id);
+    res.status(201).send({
+      success: true,
+      message: "Order Fetched Success",
+      data: orders,
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Internal Server Error",
+      error,
+    });
+  }
+};
+
+/**
  * Place a new Order
  */
 const placeOrder = async (req, res) => {
@@ -123,7 +154,6 @@ const placeOrder = async (req, res) => {
     grandTotal,
     transactionID,
   });
-  console.log(transactionID);
 
   if (error) {
     return res
@@ -136,6 +166,9 @@ const placeOrder = async (req, res) => {
   try {
     let newOrder = await storeOrder(data);
 
+    cartData.map((cartItem) => {
+      removeCartItemById(cartItem._id);
+    });
     if (data.paymentMethod === "COD") {
     } else if (data.paymentMethod === "online") {
       const object = {
@@ -195,11 +228,7 @@ const responseDeliveryStatus = async (req, res) => {
 
   try {
     if (statusText == "delivered") {
-      let order = await orderModel.findByIdAndUpdate(
-        { _id: id },
-        { deliveryStatus: statusText, paymentStatus: "paid" },
-        { new: true }
-      );
+      let order = await updateDeliveryStatusByOrderId(id, statusText);
 
       return res.status(200).send({
         success: true,
@@ -207,11 +236,7 @@ const responseDeliveryStatus = async (req, res) => {
         data: order,
       });
     } else if (statusText == "cancelled") {
-      let order = await orderModel.findByIdAndUpdate(
-        { _id: id },
-        { deliveryStatus: statusText },
-        { new: true }
-      );
+      let order = await updateDeliveryStatusByOrderId(id, statusText);
 
       return res.status(200).send({
         success: true,
@@ -234,18 +259,8 @@ const responseDeliveryStatus = async (req, res) => {
 const paymentSuccess = async (req, res) => {
   const { orderId } = req.params;
 
-  await orderModel.findByIdAndUpdate(
-    { _id: orderId },
-    { paymentStatus: "paid" },
-    { new: true }
-  );
-
   let targetOrder = await findOrderById(orderId);
-  //   targetOrder.cartItems.map(async (item) => {
-  //     await cartModel.findOneAndDelete({ _id: item.cartId });
-  //   });
 
-  console.log(targetOrder);
   await sendPurchaseConfirmationEmail(targetOrder);
 
   res.send("Payment Successful");
@@ -256,17 +271,9 @@ const paymentSuccess = async (req, res) => {
  */
 const paymentFail = async (req, res) => {
   const { orderId } = req.params;
-  console.log(orderId);
 
-  await orderModel.findByIdAndDelete({ _id: orderId });
-
-  if (process.env.SYSTEM_ENV === "production") {
-    return res.redirect(
-      `${process.env.VERCEL_HOST_URL}/payment/fail/${orderId}`
-    );
-  } else {
-    return res.redirect(`http://localhost:5173/payment/fail/${orderId}`);
-  }
+  await updateOrderStatusByOrderId(orderId);
+  res.send("Payment Failed");
 };
 
 /**
@@ -274,22 +281,15 @@ const paymentFail = async (req, res) => {
  */
 const paymentCancel = async (req, res) => {
   const { orderId } = req.params;
-  console.log(orderId);
 
-  await orderModel.findByIdAndDelete({ _id: orderId });
-
-  if (process.env.SYSTEM_ENV === "production") {
-    return res.redirect(
-      `${process.env.VERCEL_HOST_URL}/payment/cancel/${orderId}`
-    );
-  } else {
-    return res.redirect(`http://localhost:5173/payment/cancel/${orderId}`);
-  }
+  await updateOrderStatusByOrderId(orderId);
+  res.send("Payment Cancelled");
 };
 
 module.exports = {
   getAllOrders,
   getSingleUserOrder,
+  getSpecificUserOrder,
   getOrderByID,
   placeOrder,
   responseDeliveryStatus,

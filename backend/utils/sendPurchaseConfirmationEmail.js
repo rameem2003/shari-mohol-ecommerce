@@ -1,4 +1,4 @@
-const nodemailer = require("nodemailer");
+const sendEmail = require("../utils/email");
 
 const sendPurchaseConfirmationEmail = async (order) => {
   let html = `<!doctype html>
@@ -205,21 +205,11 @@ const sendPurchaseConfirmationEmail = async (order) => {
 </html>
 `;
 
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: "rameem.me@gmail.com",
-      pass: "qdsm esfy vtkg ldso",
-    },
-  });
-
-  const info = await transporter.sendMail({
-    from: "rameem.me@gmail.com", // sender address
-    to: order?.userId?.email, // list of receivers
-    subject: "Thank you for joining Shari Mohol", // Subject line
-    text: "Shari Mohol", // plain text body
-    html, // html body
-  });
+  await sendEmail(
+    order?.userId?.email,
+    "Thank you for joining Shari Mohol",
+    html
+  );
 };
 
 module.exports = sendPurchaseConfirmationEmail;

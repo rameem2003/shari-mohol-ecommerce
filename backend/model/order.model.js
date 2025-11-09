@@ -37,7 +37,6 @@ const orderSchema = new mongoose.Schema(
         quantity: { type: Number, default: 1 },
       },
     ],
-
     grandTotal: Number,
     transactionID: {
       type: String,
@@ -51,6 +50,10 @@ const orderSchema = new mongoose.Schema(
       type: String,
       enum: ["pending", "shipping", "delivered"],
       default: "pending",
+    },
+    orderIsCancelled: {
+      type: Boolean,
+      default: false,
     },
   },
   {
