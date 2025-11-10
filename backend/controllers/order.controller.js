@@ -1,4 +1,5 @@
 const sslcz = require("../helpers/paymentGateway");
+const path = require("path");
 const {
   findCartItemsByUser,
   removeCartItemById,
@@ -145,7 +146,6 @@ const placeOrder = async (req, res) => {
     size: cartItem.size || "",
     quantity: cartItem.quantity,
   }));
-  // console.log(orderItems);
 
   const { data, error } = orderValidatorSchema.safeParse({
     ...req.body,
@@ -161,15 +161,18 @@ const placeOrder = async (req, res) => {
       .json({ success: false, message: JSON.parse(error.message)[0].message });
   }
 
-  // return res.status(200).send({ success: true, message: "Order Placed" });
-
   try {
     let newOrder = await storeOrder(data);
 
-    cartData.map((cartItem) => {
-      removeCartItemById(cartItem._id);
+    cartData.map(async (cartItem) => {
+      await removeCartItemById(cartItem._id);
     });
     if (data.paymentMethod === "COD") {
+      return res
+        .status(302)
+        .redirect(
+          `${req.protocol}://${req.host}${process.env.BASE_URL}/order/success/${newOrder._id}`
+        );
     } else if (data.paymentMethod === "online") {
       const object = {
         total_amount: grandTotal,
@@ -211,7 +214,7 @@ const placeOrder = async (req, res) => {
       });
     }
   } catch (error) {
-    res.status(500).send({
+    return res.status(500).send({
       success: false,
       message: "Internal Server Error",
       error,
@@ -262,8 +265,8 @@ const paymentSuccess = async (req, res) => {
   let targetOrder = await findOrderById(orderId);
 
   await sendPurchaseConfirmationEmail(targetOrder);
-
-  res.send("Payment Successful");
+  let renderFile = path.join(__dirname, "../views/order-confirmation.html");
+  res.status(200).sendFile(renderFile);
 };
 
 /**
@@ -273,7 +276,7 @@ const paymentFail = async (req, res) => {
   const { orderId } = req.params;
 
   await updateOrderStatusByOrderId(orderId);
-  res.send("Payment Failed");
+  res.send("<h1>Payment Failed</h1>");
 };
 
 /**
@@ -283,7 +286,7 @@ const paymentCancel = async (req, res) => {
   const { orderId } = req.params;
 
   await updateOrderStatusByOrderId(orderId);
-  res.send("Payment Cancelled");
+  res.send("<h1>Payment Cancelled</h1>");
 };
 
 module.exports = {
