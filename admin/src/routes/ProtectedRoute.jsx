@@ -1,14 +1,11 @@
-import { Navigate, useLocation, useNavigate } from "react-router";
-import useAuth from "../hooks/useAuth";
+import { useNavigate } from "react-router";
 import { useEffect } from "react";
+import useAuth from "../hooks/useAuth";
 import Loader from "../components/common/Loader";
 
 const ProtectedRoute = ({ children }) => {
-  const { user, loading, msg } = useAuth();
-  console.log(user);
-
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
-  const { pathname } = useLocation();
 
   useEffect(() => {
     if (user?.role !== "admin") {

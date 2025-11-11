@@ -21,4 +21,11 @@ const orderValidatorSchema = z.object({
   }),
 });
 
-module.exports = orderValidatorSchema;
+const orderStatus = z.enum(
+  ["pending", "processing", "shipped", "delivered", "cancelled"],
+  {
+    message: "Invalid order status",
+  }
+);
+
+module.exports = { orderValidatorSchema, orderStatus };

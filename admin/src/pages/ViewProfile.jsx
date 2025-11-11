@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router";
 import Flex from "../components/common/Flex";
-import axios from "axios";
 import Image from "../components/common/Image";
 import Loader from "../components/common/Loader";
+import { Link, useParams } from "react-router";
+import { fetchCustomerInfoRequest } from "../api/auth";
+import { fetchSingleUserOrdersRequest } from "../api/order";
 
 const ViewProfile = () => {
   const { id } = useParams();
@@ -15,10 +16,9 @@ const ViewProfile = () => {
   const fetchUser = async () => {
     setIsLoading(true);
     try {
-      let res = await axios.get(`${import.meta.env.VITE_API}/auth/user/${id}`);
-      console.log(res.data.user);
+      const userData = await fetchCustomerInfoRequest(id);
       setIsLoading(false);
-      setUser(res.data.user);
+      setUser(userData.data);
     } catch (error) {
       setIsLoading(false);
       console.log(error);
@@ -29,12 +29,9 @@ const ViewProfile = () => {
   const fetchOrders = async () => {
     setIsLoading(true);
     try {
-      let res = await axios.get(
-        `${import.meta.env.VITE_API}/order/single/${user.email}`,
-      );
-      console.log(res.data.data);
+      let res = await fetchSingleUserOrdersRequest(id);
       setIsLoading(false);
-      setOrders(res.data.data);
+      setOrders(res.data);
     } catch (error) {
       setIsLoading(false);
       console.log(error);
@@ -44,7 +41,15 @@ const ViewProfile = () => {
   useEffect(() => {
     fetchUser();
     fetchOrders();
-  }, [user.email]);
+  }, [id]);
+
+  if (isLoading) {
+    return (
+      <div className="fixed left-0 top-0 z-50 flex h-screen w-full items-center justify-center bg-white/70 dark:bg-slate-900/70">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <main className="w-full overflow-y-scroll border-l-[1px] border-black bg-white p-2 dark:border-white dark:bg-slate-900">
@@ -93,7 +98,9 @@ const ViewProfile = () => {
 
               <div className="flex flex-col items-center justify-center">
                 <p className="text-[0.9rem] font-bold text-[#424242] dark:text-white">
-                  {user.isVarify ? "Verified Account" : "Not Verified Account"}
+                  {user.isVerified
+                    ? "Verified Account"
+                    : "Not Verified Account"}
                 </p>
               </div>
 
@@ -127,11 +134,11 @@ const ViewProfile = () => {
               </Flex>
 
               <Flex className="mt-4 items-center justify-between">
-                <span className="text-base font-medium text-black dark:text-white">
+                <span className="text-base font-medium capitalize text-black dark:text-white">
                   Payment Method: {order.paymentMethod}
                 </span>
-                <span className="text-base font-medium text-black dark:text-white">
-                  Payment Status: {order.paymentStatus}
+                <span className="text-base font-medium capitalize text-black dark:text-white">
+                  Delivery Status: {order.deliveryStatus}
                 </span>
               </Flex>
 

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { MdErrorOutline } from "react-icons/md";
 import useAuth from "../hooks/useAuth";
+import { Link } from "react-router";
 
 const Login = () => {
   const { loading, login, msg } = useAuth();
@@ -39,7 +40,7 @@ const Login = () => {
           <div className="mb-2 w-full">
             <label
               htmlFor="email"
-              className="text-text text-[15px] font-[400] text-black dark:text-white"
+              className="text-[15px] font-[400] text-black dark:text-white"
             >
               Email <span className="text-red-500">*</span>
             </label>
@@ -57,7 +58,7 @@ const Login = () => {
           <div className="mb-2 w-full">
             <label
               htmlFor="password"
-              className="text-text text-[15px] font-[400] text-black dark:text-white"
+              className="text-[15px] font-[400] text-black dark:text-white"
             >
               Password <span className="text-red-500">*</span>
             </label>
@@ -85,9 +86,18 @@ const Login = () => {
             </div>
           </div>
 
-          <button className="bg-primary hover:bg-secondary w-full rounded border border-[#3B9DF8] bg-[#3B9DF8] px-6 py-2 text-[#fff] transition duration-300">
+          <button className="hover:bg-secondary bg-primary border-primary w-full rounded border px-6 py-2 text-[#fff] transition duration-300">
             Sign in
           </button>
+
+          <div className="mt-2">
+            <Link
+              to="/forgot"
+              className="block text-right text-sm font-medium text-black hover:underline dark:text-white"
+            >
+              Forgot Password?
+            </Link>
+          </div>
         </form>
       </div>
       <p className="fixed bottom-2 right-2 font-semibold italic text-black dark:text-white">

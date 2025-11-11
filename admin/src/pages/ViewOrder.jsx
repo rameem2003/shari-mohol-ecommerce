@@ -1,24 +1,27 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import Loader from "../components/common/Loader";
 import Flex from "../components/common/Flex";
-import Swal from "sweetalert2";
+import { useParams } from "react-router";
+import { fetchOrderByIdRequest, updateOrderStatusRequest } from "../api/order";
+import { toast } from "react-toastify";
 
 const ViewOrder = () => {
   const { id } = useParams();
   const [orderData, setOrderData] = useState(null);
   const [deliveryLoading, setDeliveryLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // fetch order data from the backend
   const fetchOrderInfo = async () => {
+    setIsLoading(true);
     try {
-      let res = await axios.get(
-        `${import.meta.env.VITE_API}/order/singlebyid/${id}`,
-      );
+      let res = await fetchOrderByIdRequest(id);
 
-      console.log(res);
-      setOrderData(res.data.data);
+      setOrderData(res.data);
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
     }
   };
@@ -27,47 +30,35 @@ const ViewOrder = () => {
   const handleDelivery = async (text) => {
     setDeliveryLoading(true);
     try {
-      let res = await axios.patch(
-        `${import.meta.env.VITE_API}/order/response/${id}?statusText=${text}`,
-      );
+      let res = await updateOrderStatusRequest(id, text);
+      console.log(res);
 
+      if (!res.success) {
+        setDeliveryLoading(false);
+        toast.error(res.response.data.message);
+        return;
+      }
+      toast.success(res.message);
       setDeliveryLoading(false);
-      Swal.fire({
-        title: res.data.msg,
-        confirmButtonText: "Ok",
-        confirmButtonColor: "green",
-        icon: "success",
-      })
-        .then((result) => {
-          if (result.isConfirmed) {
-            location.reload();
-          }
-        })
-        .finally(() => {
-          location.reload();
-        });
+      fetchOrderInfo();
     } catch (error) {
       setDeliveryLoading(false);
+      toast.error(error.response.data.message);
       console.log(error);
-
-      Swal.fire({
-        title: error.response.data.msg,
-        showConfirmButton: false,
-        showCancelButton: true,
-        cancelButtonText: "Ok",
-        cancelButtonColor: "red",
-        icon: "error",
-      }).then((result) => {
-        if (result.isDismissed) {
-          location.reload();
-        }
-      });
     }
   };
 
   useEffect(() => {
     fetchOrderInfo();
-  }, []);
+  }, [id]);
+
+  if (isLoading) {
+    return (
+      <div className="fixed left-0 top-0 z-50 flex h-screen w-full items-center justify-center bg-white/70 dark:bg-slate-900/70">
+        <Loader />
+      </div>
+    );
+  }
   return (
     <main className="w-full overflow-y-scroll border-l-[1px] border-black bg-white p-2 dark:border-white dark:bg-slate-900">
       <h2 className="text-2xl font-semibold text-black dark:text-white">
@@ -93,11 +84,11 @@ const ViewOrder = () => {
 
         <Flex className="mt-2 items-start justify-between">
           <div>
-            <h2 className="text-4xl font-bold text-black dark:text-white">
-              {orderData?.name}
+            <h2 className="mb-2 text-4xl font-bold text-black dark:text-white">
+              {orderData?.userId?.name}
             </h2>
             <p className="text-lg font-medium text-black dark:text-white">
-              Phone: {orderData?.phone}
+              Phone: {orderData?.userId?.phone}
             </p>
             <p className="text-lg font-medium text-black dark:text-white">
               Address: {orderData?.address}

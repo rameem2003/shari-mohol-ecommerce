@@ -12,6 +12,7 @@ const {
   verifyResetPasswordToken,
   resetPassword,
   updateUserRole,
+  fetchCustomer,
 } = require("../../controllers/auth.controller");
 const checkAdminMiddleware = require("../../middlewares/checkAdminMiddleware");
 const checkUserMiddleware = require("../../middlewares/checkUserMiddleware");
@@ -26,6 +27,12 @@ const router = require("express").Router();
  * http://localhost:5000/api/v1/auth/users
  */
 router.get("/auth/users", checkAdminMiddleware, allusers);
+
+/**
+ * Fetch Customer Information by ID
+ * http://localhost:5000/api/v1/auth/user/:id
+ */
+router.get("/auth/user/:id", checkAdminMiddleware, fetchCustomer);
 
 /**
  * Login Route

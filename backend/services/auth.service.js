@@ -275,13 +275,9 @@ const createResetPasswordTokenLink = async (userID) => {
     newToken.save();
 
     let tokenLink =
-      // process.env.SYSTEM_ENV == "development"
-      //   ? `http://localhost:5000/api/v1/auth/reset-password/${token}`
-      //   : `https://code-duniya.onrender.com/api/v1/auth/reset-password/${token}`;
-
       process.env.SYSTEM_ENV == "development"
-        ? `http://localhost:5000/api/v1/auth/reset-password?token=${token}`
-        : `https://code-duniya.onrender.com/api/v1/auth/reset-password?token=${token}`;
+        ? `http://localhost:5173/reset-password?token=${token}`
+        : `https://nubian-admin-v2.netlify.app/reset-password?token=${token}`;
 
     return tokenLink;
   } catch (error) {

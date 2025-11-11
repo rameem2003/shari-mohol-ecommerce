@@ -8,12 +8,15 @@ import { BsThreeDots } from "react-icons/bs";
 import { RiAccountCircleLine } from "react-icons/ri";
 import { TbCategoryFilled } from "react-icons/tb";
 import { MdCategory } from "react-icons/md";
-import { FaHome, FaShoppingCart, FaUsers } from "react-icons/fa";
+import { PiBarcodeBold } from "react-icons/pi";
+import { TbInfoTriangleFilled } from "react-icons/tb";
+import { FaCheckCircle, FaHome, FaShoppingCart, FaUsers } from "react-icons/fa";
 import { Link } from "react-router";
 import useAuth from "../../hooks/useAuth";
+import Loader from "../common/Loader";
 
 const ResponsiveSidebar = () => {
-  const { user: admin, loading, msg, logout } = useAuth();
+  const { user: admin, logout, resendVerificationEmail, loading } = useAuth();
   const [isCollapse1, setIsCollapse1] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownOpen1, setIsDropdownOpen1] = useState(false);
@@ -24,6 +27,11 @@ const ResponsiveSidebar = () => {
         isCollapse1 ? "w-6/12 md:w-3/12 2xl:w-3/12" : "w-auto"
       }`}
     >
+      {loading && (
+        <div className="fixed left-0 top-0 z-50 flex h-screen w-full items-center justify-center bg-white/70 dark:bg-slate-900/70">
+          <Loader />
+        </div>
+      )}
       <div>
         <div
           className={`mt-5 ${
@@ -402,7 +410,12 @@ const ResponsiveSidebar = () => {
                 isCollapse1 ? "inline" : "hidden"
               } text-[0.9rem] font-[500] text-gray-800 dark:text-white`}
             >
-              {admin?.name}
+              {admin?.name}{" "}
+              {admin?.isVerified ? (
+                <FaCheckCircle className="inline text-lg text-green-500" />
+              ) : (
+                <TbInfoTriangleFilled className="inline text-lg text-yellow-500" />
+              )}
             </h3>
             {/* <h5 className="text-xs font-normal text-gray-800 dark:text-white">
               {admin?.email}
@@ -413,7 +426,7 @@ const ResponsiveSidebar = () => {
         <div className={`${isCollapse1 ? "inline" : "hidden"} group relative`}>
           <BsThreeDots className="cursor-pointer text-[1.2rem] text-gray-500 dark:text-white" />
 
-          <ul className="boxShadow absolute left-[30px] top-[-52px] z-[-1] flex translate-x-[20px] flex-col gap-[3px] rounded-md bg-white p-[8px] opacity-0 transition-all duration-300 group-hover:z-30 group-hover:translate-x-0 group-hover:opacity-100 dark:bg-slate-900">
+          <ul className="boxShadow absolute left-[30px] top-[-95px] z-[-1] flex min-w-[200px] translate-x-[20px] flex-col gap-[3px] rounded-md bg-white p-[8px] opacity-0 transition-all duration-300 group-hover:z-30 group-hover:translate-x-0 group-hover:opacity-100 dark:bg-slate-900">
             <Link
               to="/my-account"
               className="flex cursor-pointer items-center gap-[7px] rounded-md px-[8px] py-[4px] text-[0.9rem] text-gray-600 dark:text-white"
@@ -421,6 +434,15 @@ const ResponsiveSidebar = () => {
               <RiAccountCircleLine />
               Profile
             </Link>
+            {!admin?.isVerified && (
+              <button
+                onClick={() => resendVerificationEmail(admin?.email)}
+                className="flex cursor-pointer items-center gap-[7px] rounded-md bg-red-500 px-[8px] py-[4px] text-[0.9rem] text-gray-600 dark:text-white"
+              >
+                <PiBarcodeBold />
+                Verify Your Account
+              </button>
+            )}
             <button
               onClick={logout}
               className="flex cursor-pointer items-center gap-[7px] rounded-md px-[8px] py-[4px] text-[0.9rem] text-red-500 dark:text-red-300"

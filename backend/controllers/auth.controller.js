@@ -43,6 +43,45 @@ const allusers = async (req, res) => {
 };
 
 /**
+ * Fetch Customer by ID
+ */
+const fetchCustomer = async (req, res) => {
+  if (!req.user) {
+    return res.status(401).send({ success: false, message: "Unauthorized" });
+  }
+  const { id } = req.params;
+  try {
+    let user = await findUserById(id);
+
+    if (!user) {
+      return res
+        .status(400)
+        .send({ success: false, message: "User not found" });
+    }
+    // console.log(user);
+
+    return res.status(200).send({
+      success: true,
+      message: "User profile",
+      data: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        isVerified: user.isVerified,
+        phone: user.phone,
+        address: user.address,
+        photo: user.photo,
+      },
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .send({ success: false, message: "Internal server error" });
+  }
+};
+
+/**
  * user login complete
  */
 const loginUser = async (req, res) => {
@@ -483,6 +522,7 @@ const updateUserRole = async (req, res) => {
 
 module.exports = {
   allusers,
+  fetchCustomer,
   loginUser,
   registerUser,
   singleUser,

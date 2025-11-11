@@ -12,8 +12,8 @@ const UsersManage = () => {
   const { user: admin, users, loading, updateUserRole } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [openActionMenuId, setOpenActionMenuId] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
 
+  // filter users based on search term
   const filteredUsers = users?.filter(
     (user) =>
       user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -48,8 +48,6 @@ const UsersManage = () => {
     return () => document.removeEventListener("click", handleCLick);
   }, []);
 
-  console.log(users);
-
   return (
     <main className="w-full overflow-y-scroll border-l-[1px] border-black bg-white p-2 dark:border-white dark:bg-slate-900">
       {loading && (
@@ -62,7 +60,7 @@ const UsersManage = () => {
           Manage User's
         </h2>
 
-        {isLoading && (
+        {loading && (
           <Flex className="fixed left-0 top-0 z-[99999999] h-screen w-full items-center justify-center bg-white dark:bg-slate-900">
             <Loader />
           </Flex>

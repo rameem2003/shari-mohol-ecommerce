@@ -14,6 +14,20 @@ export const fetchAllUsersRequest = async () => {
   }
 };
 
+export const fetchCustomerInfoRequest = async (id) => {
+  try {
+    let res = await axiosInstance.get(`/auth/user/${id}`, {
+      withCredentials: true,
+      headers: { "Content-Type": "application/json" },
+    });
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return error;
+    throw new Error("Failed to fetch user: " + error.message);
+  }
+};
+
 export const loginRequest = async (email, password) => {
   try {
     let res = await axiosInstance.post(
@@ -140,7 +154,7 @@ export const changeAdminRoleRequest = async (data) => {
 export const forgotPasswordRequest = async (email) => {
   try {
     let res = await axiosInstance.post(
-      `/auth/forget-password`,
+      `/auth/reset-password`,
       { email },
       {
         withCredentials: true,
@@ -157,7 +171,7 @@ export const forgotPasswordRequest = async (email) => {
 
 export const verifyResetPasswordTokenRequest = async (token) => {
   try {
-    let res = await axiosInstance.get(`/auth/verify-forget-password/${token}`, {
+    let res = await axiosInstance.get(`/auth/reset-password-verify/${token}`, {
       withCredentials: true,
       headers: { "Content-Type": "application/json" },
     });

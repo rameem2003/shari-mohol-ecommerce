@@ -13,7 +13,10 @@ const {
   updateOrderStatusByOrderId,
 } = require("../services/order.service");
 const sendPurchaseConfirmationEmail = require("../utils/sendPurchaseConfirmationEmail");
-const orderValidatorSchema = require("../validator/order.validator");
+const {
+  orderValidatorSchema,
+  orderStatus,
+} = require("../validator/order.validator");
 
 /**
  * Get all orders
@@ -229,17 +232,25 @@ const responseDeliveryStatus = async (req, res) => {
   let { id } = req.params;
   let { statusText } = req.query;
 
+  const { data, error } = orderStatus.safeParse(statusText);
+
+  if (error) {
+    return res
+      .status(400)
+      .json({ success: false, message: JSON.parse(error.message)[0].message });
+  }
+
   try {
-    if (statusText == "delivered") {
-      let order = await updateDeliveryStatusByOrderId(id, statusText);
+    if (data == "delivered") {
+      let order = await updateDeliveryStatusByOrderId(id, data);
 
       return res.status(200).send({
         success: true,
         message: "Order Delivery Successful",
         data: order,
       });
-    } else if (statusText == "cancelled") {
-      let order = await updateDeliveryStatusByOrderId(id, statusText);
+    } else if (data == "cancelled") {
+      let order = await updateDeliveryStatusByOrderId(id, data);
 
       return res.status(200).send({
         success: true,

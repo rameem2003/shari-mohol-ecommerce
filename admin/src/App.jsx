@@ -14,6 +14,8 @@ import UsersManage from "./pages/UsersManage";
 import ViewProfile from "./pages/ViewProfile";
 import ViewOrder from "./pages/ViewOrder";
 import ProfilePage from "./pages/ProfilePage";
+import ForgetPassword from "./pages/ForgetPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 const App = () => {
   return (
@@ -110,6 +112,8 @@ const App = () => {
           />
         </Route>
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot" element={<ForgetPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
     </BrowserRouter>
   );

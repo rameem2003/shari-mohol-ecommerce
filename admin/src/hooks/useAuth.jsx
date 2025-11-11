@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import {
-  changeAdminRoleRequest,
   fetchAllUsersRequest,
   forgotPasswordRequest,
   loginRequest,
@@ -15,7 +14,6 @@ import {
   verifyResetPasswordTokenRequest,
 } from "../api/auth";
 import { useLocation, useNavigate } from "react-router";
-// import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import { adminLoginReducer } from "../redux/features/AdminSlice";
 import { toast } from "react-toastify";
@@ -23,7 +21,6 @@ import { toast } from "react-toastify";
 const useAuth = () => {
   const loggedInUser = useSelector((state) => state.admin.admin);
   const [msg, setMsg] = useState("");
-  // const [user, setUser] = useState(null);
   const [users, setUsers] = useState();
   const [loading, setLoading] = useState(false);
   const { pathname } = useLocation();
@@ -37,13 +34,12 @@ const useAuth = () => {
     try {
       setLoading(true);
       let res = await fetchAllUsersRequest();
-      console.log(res);
 
       if (res.success) {
         setUsers(res.data);
         setLoading(false);
       } else {
-        // setMsg(res.response.data.message);
+        setMsg(res.response.data.message);
         setLoading(false);
       }
     } catch (error) {
@@ -52,12 +48,12 @@ const useAuth = () => {
     }
   };
 
-  // change admin role
-  const changeAdminRole = async (data) => {
+  // user role update
+  const updateUserRole = async (id, role) => {
     setMsg(null);
     try {
       setLoading(true);
-      let res = await changeAdminRoleRequest(data);
+      let res = await updateUserRoleRequest(id, role);
       if (!res.success) {
         setMsg(res.response.data);
         setLoading(false);
@@ -67,11 +63,11 @@ const useAuth = () => {
       toast.success(res.message);
       setMsg(res.message);
       setLoading(false);
-      await getAdmins();
+      await getUsers();
     } catch (error) {
       console.log(error);
-      setMsg(error.response.data.message);
-      setLoading(false);
+      return error;
+      throw new Error("Failed to update user role: " + error.message);
     }
   };
 
@@ -274,7 +270,6 @@ const useAuth = () => {
     try {
       setLoading(true);
       let res = await userRequest();
-      console.log(res);
 
       if (res.success) {
         // setUser(res.data);
@@ -287,6 +282,8 @@ const useAuth = () => {
           pathname == "/otp" ||
           pathname == "/reset-password"
         ) {
+          console.log(pathname);
+
           // setLoading(true);
           navigate("/");
           setLoading(false);
@@ -294,28 +291,17 @@ const useAuth = () => {
       } else {
         dispatch(adminLoginReducer(null));
         setLoading(false);
-        // if (pathname == "/" || pathname?.startsWith("/")) {
-        //   navigate("/login");
-        //   // Optional: force reload to ensure fresh state
-        //   window.location.replace("/login");
-        //   window.history.pushState(null, null, window.location.href);
-        //   window.onpopstate = function () {
-        //     window.history.go(1);
-        //   };
-
-        //   return;
-        // }
       }
     } catch (error) {
       dispatch(adminLoginReducer(null));
       console.log(error);
-      // if (pathname == "/" || pathname?.startsWith("/")) {
-      //   navigate("/login", { replace: true });
-      //   window.history.pushState(null, null, window.location.href);
-      //   window.onpopstate = function () {
-      //     window.history.go(1);
-      //   };
-      // }
+      if (pathname == "/" || pathname?.startsWith("/")) {
+        navigate("/login", { replace: true });
+        window.history.pushState(null, null, window.location.href);
+        window.onpopstate = function () {
+          window.history.go(1);
+        };
+      }
 
       setLoading(false);
     }
@@ -343,42 +329,13 @@ const useAuth = () => {
     }
   };
 
-  // user role update
-  const updateUserRole = async (id, role) => {
-    setMsg(null);
-    try {
-      setLoading(true);
-      let res = await updateUserRoleRequest(id, role);
-      if (!res.success) {
-        setMsg(res.response.data);
-        setLoading(false);
-        toast.error(res.response.data.message);
-        return;
-      }
-      toast.success(res.message);
-      setMsg(res.message);
-      setLoading(false);
-      await getUsers();
-    } catch (error) {
-      console.log(error);
-      return error;
-      throw new Error("Failed to update user role: " + error.message);
-    }
-  };
-  useEffect(() => {
-    console.log("Hit");
-    if (
-      pathname == "/forgot" ||
-      pathname == "/reset-password" ||
-      pathname.startsWith("/reset-password")
-    )
-      return;
-    getUser();
-  }, []);
-
   useEffect(() => {
     getUsers();
-  }, []);
+  }, [loggedInUser]);
+
+  useEffect(() => {
+    getUser();
+  }, [pathname]);
 
   return {
     login,
@@ -388,12 +345,11 @@ const useAuth = () => {
     getUsers,
     updateUser,
     updatePassword,
-    changeAdminRole,
+    updateUserRole,
     forgotPassword,
     verifyResetPasswordToken,
     passwordReset,
     logout,
-    updateUserRole,
     users,
     msg,
     user: loggedInUser,
