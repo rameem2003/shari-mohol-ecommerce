@@ -93,7 +93,7 @@ export const userUpdateRequest = async (data) => {
   try {
     let res = await axiosInstance.patch(`/auth/update`, data, {
       withCredentials: true,
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "multipart/form-data" },
     });
     console.log(res);
     return res.data;
@@ -199,5 +199,23 @@ export const userRequest = async () => {
     console.log(error);
     return error;
     throw new Error("Failed to get user: " + error.message);
+  }
+};
+
+export const updateUserRoleRequest = async (id, role) => {
+  try {
+    let res = await axiosInstance.patch(
+      `/auth/update-user-role/${id}`,
+      { role },
+      {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return error;
+    throw new Error("Failed to update user role: " + error.message);
   }
 };

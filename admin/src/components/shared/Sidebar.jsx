@@ -1,51 +1,23 @@
 import React, { useState } from "react";
-
-// react icons
-import { GoHome, GoProjectSymlink, GoSidebarCollapse } from "react-icons/go";
-import { IoIosArrowDown, IoIosSearch } from "react-icons/io";
-import { CiCalendar, CiLogout } from "react-icons/ci";
+import { GoSidebarCollapse } from "react-icons/go";
+import { IoIosArrowDown } from "react-icons/io";
+import { CiLogout } from "react-icons/ci";
 import { FiBarChart, FiPieChart } from "react-icons/fi";
-import { IoNotificationsOutline, IoSettingsOutline } from "react-icons/io5";
+import { IoNotificationsOutline } from "react-icons/io5";
 import { BsThreeDots } from "react-icons/bs";
 import { RiAccountCircleLine } from "react-icons/ri";
 import { TbCategoryFilled } from "react-icons/tb";
 import { MdCategory } from "react-icons/md";
 import { FaHome, FaShoppingCart, FaUsers } from "react-icons/fa";
 import { Link } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
-import Cookies from "js-cookie";
-import axios from "axios";
-import { adminLoginReducer } from "../../redux/features/AdminSlice";
 import useAuth from "../../hooks/useAuth";
 
 const ResponsiveSidebar = () => {
-  const { loading, msg, logout } = useAuth();
-  const dispatch = useDispatch(); // dispatch instance
-  const admin = useSelector((state) => state.admin.admin);
+  const { user: admin, loading, msg, logout } = useAuth();
   const [isCollapse1, setIsCollapse1] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownOpen1, setIsDropdownOpen1] = useState(false);
 
-  // handle logout
-  const handleLogout = async (id) => {
-    try {
-      let res = await axios.post(
-        `${import.meta.env.VITE_API}/auth/logout/${id}`,
-        {},
-        {
-          withCredentials: true,
-        },
-      );
-
-      Cookies.remove("accessToken");
-      Cookies.remove("sessionToken");
-      dispatch(adminLoginReducer(""));
-      console.log(res);
-      location.reload();
-    } catch (error) {
-      console.log(error);
-    }
-  };
   return (
     <aside
       className={`boxShadow ease flex h-full flex-col justify-between bg-white transition-all duration-300 dark:bg-slate-900 ${
@@ -424,13 +396,18 @@ const ResponsiveSidebar = () => {
             alt="avatar"
             className="h-[30px] w-[30px] cursor-pointer rounded-full object-cover"
           />
-          <h3
-            className={`${
-              isCollapse1 ? "inline" : "hidden"
-            } text-[0.9rem] font-[500] text-gray-800 dark:text-white`}
-          >
-            {admin?.name}
-          </h3>
+          <div>
+            <h3
+              className={`${
+                isCollapse1 ? "inline" : "hidden"
+              } text-[0.9rem] font-[500] text-gray-800 dark:text-white`}
+            >
+              {admin?.name}
+            </h3>
+            {/* <h5 className="text-xs font-normal text-gray-800 dark:text-white">
+              {admin?.email}
+            </h5> */}
+          </div>
         </div>
 
         <div className={`${isCollapse1 ? "inline" : "hidden"} group relative`}>

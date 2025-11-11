@@ -11,6 +11,15 @@ const resetPasswordTokenModel = require("../model/resetPasswordToken.model");
 const sessionModel = require("../model/session.model");
 const deleteFile = require("../utils/fileDelete");
 
+const getAllUsers = async () => {
+  try {
+    let users = await authModel.find({});
+    return users;
+  } catch (error) {
+    throw new Error("Error getting all users: " + error.message);
+  }
+};
+
 const findUserById = async (id) => {
   try {
     let user = await authModel.findOne({ _id: id });
@@ -324,6 +333,7 @@ const verifyPassword = async (password, hashedPassword) => {
 };
 
 module.exports = {
+  getAllUsers,
   findUserById,
   findUserByEmail,
   findSessionById,

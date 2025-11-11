@@ -1,4 +1,3 @@
-const authModel = require("../model/auth.model");
 const sendEmail = require("../utils/email");
 const {
   loginValidator,
@@ -27,6 +26,7 @@ const {
   createResetPasswordTokenLink,
   findResetPasswordToken,
   clearResetPasswordToken,
+  getAllUsers,
 } = require("../services/auth.service");
 
 /**
@@ -34,11 +34,11 @@ const {
  */
 
 const allusers = async (req, res) => {
-  let User = await authModel.find();
+  let User = await getAllUsers();
   res.status(200).send({
     success: true,
     message: "All Users",
-    users: User,
+    data: User,
   });
 };
 
@@ -447,6 +447,40 @@ const verifyEmailToken = async (req, res) => {
   }
 };
 
+/**
+ * User Role Update
+ */
+const updateUserRole = async (req, res) => {
+  if (!req.user) {
+    return res.status(400).send({ success: false, message: "User not found" });
+  }
+
+  let { id } = req.params;
+  let { role } = req.body;
+
+  try {
+    let user = await findUserById(id);
+
+    if (!user) {
+      return res
+        .status(400)
+        .send({ success: false, message: "User not found" });
+    }
+
+    let userUpdate = await findUserAndUpdateProfile(id, { role });
+
+    return res.status(200).send({
+      success: true,
+      message: "User role updated successfully",
+      data: userUpdate,
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .send({ success: false, message: "Internal server error" });
+  }
+};
+
 module.exports = {
   allusers,
   loginUser,
@@ -460,4 +494,5 @@ module.exports = {
   resetPassword,
   sendEmailVerificationToken,
   verifyEmailToken,
+  updateUserRole,
 };

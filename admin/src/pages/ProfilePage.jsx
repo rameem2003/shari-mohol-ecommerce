@@ -1,26 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import Flex from "../components/common/Flex";
-import Image from "../components/common/Image";
-import profile from "../assets/profile.png";
 import { CiEdit } from "react-icons/ci";
 import { IoCloudUploadOutline } from "react-icons/io5";
-import Cookies from "js-cookie";
-import Swal from "sweetalert2";
-import axios from "axios";
 import Loader from "../components/common/Loader";
-import { adminLoginReducer } from "../redux/features/AdminSlice";
+import useAuth from "../hooks/useAuth";
 
 const ProfilePage = () => {
-  const dispatch = useDispatch(); // dispatch instance
-  const accessToken = Cookies.get("accessToken"); // access token
-  const sessionToken = Cookies.get("sessionToken"); // access token
-  const admin = useSelector((state) => state.admin.admin);
+  const { user: admin, updateUser, updatePassword, loading, msg } = useAuth();
   const [isDragging, setIsDragging] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [displayImage, setDisplayImage] = useState(null);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   // data state for admin
   const [data, setData] = useState({
@@ -37,160 +26,27 @@ const ProfilePage = () => {
     newPassword: "",
     conFirmPassword: "",
   });
-
-  // fetch update data
-  const fetchUpdateUser = async () => {
-    let res = await axios.get(
-      `${import.meta.env.VITE_API}/auth/user/${admin.id}`,
-    );
-    let newData = {
-      id: res.data.user._id,
-      name: res.data.user.name,
-      email: res.data.user.email,
-      role: res.data.user.role,
-      phone: res.data.user.phone,
-      address: res.data.user.address,
-      photo: res.data.user.photo,
-    };
-    dispatch(adminLoginReducer(newData));
-    console.log(res.data);
-  };
-
   // handle profile update
   const handleProfileUpdate = async () => {
-    setIsLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append("name", data.name);
-      // formData.append("email", data.email);
-      formData.append("phone", data.phone);
-      formData.append("address", data.address);
-      if (data.photo) {
-        formData.append("photo", data.photo);
-      }
+    const formData = new FormData();
+    formData.append("name", data.name);
+    // formData.append("email", data.email);
+    formData.append("phone", data.phone);
+    formData.append("address", data.address);
+    // if (data.photo) {
+    //   formData.append("photo", data.photo);
+    // }
 
-      let res = await axios.patch(
-        `${import.meta.env.VITE_API}/auth/update/${admin.id}`,
-        formData,
-        {
-          withCredentials: true,
-        },
-        {
-          headers: {
-            "Content-Type": "multipart/formdata",
-            Cookie: `accessToken=${accessToken};sessionToken=${sessionToken}`,
-          },
-        },
-      );
-
-      await fetchUpdateUser();
-
-      setIsLoading(false);
-      Swal.fire({
-        title: res.data.msg,
-        showConfirmButton: true,
-        confirmButtonText: "Ok",
-        confirmButtonColor: "green",
-        icon: "success",
-      });
-    } catch (error) {
-      setIsLoading(false);
-      console.log(error);
-
-      Swal.fire({
-        title: error.response.data.msg,
-        showConfirmButton: false,
-        showCancelButton: true,
-        cancelButtonText: "Ok",
-        cancelButtonColor: "red",
-        icon: "error",
-      })
-        .then((result) => {
-          if (result.isDismissed) {
-            location.reload();
-          }
-        })
-        .finally(() => {
-          location.reload();
-          setIsLoading(false);
-        });
-    }
+    await updateUser(formData);
   };
 
   // handle password change
   const handlePasswordChange = async () => {
-    setIsLoading(true);
-    try {
-      let res = await axios.patch(
-        `${import.meta.env.VITE_API}/auth/changepassword/${admin.id}`,
-        passwordData,
-        {
-          withCredentials: true,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Cookie: `accessToken=${accessToken};sessionToken=${sessionToken}`,
-          },
-        },
-      );
-
-      setIsLoading(false);
-
-      Swal.fire({
-        title: res.data.msg,
-        showConfirmButton: true,
-        confirmButtonText: "Ok",
-        confirmButtonColor: "green",
-        icon: "success",
-      })
-        .then((result) => {
-          if (result.isConfirmed) {
-            handleLogout(admin.id);
-          }
-        })
-        .finally(() => {
-          handleLogout(admin.id);
-        });
-    } catch (error) {
-      setIsLoading(false);
-      console.log(error);
-
-      Swal.fire({
-        title: error.response.data.msg,
-        showConfirmButton: false,
-        showCancelButton: true,
-        cancelButtonText: "Ok",
-        cancelButtonColor: "red",
-        icon: "error",
-      })
-        .then((result) => {
-          if (result.isDismissed) {
-            location.reload();
-          }
-        })
-        .finally(() => {
-          location.reload();
-          setIsLoading(false);
-        });
-    }
-  };
-
-  // handle logout
-  const handleLogout = async (id) => {
-    try {
-      let res = await axios.post(
-        `${import.meta.env.VITE_API}/auth/logout/${id}`,
-      );
-
-      Cookies.remove("accessToken");
-      Cookies.remove("sessionToken");
-      dispatch(adminLoginReducer(""));
-      console.log(res);
-      location.reload();
-    } catch (error) {
-      console.log(error);
-    }
+    await updatePassword(
+      passwordData.oldPassword,
+      passwordData.newPassword,
+      passwordData.conFirmPassword,
+    );
   };
 
   // Handle file selection when dropped or clicked
@@ -237,8 +93,6 @@ const ProfilePage = () => {
     setIsDragging(false);
   };
 
-  console.log(data);
-
   useEffect(() => {
     if (admin) {
       setData({
@@ -259,14 +113,14 @@ const ProfilePage = () => {
         Profile Page
       </h2>
 
-      {isLoading && (
+      {loading && (
         <Flex className="fixed left-0 top-0 z-[99999999] h-screen w-full items-center justify-center bg-white dark:bg-slate-900">
           <Loader />
         </Flex>
       )}
       <section className="mt-10">
-        <Flex className="items-start gap-5">
-          <div className="w-full md:w-3/12">
+        <Flex className="flex-col-reverse items-start gap-5 lg:flex-row">
+          <div className="w-full lg:w-1/2 xl:w-3/12">
             <div className="mb-5 flex w-full flex-col items-center justify-center">
               <div
                 className={`${
@@ -338,8 +192,8 @@ const ProfilePage = () => {
                 )}
               </div>
 
-              {errorMessage && (
-                <p className="mt-4 text-red-500">{errorMessage}</p>
+              {msg?.success == false && (
+                <p className="mt-4 text-red-500">{msg?.success}</p>
               )}
 
               {/* {selectedImage && (
@@ -354,7 +208,7 @@ const ProfilePage = () => {
               )} */}
             </div>
           </div>
-          <div className="w-full md:w-9/12">
+          <div className="w-full lg:w-1/2 xl:w-9/12">
             <button
               onClick={handleProfileUpdate}
               className="ml-auto flex items-center gap-1 rounded-md bg-red-500 px-3 py-2 text-white"
@@ -389,6 +243,7 @@ const ProfilePage = () => {
                 Email
               </label>
               <input
+                disabled
                 type="text"
                 name="email"
                 id="email"

@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
 import Flex from "../components/common/Flex";
-import axios from "axios";
-import Swal from "sweetalert2";
 import Loader from "../components/common/Loader";
-import Cookies from "js-cookie";
-import { BsThreeDotsVertical } from "react-icons/bs";
-import { MdDeleteOutline, MdDone } from "react-icons/md";
-import { FaTimes } from "react-icons/fa";
+import useAuth from "../hooks/useAuth";
 import { Link } from "react-router";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { MdDone } from "react-icons/md";
+import { FaTimes } from "react-icons/fa";
 import { IoEyeOutline } from "react-icons/io5";
-import { useSelector } from "react-redux";
 
 const UsersManage = () => {
-  const admin = useSelector((state) => state.admin.admin);
-  const accessToken = Cookies.get("accessToken"); // access token
-  const sessionToken = Cookies.get("sessionToken"); // access token
-  const [users, setUsers] = useState([]);
-  const [filterResult, setFilterResult] = useState([]);
+  const { user: admin, users, loading, updateUserRole } = useAuth();
+  const [searchTerm, setSearchTerm] = useState("");
   const [openActionMenuId, setOpenActionMenuId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const filteredUsers = users?.filter(
+    (user) =>
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
 
   const toggleActionMenu = (id) => {
     setOpenActionMenuId(openActionMenuId === id ? null : id);
@@ -26,138 +26,14 @@ const UsersManage = () => {
 
   // function for handle search
   const handleSearch = (e) => {
-    if (e.target.value == "") {
-      setFilterResult(orders);
-    } else {
-      const searchResult = users.filter((searchItem) =>
-        searchItem.email.includes(e.target.value.toLowerCase()),
-      );
-      setFilterResult(searchResult); // state for store the search result
-    }
+    setSearchTerm(e.target.value);
   };
 
   // function for admin toggle
   const handleAdmin = async (user) => {
-    setIsLoading(true);
-    try {
-      let res = await axios.patch(
-        `${import.meta.env.VITE_API}/auth/update/${user._id}`,
-        { role: user.role == "admin" ? "user" : "admin" },
-        {
-          withCredentials: true,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Cookie: `accessToken=${accessToken};sessionToken=${sessionToken}`,
-          },
-        },
-      );
-
-      Swal.fire({
-        title: res.data.msg,
-        confirmButtonText: "Ok",
-        confirmButtonColor: "green",
-        icon: "success",
-      }).finally(() => {
-        location.reload();
-      });
-      setIsLoading(false);
-
-      console.log(res.data);
-    } catch (error) {
-      setIsLoading(false);
-      console.log(error);
-
-      Swal.fire({
-        title: error.response.data.msg,
-        showConfirmButton: false,
-        showCancelButton: true,
-        cancelButtonText: "Ok",
-        cancelButtonColor: "red",
-        icon: "error",
-      })
-        .then((result) => {
-          if (result.isConfirmed) {
-            location.reload();
-          }
-        })
-        .finally(() => {
-          location.reload();
-        });
-    }
+    await updateUserRole(user._id, user.role == "admin" ? "user" : "admin");
+    return;
   };
-
-  // function for delete user
-  const handleDelete = async (id) => {
-    setIsLoading(true);
-    try {
-      let res = await axios.delete(
-        `${import.meta.env.VITE_API}/auth/delete/${id}`,
-        {
-          withCredentials: true,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Cookie: `accessToken=${accessToken};sessionToken=${sessionToken}`,
-          },
-        },
-      );
-      setIsLoading(false);
-      Swal.fire({
-        title: res.data.msg,
-        confirmButtonText: "Ok",
-        confirmButtonColor: "green",
-        icon: "success",
-      }).finally(() => {
-        location.reload();
-      });
-    } catch (error) {
-      setIsLoading(false);
-      console.log(error);
-
-      Swal.fire({
-        title: error.response.data.msg,
-        showConfirmButton: false,
-        showCancelButton: true,
-        cancelButtonText: "Ok",
-        cancelButtonColor: "red",
-        icon: "error",
-      })
-        .then((result) => {
-          if (result.isConfirmed) {
-            location.reload();
-          }
-        })
-        .finally(() => {
-          location.reload();
-        });
-    }
-  };
-
-  // fetch users
-  const fetchUsers = async () => {
-    let res = await axios.get(
-      `${import.meta.env.VITE_API}/auth/users`,
-      {
-        withCredentials: true,
-      },
-      {
-        headers: {
-          "Content-Type": "multipart/formdata",
-          Cookie: `accessToken=${accessToken};sessionToken=${sessionToken}`,
-        },
-      },
-    );
-
-    setFilterResult(res.data.users);
-    setUsers(res.data.users);
-  };
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
 
   useEffect(() => {
     const handleCLick = (event) => {
@@ -176,6 +52,11 @@ const UsersManage = () => {
 
   return (
     <main className="w-full overflow-y-scroll border-l-[1px] border-black bg-white p-2 dark:border-white dark:bg-slate-900">
+      {loading && (
+        <div className="flex h-screen w-full items-center justify-center">
+          <Loader />
+        </div>
+      )}
       <Flex className="items-center justify-between">
         <h2 className="text-2xl font-semibold text-black dark:text-white">
           Manage User's
@@ -229,7 +110,7 @@ const UsersManage = () => {
               </tr>
             </thead>
             <tbody className="">
-              {filterResult.map((item, index) => (
+              {filteredUsers?.map((item, index) => (
                 <tr className="border-t border-gray-200" key={index}>
                   <td className="p-3 text-black dark:text-white">
                     {item.name}
@@ -270,7 +151,7 @@ const UsersManage = () => {
                   </td>
 
                   <td className="p-3 text-black dark:text-white">
-                    {item.isVarify ? (
+                    {item.isVerified ? (
                       <div className="flex items-center justify-center gap-2 rounded-full bg-[#18c964] py-1.5 text-[0.9rem] font-[500] text-white">
                         <MdDone className="rounded-full bg-[#18c964] p-0.5 text-[1.4rem] text-[#fff]" />
                         Verified
@@ -301,7 +182,7 @@ const UsersManage = () => {
                         item._id > 1 ? "bottom-[90%]" : "top-[90%]"
                       } zenui-table absolute right-[80%] min-w-[160px] rounded-md bg-white p-1.5 shadow-md transition-all duration-100`}
                     >
-                      {admin?.id !== item._id && (
+                      {/* {admin?.id !== item._id && (
                         <button
                           onClick={() => handleDelete(item._id)}
                           className="flex w-full cursor-pointer items-center gap-[8px] rounded-md px-2 py-1.5 text-[0.9rem] text-gray-700 transition-all duration-200 hover:bg-gray-50"
@@ -309,7 +190,7 @@ const UsersManage = () => {
                           <MdDeleteOutline />
                           Delete
                         </button>
-                      )}
+                      )} */}
                       <Link
                         to={`/profile/${item._id}`}
                         className="flex w-full cursor-pointer items-center gap-[8px] rounded-md px-2 py-1.5 text-[0.9rem] text-gray-700 transition-all duration-200 hover:bg-gray-50"
@@ -324,7 +205,7 @@ const UsersManage = () => {
             </tbody>
           </table>
 
-          {!filterResult?.length && (
+          {!filteredUsers?.length && (
             <p className="w-full py-6 text-center text-[0.9rem] text-gray-500">
               No data found!
             </p>

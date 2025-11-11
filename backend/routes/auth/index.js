@@ -11,6 +11,7 @@ const {
   sendResetPasswordToken,
   verifyResetPasswordToken,
   resetPassword,
+  updateUserRole,
 } = require("../../controllers/auth.controller");
 const checkAdminMiddleware = require("../../middlewares/checkAdminMiddleware");
 const checkUserMiddleware = require("../../middlewares/checkUserMiddleware");
@@ -101,5 +102,15 @@ router.post(
  * https://localhost:5000/api/v1/auth/verify-email
  */
 router.get("/auth/verify-email", verifyEmailToken);
+
+/**
+ * Update User Role Route
+ * http://localhost:5000/api/v1/auth/update-user-role/:id
+ */
+router.patch(
+  "/auth/update-user-role/:id",
+  checkAdminMiddleware,
+  updateUserRole
+);
 
 module.exports = router;
