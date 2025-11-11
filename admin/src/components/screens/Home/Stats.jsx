@@ -29,7 +29,7 @@ const Stats = () => {
   ); // calculate the total sold for today
 
   useEffect(() => {
-    fetchOrders();
+    // fetchOrders();
   }, []); // fetch the orders when the component mounts
   return (
     <section>

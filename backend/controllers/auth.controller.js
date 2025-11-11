@@ -69,9 +69,19 @@ const loginUser = async (req, res) => {
 
   let authdata = await authenticateUser({ req, res, user });
 
-  return res
-    .status(200)
-    .send({ success: true, message: "Login successful", data: authdata });
+  return res.status(200).send({
+    success: true,
+    message: "Login successful",
+    data: {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      phone: user.phone,
+      isVerified: user.isVerified,
+    },
+    authdata,
+  });
 };
 
 /**
@@ -127,7 +137,7 @@ const singleUser = async (req, res) => {
         .status(400)
         .send({ success: false, message: "User not found" });
     }
-    console.log(user);
+    // console.log(user);
 
     return res.status(200).send({
       success: true,

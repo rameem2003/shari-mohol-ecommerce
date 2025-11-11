@@ -8,6 +8,8 @@ const checkAdminMiddleware = async (req, res, next) => {
   const accessToken = req.cookies.access_token;
   const refreshToken = req.cookies.refresh_token;
 
+  console.log("token", accessToken, "token 1", refreshToken);
+
   req.user = null;
 
   if (!accessToken && !refreshToken) {

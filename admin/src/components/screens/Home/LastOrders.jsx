@@ -76,7 +76,7 @@ const LastOrders = () => {
   }, []);
 
   useEffect(() => {
-    fetchOrders();
+    // fetchOrders();
   }, []);
 
   return (
@@ -121,7 +121,7 @@ const LastOrders = () => {
               </tr>
             </thead>
             <tbody className="">
-              {orders?.slice(0, 4).map((item, index) => (
+              {/* {orders?.slice(0, 4).map((item, index) => (
                 <tr className="border-t border-gray-200" key={item._id}>
                   <td className="p-3 text-black dark:text-white">{item._id}</td>
                   <td className="p-3 text-black dark:text-white">
@@ -230,7 +230,7 @@ const LastOrders = () => {
                     </div>
                   </td>
                 </tr>
-              ))}
+              ))} */}
             </tbody>
           </table>
 

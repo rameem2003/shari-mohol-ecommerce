@@ -114,7 +114,7 @@ const AddProduct = () => {
   };
 
   useEffect(() => {
-    fetchCategories();
+    // fetchCategories();
   }, []);
 
   // Product upload
@@ -138,48 +138,6 @@ const AddProduct = () => {
       for (let i = 0; i < product.images.length; i++) {
         data.append("images", product.images[i]);
       }
-    }
-
-    try {
-      let res = await axios.post(
-        `${import.meta.env.VITE_API}/product/create`,
-        data,
-        {
-          withCredentials: true,
-        },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Cookie: `accessToken=${accessToken};sessionToken=${sessionToken}`,
-          },
-        },
-      );
-      setIsLoading(false);
-
-      Swal.fire({
-        title: res.data.msg,
-        confirmButtonText: "Ok",
-        confirmButtonColor: "green",
-        icon: "success",
-      });
-
-      console.log(res.data);
-    } catch (error) {
-      console.log(error);
-      setIsLoading(false);
-
-      Swal.fire({
-        title: error.response.data.msg,
-        showConfirmButton: false,
-        showCancelButton: true,
-        cancelButtonText: "Ok",
-        cancelButtonColor: "red",
-        icon: "error",
-      }).then((result) => {
-        if (result.isDismissed) {
-          location.reload();
-        }
-      });
     }
   };
 

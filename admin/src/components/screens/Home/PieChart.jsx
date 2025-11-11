@@ -39,7 +39,7 @@ const PieChart = () => {
   }, []);
 
   useEffect(() => {
-    fetchOrders();
+    // fetchOrders();
   }, []);
 
   const data = [

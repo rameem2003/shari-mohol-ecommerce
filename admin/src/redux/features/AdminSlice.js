@@ -3,14 +3,12 @@ import { createSlice } from "@reduxjs/toolkit";
 export const AdminSlice = createSlice({
   name: "Admin",
   initialState: {
-    admin: localStorage.getItem("shari_mohol_admin")
-      ? JSON.parse(localStorage.getItem("shari_mohol_admin"))
-      : null,
+    admin: null,
   },
   reducers: {
     adminLoginReducer: (state, action) => {
       state.admin = action.payload;
-      localStorage.setItem("shari_mohol_admin", JSON.stringify(action.payload));
+      // localStorage.setItem("shari_mohol_admin", JSON.stringify(action.payload));
     },
 
     adminLogoutReducer: (state, action) => {

@@ -18,7 +18,7 @@ const router = require("express").Router();
  * Get all orders
  * http://localhost:5000/api/v1/order/all
  */
-router.get("/order/all", checkUserMiddleware, getAllOrders);
+router.get("/order/all", checkAdminMiddleware, getAllOrders);
 
 /**
  * Get Logged in user orders

@@ -16,8 +16,10 @@ import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { adminLoginReducer } from "../../redux/features/AdminSlice";
+import useAuth from "../../hooks/useAuth";
 
 const ResponsiveSidebar = () => {
+  const { loading, msg, logout } = useAuth();
   const dispatch = useDispatch(); // dispatch instance
   const admin = useSelector((state) => state.admin.admin);
   const [isCollapse1, setIsCollapse1] = useState(true);
@@ -443,7 +445,7 @@ const ResponsiveSidebar = () => {
               Profile
             </Link>
             <button
-              onClick={() => handleLogout(admin.id)}
+              onClick={logout}
               className="flex cursor-pointer items-center gap-[7px] rounded-md px-[8px] py-[4px] text-[0.9rem] text-red-500 dark:text-red-300"
             >
               <CiLogout />
