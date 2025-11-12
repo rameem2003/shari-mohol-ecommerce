@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import Flex from "../components/common/Flex";
-import Cookies from "js-cookie";
-import Swal from "sweetalert2";
 import Loader from "../components/common/Loader";
-import axios from "axios";
 import { IoCloudUploadOutline } from "react-icons/io5";
+import { createNewCategoryRequest } from "../api/category";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 const AddCategory = () => {
-  const accessToken = Cookies.get("accessToken"); // access token
-  const sessionToken = Cookies.get("sessionToken"); // access token
+  const navigate = useNavigate();
   const [isDragging, setIsDragging] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [displayImage, setDisplayImage] = useState(null);
@@ -69,9 +68,9 @@ const AddCategory = () => {
   // Product upload
   const handleUpload = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     console.log(category);
 
-    setIsLoading(true);
     let data = new FormData();
     data.append("name", category.name);
     data.append("description", category.description);
@@ -79,45 +78,17 @@ const AddCategory = () => {
     data.append("image", category.image);
 
     try {
-      let res = await axios.post(
-        `${import.meta.env.VITE_API}/category/create`,
-        data,
-        {
-          withCredentials: true,
-        },
-        {
-          headers: {
-            "Content-Type": "multipart/formdata",
-            Cookie: `accessToken=${accessToken};sessionToken=${sessionToken}`,
-          },
-        },
-      );
+      let res = await createNewCategoryRequest(data);
       setIsLoading(false);
-
-      Swal.fire({
-        title: res.data.msg,
-        confirmButtonText: "Ok",
-        confirmButtonColor: "green",
-        icon: "success",
-      });
-
-      console.log(res.data);
+      if (!res.success) {
+        toast.error(res.response.data.message);
+        return;
+      }
+      toast.success(res.message);
+      navigate("/all-categories");
     } catch (error) {
       setIsLoading(false);
       console.log(error);
-
-      Swal.fire({
-        title: error.response.data.msg,
-        showConfirmButton: false,
-        showCancelButton: true,
-        cancelButtonText: "Ok",
-        cancelButtonColor: "red",
-        icon: "error",
-      }).then((result) => {
-        if (result.isDismissed) {
-          location.reload();
-        }
-      });
     }
   };
   return (
@@ -139,7 +110,7 @@ const AddCategory = () => {
             <div className="w-full">
               <label
                 htmlFor="name"
-                className="text-text text-[15px] font-[400] text-black dark:text-white"
+                className="text-[15px] font-[400] text-text dark:text-white"
               >
                 Category Name <span className="text-red-500">*</span>
               </label>
@@ -153,7 +124,7 @@ const AddCategory = () => {
                 name="name"
                 id="name"
                 placeholder="Category name"
-                className="border-border focus:border-primary mt-1 w-full rounded-md border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 dark:bg-transparent dark:text-white"
+                className="mt-1 w-full rounded-md border border-border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 focus:border-primary dark:bg-transparent dark:text-white"
               />
             </div>
           </div>
@@ -161,7 +132,7 @@ const AddCategory = () => {
             <div className="w-full">
               <label
                 htmlFor="description"
-                className="text-text text-[15px] font-[400] text-black dark:text-white"
+                className="text-[15px] font-[400] text-text dark:text-white"
               >
                 Category Description <span className="text-red-500">*</span>
               </label>
@@ -175,7 +146,7 @@ const AddCategory = () => {
                 name="description"
                 id="description"
                 placeholder="Product Description"
-                className="border-border focus:border-primary mt-1 w-full rounded-md border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 dark:bg-transparent dark:text-white"
+                className="mt-1 w-full rounded-md border border-border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 focus:border-primary dark:bg-transparent dark:text-white"
               />
             </div>
           </div>
@@ -186,7 +157,7 @@ const AddCategory = () => {
             <div className="w-full">
               <label
                 htmlFor="subcategory"
-                className="text-text text-[15px] font-[400] text-black dark:text-white"
+                className="text-[15px] font-[400] text-text dark:text-white"
               >
                 Sub Categories (Input Comma Separated){" "}
                 <span className="text-red-500">*</span>
@@ -201,7 +172,7 @@ const AddCategory = () => {
                 name="subcategory"
                 id="subcategory"
                 placeholder="Sub Categories"
-                className="border-border focus:border-primary mt-1 w-full rounded-md border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 dark:bg-transparent dark:text-white"
+                className="mt-1 w-full rounded-md border border-border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 focus:border-primary dark:bg-transparent dark:text-white"
               />
             </div>
           </div>
@@ -275,7 +246,7 @@ const AddCategory = () => {
 
         <button
           type="submit"
-          className="hover:bg-secondary w-full rounded border border-[#3B9DF8] bg-blue-500 px-6 py-2 text-[#fff] transition duration-300"
+          className="w-full rounded border border-[#3B9DF8] bg-blue-500 px-6 py-2 text-[#fff] transition duration-300 hover:bg-secondary"
         >
           Add
         </button>

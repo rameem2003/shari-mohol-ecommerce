@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Flex from "../components/common/Flex";
 import Cookies from "js-cookie";
-import Swal from "sweetalert2";
-import axios from "axios";
 import Loader from "../components/common/Loader";
-import { IoCloudUploadOutline } from "react-icons/io5";
 import Image from "../components/common/Image";
-import { FaStar } from "react-icons/fa";
+import { toast } from "react-toastify";
+import {
+  createBannerRequest,
+  deleteBannerRequest,
+  fetchAllBannersRequest,
+} from "../api/banner";
+import { IoCloudUploadOutline } from "react-icons/io5";
 
 const AdvertisementPage = () => {
   const accessToken = Cookies.get("accessToken"); // access token
@@ -23,6 +26,7 @@ const AdvertisementPage = () => {
   });
   const [banners, setBanners] = useState([]);
 
+  // Function to handle file drop
   const handleFileDrop = (e) => {
     e.preventDefault();
     const file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
@@ -58,10 +62,12 @@ const AdvertisementPage = () => {
     e.preventDefault();
   };
 
+  // handle drag enter
   const handleDragEnter = () => {
     setIsDragging(true);
   };
 
+  // handle drag leave
   const handleDragLeave = () => {
     setIsDragging(false);
   };
@@ -76,116 +82,49 @@ const AdvertisementPage = () => {
     formData.append("advertisementLink", banner.advertisementLink);
 
     try {
-      let res = await axios.post(
-        `${import.meta.env.VITE_API}/banner/create`,
-        formData,
-        {
-          withCredentials: true,
-        },
-        {
-          headers: {
-            "Content-Type": "multipart/formdata",
-            Cookie: `accessToken=${accessToken};sessionToken=${sessionToken}`,
-          },
-        },
-      );
+      let res = await createBannerRequest(formData);
       setIsLoading(false);
-
-      Swal.fire({
-        title: res.data.msg,
-        confirmButtonText: "Ok",
-        confirmButtonColor: "green",
-        icon: "success",
-      })
-        .then((result) => {
-          if (result.isConfirmed) {
-            location.reload();
-          }
-        })
-        .finally(() => {
-          location.reload();
-        });
-
-      console.log(res.data);
+      if (!res.success) {
+        toast.error(res.response.data.message);
+        return;
+      }
+      toast.success(res.message);
+      await fetchAllBanners();
+      setBanner({ banner: null, description: "", advertisementLink: "" });
+      setSelectedImage(null);
+      setDisplayImage(null);
     } catch (error) {
       setIsLoading(false);
       console.log(error);
 
-      Swal.fire({
-        title: error.response.data.msg,
-        showConfirmButton: false,
-        showCancelButton: true,
-        cancelButtonText: "Ok",
-        cancelButtonColor: "red",
-        icon: "error",
-      }).then((result) => {
-        if (result.isDismissed) {
-          location.reload();
-        }
-      });
+      toast.error(error.response.data.message || error.message);
     }
-  };
-
-  // fetch all banners
-  const fetchAllBanners = async () => {
-    let res = await axios.get(`${import.meta.env.VITE_API}/banner/all`);
-    setBanners(res.data.data);
   };
 
   // handle delete banner
   const handleBannerDelete = async (id) => {
     setIsLoading(true);
     try {
-      let res = await axios.delete(
-        `${import.meta.env.VITE_API}/banner/delete/${id}`,
-        {
-          withCredentials: true,
-        },
-        {
-          headers: {
-            Cookie: `accessToken=${accessToken};sessionToken=${sessionToken}`,
-          },
-        },
-      );
-
+      let res = await deleteBannerRequest(id);
       setIsLoading(false);
-      Swal.fire({
-        title: res.data.msg,
-        confirmButtonText: "Ok",
-        confirmButtonColor: "green",
-        icon: "success",
-      })
-        .then((result) => {
-          if (result.isConfirmed) {
-            location.reload();
-          }
-        })
-        .finally(() => {
-          location.reload();
-        });
-
-      console.log(res.data);
+      if (!res.success) {
+        toast.error(res.response.data.message);
+        return;
+      }
+      toast.success(res.message);
+      await fetchAllBanners();
     } catch (error) {
       setIsLoading(false);
       console.log(error);
 
-      Swal.fire({
-        title: error.response.data.msg,
-        showConfirmButton: false,
-        showCancelButton: true,
-        cancelButtonText: "Ok",
-        cancelButtonColor: "red",
-        icon: "error",
-      })
-        .then((result) => {
-          if (result.isConfirmed) {
-            location.reload();
-          }
-        })
-        .finally(() => {
-          location.reload();
-        });
+      toast.error(error.response.data.message || error.message);
     }
+  };
+
+  // fetch all banners
+  const fetchAllBanners = async () => {
+    let res = await fetchAllBannersRequest();
+    setBanners(res.data);
   };
 
   useEffect(() => {
@@ -211,9 +150,9 @@ const AdvertisementPage = () => {
             <div className="w-full">
               <label
                 htmlFor="addDescription"
-                className="text-text text-[15px] font-[400] text-black dark:text-white"
+                className="text-[15px] font-[400] text-text dark:text-white"
               >
-                Banner Description
+                Banner Description <span className="text-red-500">*</span>
               </label>
               <input
                 required
@@ -225,7 +164,7 @@ const AdvertisementPage = () => {
                 name="addDescription"
                 id="addDescription"
                 placeholder="Advertisement Description"
-                className="border-border focus:border-primary mt-1 w-full rounded-md border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 dark:bg-transparent dark:text-white"
+                className="mt-1 w-full rounded-md border border-border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 focus:border-primary dark:bg-transparent dark:text-white"
               />
             </div>
           </div>
@@ -233,7 +172,7 @@ const AdvertisementPage = () => {
             <div className="w-full">
               <label
                 htmlFor="addLink"
-                className="text-text text-[15px] font-[400] text-black dark:text-white"
+                className="text-[15px] font-[400] text-text dark:text-white"
               >
                 Advertisement Link <span className="text-red-500">*</span>
               </label>
@@ -247,7 +186,7 @@ const AdvertisementPage = () => {
                 name="addLink"
                 id="addLink"
                 placeholder="Advertisement Link"
-                className="border-border focus:border-primary mt-1 w-full rounded-md border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 dark:bg-transparent dark:text-white"
+                className="mt-1 w-full rounded-md border border-border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 focus:border-primary dark:bg-transparent dark:text-white"
               />
             </div>
           </div>
@@ -283,7 +222,8 @@ const AdvertisementPage = () => {
                   <>
                     <IoCloudUploadOutline className="mb-4 text-[3rem] text-gray-400" />
                     <p className="mb-2 text-center text-[1.1rem] font-[500] text-gray-500">
-                      Drag & Drop your image here
+                      Drag & Drop your image here{" "}
+                      <span className="text-red-500">*</span>
                     </p>
                     <p className="text-gray-400">or</p>
                     <label
@@ -322,7 +262,7 @@ const AdvertisementPage = () => {
         <button
           onClick={handleUploadBanner}
           type="submit"
-          className="hover:bg-secondary w-full rounded border border-[#3B9DF8] bg-blue-500 px-6 py-2 text-[#fff] transition duration-300"
+          className="w-full rounded border border-[#3B9DF8] bg-blue-500 px-6 py-2 text-[#fff] transition duration-300 hover:bg-secondary"
         >
           Add
         </button>
@@ -336,7 +276,7 @@ const AdvertisementPage = () => {
               className="boxShadow relative w-[24%] rounded-md bg-white"
               key={i}
             >
-              <img
+              <Image
                 src={`${import.meta.env.VITE_MEDIA}/${b.banner}`}
                 alt={b.banner}
                 className="h-[250px] w-full rounded-t-md object-cover"

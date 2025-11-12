@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Image from "./../components/common/Image";
-import axios from "axios";
 import EditCategory from "../components/screens/categoryScreen/EditCategory";
-import Cookies from "js-cookie";
-import Swal from "sweetalert2";
 import Loader from "../components/common/Loader";
 import Flex from "../components/common/Flex";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { MdDeleteOutline } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
+import {
+  deleteCategoryRequest,
+  fetchAllCategoriesRequest,
+} from "../api/category";
+import { toast } from "react-toastify";
 
 const AllCategory = () => {
-  const accessToken = Cookies.get("accessToken"); // access token
-  const sessionToken = Cookies.get("sessionToken"); // access token
   const [categories, setCategories] = useState([]);
   const [openActionMenuId, setOpenActionMenuId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,8 +21,8 @@ const AllCategory = () => {
 
   // Fetch categories
   const fetchCategories = async () => {
-    let res = await axios.get(`${import.meta.env.VITE_API}/category/all`);
-    setCategories(res.data.data);
+    let res = await fetchAllCategoriesRequest();
+    setCategories(res.data);
   };
 
   const toggleActionMenu = (id) => {
@@ -36,9 +36,10 @@ const AllCategory = () => {
   };
 
   // on update
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     // Fetch updated category list logic
     setIsModalOpen(false);
+    await fetchCategories();
   };
 
   // handle delete
@@ -47,50 +48,18 @@ const AllCategory = () => {
     console.log("Delete:", id);
 
     try {
-      let res = await axios.delete(
-        `${import.meta.env.VITE_API}/category/delete/${id}`,
-        {
-          withCredentials: true,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Cookie: `accessToken=${accessToken};sessionToken=${sessionToken}`,
-          },
-        },
-      );
-
-      Swal.fire({
-        title: res.data.msg,
-        confirmButtonText: "Ok",
-        confirmButtonColor: "green",
-        icon: "success",
-      }).finally(() => {
-        location.reload();
-      });
+      let res = await deleteCategoryRequest(id);
       setIsLoading(false);
-
-      console.log(res.data);
+      if (!res.success) {
+        toast.error(res.response.data.message);
+        return;
+      }
+      toast.success(res.message);
+      await fetchCategories();
     } catch (error) {
-      setIsLoading(false);
       console.log(error);
-
-      Swal.fire({
-        title: error.response.data.msg,
-        showConfirmButton: false,
-        showCancelButton: true,
-        cancelButtonText: "Ok",
-        cancelButtonColor: "red",
-        icon: "error",
-      })
-        .then((result) => {
-          if (result.isConfirmed) {
-            location.reload();
-          }
-        })
-        .finally(() => {
-          location.reload();
-        });
+      setIsLoading(false);
+      toast.error(error.response?.data?.message || error.message);
     }
   };
 
@@ -109,7 +78,7 @@ const AllCategory = () => {
 
   useEffect(() => {
     fetchCategories();
-  }, [isModalOpen]);
+  }, []);
   return (
     <main className="w-full overflow-y-scroll border-l-[1px] border-black bg-white p-2 dark:border-white dark:bg-slate-900">
       <h2 className="text-2xl font-semibold text-black dark:text-white">
@@ -146,7 +115,7 @@ const AllCategory = () => {
             </tr>
           </thead>
           <tbody className="">
-            {categories.map((item, index) => (
+            {categories.map((item) => (
               <tr className="border-t border-gray-200" key={item._id}>
                 <td className="p-3 text-black dark:text-white">
                   <Image

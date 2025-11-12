@@ -131,7 +131,7 @@ const ResponsiveSidebar = () => {
                     isCollapse1 ? "hidden" : "inline"
                   } absolute right-[-99px] top-0 z-[-1] translate-x-[20px] opacity-0 transition-all duration-500 group-hover:z-[1] group-hover:translate-x-[-20px] group-hover:opacity-100`}
                 >
-                  <p className="text-secondary w-max rounded bg-slate-900 px-3 py-[5px] text-[0.9rem] text-white">
+                  <p className="w-max rounded bg-slate-900 px-3 py-[5px] text-[0.9rem] text-white">
                     Order's
                   </p>
                 </div>
@@ -291,7 +291,7 @@ const ResponsiveSidebar = () => {
                     isCollapse1 ? "hidden" : "inline"
                   } absolute right-[-100px] top-0 z-[-1] translate-x-[20px] opacity-0 transition-all duration-500 group-hover:z-[1] group-hover:translate-x-0 group-hover:opacity-100`}
                 >
-                  <p className="text-secondary w-max rounded bg-slate-900 px-3 py-[5px] text-[0.9rem] text-white">
+                  <p className="w-max rounded bg-slate-900 px-3 py-[5px] text-[0.9rem] text-white">
                     Advertisement
                   </p>
                 </div>
@@ -301,7 +301,7 @@ const ResponsiveSidebar = () => {
             <div
               className={`${
                 isCollapse1 ? "justify-between" : "justify-center"
-              } group relative flex hidden w-full cursor-pointer items-center rounded-md p-[5px] transition-all duration-200 hover:bg-gray-50`}
+              } group relative hidden w-full cursor-pointer items-center rounded-md p-[5px] transition-all duration-200 hover:bg-gray-50`}
             >
               <div className="flex items-center gap-[8px]">
                 <FiPieChart className="text-[1.3rem] text-gray-500" />
@@ -336,7 +336,7 @@ const ResponsiveSidebar = () => {
             <div
               className={`${
                 isCollapse1 ? "justify-between" : "justify-center"
-              } group relative flex hidden w-full cursor-pointer items-center rounded-md p-[5px] transition-all duration-200 hover:bg-gray-50`}
+              } group relative hidden w-full cursor-pointer items-center rounded-md p-[5px] transition-all duration-200 hover:bg-gray-50`}
             >
               <div className="flex items-center gap-[8px]">
                 <IoNotificationsOutline className="text-[1.3rem] text-gray-500" />
@@ -382,7 +382,7 @@ const ResponsiveSidebar = () => {
                     isCollapse1 ? "hidden" : "inline"
                   } absolute right-[-96px] top-0 z-[-1] translate-x-[20px] opacity-0 transition-all duration-500 group-hover:z-[1] group-hover:translate-x-[10px] group-hover:opacity-100`}
                 >
-                  <p className="text-secondary w-max rounded bg-slate-900 px-3 py-[5px] text-[0.9rem] text-white">
+                  <p className="w-max rounded bg-slate-900 px-3 py-[5px] text-[0.9rem] text-white">
                     Users Manage
                   </p>
                 </div>

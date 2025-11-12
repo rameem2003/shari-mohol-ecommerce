@@ -35,15 +35,15 @@ const addNewBanner = async (req, res) => {
     return res.status(401).send({ success: false, message: "Unauthorized" });
   }
 
+  let filename = req?.file?.filename || "";
   const { data, error } = bannerUploadValidator.safeParse(req.body);
 
   if (error) {
+    await deleteFile("../uploads/banners/", filename);
     return res
       .status(400)
       .json({ success: false, message: JSON.parse(error.message)[0].message });
   }
-
-  let filename = req?.file?.filename || "";
 
   if (!filename || !req.file) {
     return res

@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Flex from "../../common/Flex";
-import Cookies from "js-cookie";
-import Swal from "sweetalert2";
-import Loader from "../../common/Loader";
-import axios from "axios";
+import { updateCategoryRequest } from "../../../api/category";
+import { toast } from "react-toastify";
 // react icons
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
@@ -14,8 +12,6 @@ const EditCategory = ({
   handleClose,
   onUpdate,
 }) => {
-  const accessToken = Cookies.get("accessToken"); // access token
-  const sessionToken = Cookies.get("sessionToken"); // access token
   const [isDragging, setIsDragging] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [displayImage, setDisplayImage] = useState(null);
@@ -29,18 +25,6 @@ const EditCategory = ({
     subcategories: selectedCategory?.subCategories || "",
     image: null,
   });
-
-  useEffect(() => {
-    if (selectedCategory) {
-      setCategory({
-        name: selectedCategory.name || "",
-        description: selectedCategory.description || "",
-        subcategories: selectedCategory.subCategories || "",
-        image: selectedCategory.thumb || "",
-      });
-    }
-  }, [selectedCategory]);
-  console.log(category);
 
   // Handle file selection when dropped or clicked
   const handleFileDrop = (e) => {
@@ -90,7 +74,6 @@ const EditCategory = ({
   const handleSubmit = async (e) => {
     setIsLoading(true);
     e.preventDefault();
-    console.log(category);
     try {
       const formDataToSend = new FormData();
       formDataToSend.append("name", category.name);
@@ -100,46 +83,39 @@ const EditCategory = ({
         formDataToSend.append("image", category.image);
       }
 
-      const res = await axios.patch(
-        `${import.meta.env.VITE_API}/category/update/${selectedCategory._id}`,
+      const res = await updateCategoryRequest(
+        selectedCategory._id,
         formDataToSend,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Cookie: `accessToken=${accessToken};sessionToken=${sessionToken}`,
-          },
-          withCredentials: true,
-        },
       );
       setIsLoading(false);
-      Swal.fire({
-        title: res.data.msg,
-        confirmButtonText: "Ok",
-        confirmButtonColor: "green",
-        icon: "success",
-      });
+
+      if (!res.success) {
+        toast.error(res.response.data.message);
+        return;
+      }
+      toast.success(res.message);
       onUpdate(); // Refresh the category list
       handleClose();
     } catch (error) {
-      setIsLoading(false);
       console.log(error);
+      setIsLoading(false);
+      toast.error(error.response?.data?.message || error.message);
       handleClose();
-      Swal.fire({
-        title: error.response.data.msg,
-        showConfirmButton: false,
-        showCancelButton: true,
-        cancelButtonText: "Ok",
-        cancelButtonColor: "red",
-        icon: "error",
-      }).then((result) => {
-        if (result.isDismissed) {
-          location.reload();
-        }
-      });
     } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (selectedCategory) {
+      setCategory({
+        name: selectedCategory.name || "",
+        description: selectedCategory.description || "",
+        subcategories: selectedCategory.subCategories || "",
+        image: selectedCategory.thumb || "",
+      });
+    }
+  }, [selectedCategory]);
 
   return (
     <div
@@ -155,7 +131,7 @@ const EditCategory = ({
       <div
         className={`${
           isModalOpen ? "scale-[1] opacity-100" : "scale-[0] opacity-0"
-        } mx-auto mt-8 w-[90%] rounded-lg bg-white transition-all duration-300 dark:bg-slate-700 sm:w-[80%] md:w-[35%]`}
+        } mx-auto mt-8 w-[90%] rounded-lg bg-white transition-all duration-300 sm:w-[80%] md:w-[35%] dark:bg-slate-700`}
       >
         <div className="flex w-full items-end justify-between border-b border-[#d1d1d1] p-4">
           <h1 className="text-[1.5rem] font-bold text-black dark:text-white">

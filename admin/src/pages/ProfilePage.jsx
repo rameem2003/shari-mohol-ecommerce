@@ -220,7 +220,7 @@ const ProfilePage = () => {
             <div className="mb-5 w-full">
               <label
                 htmlFor="name"
-                className="text-text text-[15px] font-[400] text-black dark:text-white"
+                className="text-[15px] font-[400] text-black dark:text-white"
               >
                 Name
               </label>
@@ -238,7 +238,7 @@ const ProfilePage = () => {
             <div className="mb-5 w-full">
               <label
                 htmlFor="email"
-                className="text-text text-[15px] font-[400] text-black dark:text-white"
+                className="text-[15px] font-[400] text-black dark:text-white"
               >
                 Email
               </label>
@@ -257,7 +257,7 @@ const ProfilePage = () => {
             <div className="mb-5 w-full">
               <label
                 htmlFor="phone"
-                className="text-text text-[15px] font-[400] text-black dark:text-white"
+                className="text-[15px] font-[400] text-black dark:text-white"
               >
                 Phone
               </label>
@@ -275,7 +275,7 @@ const ProfilePage = () => {
             <div className="mb-5 w-full">
               <label
                 htmlFor="address"
-                className="text-text text-[15px] font-[400] text-black dark:text-white"
+                className="text-[15px] font-[400] text-black dark:text-white"
               >
                 Address
               </label>
@@ -302,7 +302,7 @@ const ProfilePage = () => {
           <div className="mb-5 w-full md:w-1/2">
             <label
               htmlFor="old-password"
-              className="text-text text-[15px] font-[400] text-black dark:text-white"
+              className="text-[15px] font-[400] text-black dark:text-white"
             >
               Old Password <span className="text-red-500">*</span>
             </label>
@@ -325,7 +325,7 @@ const ProfilePage = () => {
           <div className="mb-5 w-full md:w-1/2">
             <label
               htmlFor="new-password"
-              className="text-text text-[15px] font-[400] text-black dark:text-white"
+              className="text-[15px] font-[400] text-black dark:text-white"
             >
               New Password <span className="text-red-500">*</span>
             </label>
@@ -348,7 +348,7 @@ const ProfilePage = () => {
           <div className="mb-5 w-full md:w-1/2">
             <label
               htmlFor="confirm-new-password"
-              className="text-text text-[15px] font-[400] text-black dark:text-white"
+              className="text-[15px] font-[400] text-black dark:text-white"
             >
               Confirm New Password <span className="text-red-500">*</span>
             </label>
