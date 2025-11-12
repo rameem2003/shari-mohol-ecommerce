@@ -293,8 +293,8 @@ const useAuth = () => {
         setLoading(false);
       }
     } catch (error) {
-      dispatch(adminLoginReducer(null));
       console.log(error);
+      dispatch(adminLoginReducer(null));
       if (pathname == "/" || pathname?.startsWith("/")) {
         navigate("/login", { replace: true });
         window.history.pushState(null, null, window.location.href);
@@ -321,7 +321,7 @@ const useAuth = () => {
       navigate("/login", { replace: true });
       setLoading(false);
       // Optional: force reload to ensure fresh state
-      window.location.replace("/login");
+      // window.location.replace("/login");
     } catch (error) {
       console.log(error);
       dispatch(adminLoginReducer(null));
@@ -331,7 +331,7 @@ const useAuth = () => {
 
   useEffect(() => {
     getUsers();
-  }, [loggedInUser]);
+  }, []);
 
   useEffect(() => {
     getUser();

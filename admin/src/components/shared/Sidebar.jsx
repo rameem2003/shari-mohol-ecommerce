@@ -27,11 +27,11 @@ const ResponsiveSidebar = () => {
         isCollapse1 ? "w-6/12 md:w-3/12 2xl:w-3/12" : "w-auto"
       }`}
     >
-      {loading && (
+      {/* {loading && (
         <div className="fixed left-0 top-0 z-50 flex h-screen w-full items-center justify-center bg-white/70 dark:bg-slate-900/70">
           <Loader />
         </div>
-      )}
+      )} */}
       <div>
         <div
           className={`mt-5 ${
@@ -55,7 +55,7 @@ const ResponsiveSidebar = () => {
                 <div
                   className={`absolute -top-1 right-[-115px] z-[-1] translate-x-[20px] opacity-0 transition-all duration-500 group-hover:z-[1] group-hover:translate-x-0 group-hover:opacity-100`}
                 >
-                  <p className="text-secondary w-max rounded bg-gray-600 px-3 py-[5px] text-[0.9rem]">
+                  <p className="w-max rounded bg-gray-600 px-3 py-[5px] text-[0.9rem] text-secondary">
                     Collapse
                   </p>
                 </div>
@@ -101,7 +101,7 @@ const ResponsiveSidebar = () => {
                     isCollapse1 ? "hidden" : "inline"
                   } absolute right-[-80px] top-0 z-[-1] translate-x-[20px] opacity-0 transition-all duration-500 group-hover:z-[1] group-hover:translate-x-0 group-hover:opacity-100`}
                 >
-                  <p className="text-secondary w-max rounded bg-slate-900 px-3 py-[5px] text-[0.9rem] dark:text-white">
+                  <p className="w-max rounded bg-slate-900 px-3 py-[5px] text-[0.9rem] text-secondary dark:text-white">
                     Dashboard
                   </p>
                 </div>
@@ -318,7 +318,7 @@ const ResponsiveSidebar = () => {
                   isCollapse1 ? "hidden" : "inline"
                 } absolute right-[-76px] top-0 z-[-1] translate-x-[20px] opacity-0 transition-all duration-500 group-hover:z-[1] group-hover:translate-x-0 group-hover:opacity-100`}
               >
-                <p className="text-secondary w-max rounded bg-gray-600 px-3 py-[5px] text-[0.9rem]">
+                <p className="w-max rounded bg-gray-600 px-3 py-[5px] text-[0.9rem] text-secondary">
                   Goals
                 </p>
               </div>
@@ -353,7 +353,7 @@ const ResponsiveSidebar = () => {
                   isCollapse1 ? "hidden" : "inline"
                 } absolute right-[-98px] top-0 z-[-1] translate-x-[20px] opacity-0 transition-all duration-500 group-hover:z-[1] group-hover:translate-x-0 group-hover:opacity-100`}
               >
-                <p className="text-secondary w-max rounded bg-gray-600 px-3 py-[5px] text-[0.9rem]">
+                <p className="w-max rounded bg-gray-600 px-3 py-[5px] text-[0.9rem] text-secondary">
                   Activity
                 </p>
               </div>

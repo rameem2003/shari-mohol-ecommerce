@@ -231,7 +231,7 @@ const ProfilePage = () => {
                 value={data.name}
                 onChange={(e) => setData({ ...data, name: e.target.value })}
                 placeholder="Your name"
-                className="border-border focus:border-primary mt-1 w-full rounded-md border px-4 py-3 outline-none transition-colors duration-300"
+                className="mt-1 w-full rounded-md border border-border px-4 py-3 outline-none transition-colors duration-300 focus:border-primary"
               />
             </div>
 
@@ -250,7 +250,7 @@ const ProfilePage = () => {
                 value={data.email}
                 onChange={(e) => setData({ ...data, email: e.target.value })}
                 placeholder="Your name"
-                className="border-border focus:border-primary mt-1 w-full rounded-md border px-4 py-3 outline-none transition-colors duration-300"
+                className="mt-1 w-full rounded-md border border-border px-4 py-3 outline-none transition-colors duration-300 focus:border-primary"
               />
             </div>
 
@@ -268,7 +268,7 @@ const ProfilePage = () => {
                 value={data.phone}
                 onChange={(e) => setData({ ...data, phone: e.target.value })}
                 placeholder="Your name"
-                className="border-border focus:border-primary mt-1 w-full rounded-md border px-4 py-3 outline-none transition-colors duration-300"
+                className="mt-1 w-full rounded-md border border-border px-4 py-3 outline-none transition-colors duration-300 focus:border-primary"
               />
             </div>
 
@@ -286,7 +286,7 @@ const ProfilePage = () => {
                 value={data.address}
                 onChange={(e) => setData({ ...data, address: e.target.value })}
                 placeholder="Your name"
-                className="border-border focus:border-primary mt-1 w-full rounded-md border px-4 py-3 outline-none transition-colors duration-300"
+                className="mt-1 w-full rounded-md border border-border px-4 py-3 outline-none transition-colors duration-300 focus:border-primary"
               />
             </div>
           </div>
@@ -318,7 +318,7 @@ const ProfilePage = () => {
                 })
               }
               placeholder="Your Old Password"
-              className="border-border focus:border-primary mt-1 w-full rounded-md border px-4 py-3 outline-none transition-colors duration-300"
+              className="mt-1 w-full rounded-md border border-border px-4 py-3 outline-none transition-colors duration-300 focus:border-primary"
             />
           </div>
 
@@ -341,7 +341,7 @@ const ProfilePage = () => {
                 })
               }
               placeholder="Your New Password"
-              className="border-border focus:border-primary mt-1 w-full rounded-md border px-4 py-3 outline-none transition-colors duration-300"
+              className="mt-1 w-full rounded-md border border-border px-4 py-3 outline-none transition-colors duration-300 focus:border-primary"
             />
           </div>
 
@@ -364,7 +364,7 @@ const ProfilePage = () => {
                 })
               }
               placeholder="Your Confirm New Password"
-              className="border-border focus:border-primary mt-1 w-full rounded-md border px-4 py-3 outline-none transition-colors duration-300"
+              className="mt-1 w-full rounded-md border border-border px-4 py-3 outline-none transition-colors duration-300 focus:border-primary"
             />
           </div>
 
