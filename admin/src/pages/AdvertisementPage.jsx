@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Flex from "../components/common/Flex";
-import Cookies from "js-cookie";
 import Loader from "../components/common/Loader";
 import Image from "../components/common/Image";
 import { toast } from "react-toastify";
@@ -12,8 +11,6 @@ import {
 import { IoCloudUploadOutline } from "react-icons/io5";
 
 const AdvertisementPage = () => {
-  const accessToken = Cookies.get("accessToken"); // access token
-  const sessionToken = Cookies.get("sessionToken"); // access token
   const [selectedImage, setSelectedImage] = useState(null);
   const [displayImage, setDisplayImage] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
