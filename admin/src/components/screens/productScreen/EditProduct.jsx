@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Flex from "../../common/Flex";
-import Cookies from "js-cookie";
-import Swal from "sweetalert2";
-import Loader from "../../common/Loader";
-import axios from "axios";
+import { updateProductRequest } from "../../../api/product";
+import { toast } from "react-toastify";
 // react icons
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
@@ -13,9 +11,8 @@ const EditProduct = ({
   selectedProduct,
   handleClose,
   onUpdate,
+  handleUpdate,
 }) => {
-  const accessToken = Cookies.get("accessToken"); // access token
-  const sessionToken = Cookies.get("sessionToken"); // access token
   const [isDragging, setIsDragging] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [displayImage, setDisplayImage] = useState(null);
@@ -50,7 +47,6 @@ const EditProduct = ({
       });
     }
   }, [selectedProduct]);
-  console.log(product);
 
   // Handle file selection when dropped or clicked
   const handleFileDrop = (e) => {
@@ -99,66 +95,9 @@ const EditProduct = ({
 
   // update the category
   const handleSubmit = async (e) => {
-    setIsLoading(true);
     e.preventDefault();
-    console.log(product);
-    try {
-      const formDataToSend = new FormData();
-      formDataToSend.append("name", product.name);
-      formDataToSend.append("description", product.description);
-      formDataToSend.append("sellingPrice", product.sellingPrice);
-      formDataToSend.append("discountPrice", product.discountPrice);
-      formDataToSend.append("colors", product.colors);
-      formDataToSend.append("sizes", product.sizes);
-      if (product.images) {
-        for (let i = 0; i < product.images.length; i++) {
-          formDataToSend.append("images", product.images[i]);
-        }
-      }
-
-      const res = await axios.patch(
-        `${import.meta.env.VITE_API}/product/update/${selectedProduct._id}`,
-        formDataToSend,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Cookie: `accessToken=${accessToken};sessionToken=${sessionToken}`,
-          },
-          withCredentials: true,
-        },
-      );
-      setIsLoading(false);
-      handleClose();
-      Swal.fire({
-        title: res.data.msg,
-        confirmButtonText: "Ok",
-        confirmButtonColor: "green",
-        icon: "success",
-      });
-      onUpdate(); // Refresh the category list
-      handleClose();
-    } catch (error) {
-      setIsLoading(false);
-      console.log(error);
-      handleClose();
-      Swal.fire({
-        title: error.response.data.msg,
-        showConfirmButton: false,
-        showCancelButton: true,
-        cancelButtonText: "Ok",
-        cancelButtonColor: "red",
-        icon: "error",
-      }).then((result) => {
-        if (result.isDismissed) {
-          location.reload();
-        }
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    await handleUpdate(product);
   };
-
-  console.log(displayImage);
 
   return (
     <div
@@ -166,15 +105,10 @@ const EditProduct = ({
         isModalOpen ? "visible" : "invisible"
       } fixed left-0 top-0 z-[200000000] flex h-screen w-full items-center justify-center bg-[#0000002a] transition-all duration-300`}
     >
-      {isLoading && (
-        <Flex className="fixed left-0 top-0 z-[99999999] h-screen w-full items-center justify-center bg-white dark:bg-slate-900">
-          <Loader />
-        </Flex>
-      )}
       <div
         className={`${
           isModalOpen ? "scale-[1] opacity-100" : "scale-[0] opacity-0"
-        } mx-auto mt-8 w-[90%] rounded-lg bg-white transition-all duration-300 dark:bg-slate-700 sm:w-[80%] md:w-[35%]`}
+        } mx-auto mt-8 w-[90%] rounded-lg bg-white transition-all duration-300 sm:w-[80%] md:w-[35%] dark:bg-slate-700`}
       >
         <div className="flex w-full items-end justify-between border-b border-[#d1d1d1] p-4">
           <h1 className="text-[1.5rem] font-bold text-black dark:text-white">
@@ -414,7 +348,7 @@ const EditProduct = ({
             type="submit"
             className="w-full rounded-md bg-[#3B9DF8] px-4 py-2 text-[#fff]"
           >
-            Update
+            {isLoading ? "Updating..." : "Update Product"}
           </button>
         </form>
       </div>

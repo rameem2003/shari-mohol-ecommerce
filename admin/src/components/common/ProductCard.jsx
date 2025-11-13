@@ -1,82 +1,41 @@
 import React, { useState } from "react";
-import { FaTrash } from "react-icons/fa";
-import Cookies from "js-cookie";
-import Swal from "sweetalert2";
-import axios from "axios";
 import Flex from "./Flex";
 import Loader from "./Loader";
-import EditProduct from "../screens/productScreen/EditProduct";
+import { deleteProductRequest } from "../../api/product";
+import { toast } from "react-toastify";
+import { FaTrash } from "react-icons/fa";
 
 const ProductCard = ({
   className,
   data,
   handleHotSellUpdate,
   handleFeaturedUpdate,
+  handleEdit,
+  onUpdate,
 }) => {
-  const accessToken = Cookies.get("accessToken"); // access token
-  const [isLoading, setIsLoading] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null); // set the target category
+  const [isLoading, setIsLoading] = useState(false); // set the target category
 
   // function for product delete
   const handleDelete = async (id) => {
     setIsLoading(true);
-    console.log("Delete:", id);
-
     try {
-      let res = await axios.delete(
-        `${import.meta.env.VITE_API}/product/delete/${id}`,
-        {
-          withCredentials: true,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Cookie: `accessToken=${accessToken}`,
-          },
-        },
-      );
+      let res = await deleteProductRequest(id);
 
       setIsLoading(false);
-      Swal.fire({
-        title: res.data.msg,
-        confirmButtonText: "Ok",
-        confirmButtonColor: "green",
-        icon: "success",
-      })
-        .then((result) => {
-          if (result.isConfirmed) {
-            location.reload();
-          }
-        })
-        .finally(() => {
-          Location.reload();
-        });
 
+      if (!res.success) {
+        toast.error(res.response.data.message);
+        return;
+      }
+      toast.success(res.message);
+      await onUpdate();
       console.log(res.data);
     } catch (error) {
       setIsLoading(false);
       console.log(error);
 
-      Swal.fire({
-        title: error.response.data.msg,
-        showConfirmButton: false,
-        showCancelButton: true,
-        cancelButtonText: "Ok",
-        cancelButtonColor: "red",
-        icon: "error",
-      }).then((result) => {
-        if (result.isDismissed) {
-          location.reload();
-        }
-      });
+      toast.error(error.response.data.message);
     }
-  };
-
-  // product update
-  const handleEdit = (product) => {
-    setSelectedProduct(product);
-    setIsModalOpen(true);
   };
 
   return (
@@ -169,12 +128,6 @@ const ProductCard = ({
           </div>
         </div>
       </div>
-
-      <EditProduct
-        isModalOpen={isModalOpen}
-        selectedProduct={selectedProduct}
-        handleClose={() => setIsModalOpen(false)}
-      />
     </>
   );
 };
