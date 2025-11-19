@@ -51,7 +51,7 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
-              className="border-border focus:border-primary mt-1 w-full rounded-md border px-4 py-3 outline-none transition-colors duration-300"
+              className="mt-1 w-full rounded-md border border-border px-4 py-3 outline-none transition-colors duration-300 focus:border-primary"
             />
           </div>
 
@@ -70,7 +70,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
-                className="border-border focus:border-primary peer mt-1 w-full rounded-md border py-3 pl-4 pr-12 outline-none transition-colors duration-300"
+                className="peer mt-1 w-full rounded-md border border-border py-3 pl-4 pr-12 outline-none transition-colors duration-300 focus:border-primary"
               />
               {isEyeOpen ? (
                 <IoEyeOutline
@@ -86,8 +86,11 @@ const Login = () => {
             </div>
           </div>
 
-          <button className="hover:bg-secondary bg-primary border-primary w-full rounded border px-6 py-2 text-[#fff] transition duration-300">
-            Sign in
+          <button
+            disabled={loading}
+            className="w-full rounded border border-primary bg-primary px-6 py-2 text-[#fff] transition duration-300 hover:bg-secondary"
+          >
+            {loading ? "Loading..." : "Login"}
           </button>
 
           <div className="mt-2">

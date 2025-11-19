@@ -30,6 +30,7 @@ const getAllOrders = async (req, res) => {
   try {
     let {
       orders,
+      pendingOrders,
       totalOrders,
       totalRevenue,
       ordersByPayment,
@@ -41,6 +42,7 @@ const getAllOrders = async (req, res) => {
       success: true,
       message: "Order Fetched Success",
       data: orders,
+      pendingOrders,
       totalOrders,
       totalRevenue,
       ordersByPayment,

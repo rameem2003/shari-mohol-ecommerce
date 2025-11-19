@@ -13,6 +13,11 @@ const findAllOrders = async () => {
       .populate("userId")
       .sort({ createdAt: -1 });
 
+    let pendingOrders = orders.filter(
+      (order) => order.deliveryStatus === "Pending"
+    );
+    console.log("Pending Orders:", pendingOrders);
+
     let totalOrders = await orderModel.countDocuments();
     let totalRevenue = await orderModel.aggregate([
       {
@@ -28,9 +33,9 @@ const findAllOrders = async () => {
     const ordersByPayment = await orderModel.aggregate([
       {
         $group: {
-          _id: "$paymentMethod",
-          count: { $sum: 1 },
-          revenue: { $sum: "$grandTotal" },
+          _id: "$paymentMethod", // online / cod
+          totalRevenue: { $sum: "$grandTotal" },
+          orderCount: { $sum: 1 },
         },
       },
     ]);
@@ -94,11 +99,27 @@ const findAllOrders = async () => {
       return found ? found : month; // keep zero-filled data
     });
 
+    // Force include both methods (even if no data)
+    const paymentMethods = ["online", "cod"];
+
+    const allOrdersByPaymentStatus = paymentMethods.map((method) => {
+      const found = ordersByPayment.find((r) => r._id === method);
+
+      return found
+        ? found
+        : {
+            _id: method,
+            totalRevenue: 0,
+            orderCount: 0,
+          };
+    });
+
     return {
       orders,
+      pendingOrders,
       totalOrders,
       totalRevenue: totalRevenue[0]?.total || 0,
-      ordersByPayment,
+      ordersByPayment: allOrdersByPaymentStatus,
       ordersByStatus,
       dailyRevenue,
       monthlyRevenue: merged,

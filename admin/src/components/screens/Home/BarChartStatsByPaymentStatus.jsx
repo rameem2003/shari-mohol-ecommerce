@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,9 +9,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { useState } from "react";
 import { fetchAllOrdersRequest } from "../../../api/order";
-import { useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
 
 ChartJS.register(
@@ -35,49 +33,40 @@ export const options = {
   responsive: true,
   plugins: {
     legend: { position: "top", labels: { color: "white" } },
-    title: { display: true, text: "Monthly Revenue", color: "white" },
+    title: {
+      display: true,
+      text: "Order Count by Payment Status",
+      color: "white",
+    },
   },
-  //   color: { white: "white" },
 };
 
-const BarChartMonthlyRevenue = () => {
+const BarChartStatsByPaymentStatus = () => {
   const [chartData, setChartData] = useState(null);
-
   const fetchOrders = async () => {
     let res = await fetchAllOrdersRequest();
     // console.log(res);
 
-    const data = res.monthlyRevenue; // <-- MATCHES YOUR RESPONSE
+    const data = res.ordersByPayment; // <-- MATCHES YOUR RESPONSE
 
-    // Convert month numbers → month names
-    const monthNames = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-
-    const labels = data.map(
-      (item) => `${monthNames[item._id.month]} ${item._id.year}`,
-    );
-    const revenue = data.map((item) => item.revenue);
+    const labels = data.map((item) => item._id.toUpperCase());
+    const count = data.map((item) => item.orderCount);
+    const revenue = data.map((item) => item.totalRevenue);
 
     setChartData({
       labels,
       datasets: [
         {
-          label: "Revenue (BDT)",
+          label: "Order Count",
+          color: "white",
+          data: count,
+          backgroundColor: "blue",
+        },
+        {
+          label: "Total Revenue",
           color: "white",
           data: revenue,
-          backgroundColor: "orange",
+          backgroundColor: "green",
         },
       ],
     });
@@ -86,11 +75,10 @@ const BarChartMonthlyRevenue = () => {
   useEffect(() => {
     fetchOrders();
   }, []);
-
   return (
     <div className="relative w-full rounded-md bg-gray-100 p-2 lg:w-[48%] dark:bg-slate-800">
       <h2 className="text-2xl font-bold text-black dark:text-white">
-        Monthly Revenue
+        Order Count by Payment Status
       </h2>
 
       {!chartData && (
@@ -107,4 +95,4 @@ const BarChartMonthlyRevenue = () => {
   );
 };
 
-export default BarChartMonthlyRevenue;
+export default BarChartStatsByPaymentStatus;

@@ -6,22 +6,22 @@ const ListSkeleton = () => {
   return (
     <tr className="flex w-full gap-[20px]">
       <td className="w-2/12">
-        <Skeleton baseColor="#202020" highlightColor="#ddd" count={1} />
+        <Skeleton baseColor="#0F172A" highlightColor="#ddd" count={1} />
       </td>
       <td className="w-2/12">
-        <Skeleton baseColor="#202020" highlightColor="#ddd" count={1} />
+        <Skeleton baseColor="#0F172A" highlightColor="#ddd" count={1} />
       </td>
       <td className="w-2/12">
-        <Skeleton baseColor="#202020" highlightColor="#ddd" count={1} />
+        <Skeleton baseColor="#0F172A" highlightColor="#ddd" count={1} />
       </td>
       <td className="w-2/12">
-        <Skeleton baseColor="#202020" highlightColor="#ddd" count={1} />
+        <Skeleton baseColor="#0F172A" highlightColor="#ddd" count={1} />
       </td>
       <td className="w-2/12">
-        <Skeleton baseColor="#202020" highlightColor="#ddd" count={1} />
+        <Skeleton baseColor="#0F172A" highlightColor="#ddd" count={1} />
       </td>
       <td className="w-2/12">
-        <Skeleton baseColor="#202020" highlightColor="#ddd" count={1} />
+        <Skeleton baseColor="#0F172A" highlightColor="#ddd" count={1} />
       </td>
     </tr>
   );

@@ -399,11 +399,19 @@ const ResponsiveSidebar = () => {
         } mt-10 flex items-center bg-gray-100 px-[20px] py-3 dark:bg-slate-900`}
       >
         <div className="flex items-center gap-[10px]">
-          <img
-            src={`${import.meta.env.VITE_MEDIA}/${admin?.photo}`}
-            alt="avatar"
-            className="h-[30px] w-[30px] cursor-pointer rounded-full object-cover"
-          />
+          <div className="relative">
+            <img
+              src={`${import.meta.env.VITE_MEDIA}/${admin?.photo}`}
+              alt="avatar"
+              className="h-[30px] w-[30px] cursor-pointer rounded-full object-cover"
+            />
+
+            {admin?.isVerified ? (
+              <FaCheckCircle className="absolute bottom-[-1px] right-[-2px] inline rounded-full border-2 border-white text-sm text-green-500" />
+            ) : (
+              <TbInfoTriangleFilled className="absolute bottom-[-1px] right-[-2px] inline rounded-full border-2 border-white text-sm text-yellow-500" />
+            )}
+          </div>
           <div>
             <h3
               className={`${
@@ -411,11 +419,6 @@ const ResponsiveSidebar = () => {
               } text-[0.9rem] font-[500] text-gray-800 dark:text-white`}
             >
               {admin?.name}{" "}
-              {admin?.isVerified ? (
-                <FaCheckCircle className="inline text-lg text-green-500" />
-              ) : (
-                <TbInfoTriangleFilled className="inline text-lg text-yellow-500" />
-              )}
             </h3>
             {/* <h5 className="text-xs font-normal text-gray-800 dark:text-white">
               {admin?.email}
