@@ -13,7 +13,96 @@ const findAllOrders = async () => {
       .populate("userId")
       .sort({ createdAt: -1 });
 
-    return orders;
+    let totalOrders = await orderModel.countDocuments();
+    let totalRevenue = await orderModel.aggregate([
+      {
+        $group: {
+          _id: null,
+          total: {
+            $sum: "$grandTotal",
+          },
+        },
+      },
+    ]);
+
+    const ordersByPayment = await orderModel.aggregate([
+      {
+        $group: {
+          _id: "$paymentMethod",
+          count: { $sum: 1 },
+          revenue: { $sum: "$grandTotal" },
+        },
+      },
+    ]);
+
+    const ordersByStatus = await orderModel.aggregate([
+      {
+        $group: {
+          _id: "$deliveryStatus",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const dailyRevenue = await orderModel.aggregate([
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
+            day: { $dayOfMonth: "$createdAt" },
+          },
+          revenue: { $sum: "$grandTotal" },
+          orders: { $sum: 1 },
+        },
+      },
+      { $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 } },
+    ]);
+
+    const monthlyRevenueAllMonths = await orderModel.aggregate([
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
+          },
+          revenue: { $sum: "$grandTotal" },
+          orderCount: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { "_id.year": 1, "_id.month": 1 },
+      },
+    ]);
+
+    // --- GENERATE FULL YEAR MONTHS ---
+    const currentYear = new Date().getFullYear();
+
+    const fullYearMonths = Array.from({ length: 12 }, (_, i) => ({
+      _id: { year: currentYear, month: i },
+      revenue: 0,
+      orderCount: 0,
+    }));
+
+    // --- MERGE RESULTS INTO FULL 12 MONTHS ---
+    const merged = fullYearMonths.map((month) => {
+      const found = monthlyRevenueAllMonths.find(
+        (item) =>
+          item._id.year === month._id.year && item._id.month === month._id.month
+      );
+
+      return found ? found : month; // keep zero-filled data
+    });
+
+    return {
+      orders,
+      totalOrders,
+      totalRevenue: totalRevenue[0]?.total || 0,
+      ordersByPayment,
+      ordersByStatus,
+      dailyRevenue,
+      monthlyRevenue: merged,
+    };
   } catch (error) {
     console.log(error);
     throw new Error("Error finding orders: " + error.message);

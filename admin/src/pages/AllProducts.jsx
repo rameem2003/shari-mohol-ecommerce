@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "../components/common/ProductCard";
-import axios from "axios";
-import ProductListPagination from "../components/screens/productsScreen/ProductListPagination";
-import { fetchAllProductsRequest, updateProductRequest } from "../api/product";
 import Flex from "../components/common/Flex";
-import { toast } from "react-toastify";
 import EditProduct from "../components/screens/productScreen/EditProduct";
 import ProductListSkeleton from "../components/screens/productsScreen/ProductListSkeleton";
+import { fetchAllProductsRequest, updateProductRequest } from "../api/product";
+import { toast } from "react-toastify";
 
 const AllProducts = () => {
   const [allProducts, setAllProducts] = useState([]);

@@ -8,6 +8,8 @@ import { MdDone } from "react-icons/md";
 import axios from "axios";
 import { FaTimes } from "react-icons/fa";
 import { Link } from "react-router";
+import { fetchAllOrdersRequest } from "../../../api/order";
+import ListSkeleton from "../../common/ListSkeleton";
 
 const LastOrders = () => {
   const [data, setData] = useState([]);
@@ -18,12 +20,8 @@ const LastOrders = () => {
 
   // fetch orders
   const fetchOrders = async () => {
-    let res = await axios.get(`${import.meta.env.VITE_API}/order/all`);
-    setOrders(
-      res?.data?.data
-        ?.filter((data) => data.deliveryStatus == "pending")
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
-    );
+    let res = await fetchAllOrdersRequest();
+    setOrders(res?.data);
   };
 
   const toggleActionMenu = (id) => {
@@ -76,11 +74,11 @@ const LastOrders = () => {
   }, []);
 
   useEffect(() => {
-    // fetchOrders();
+    fetchOrders();
   }, []);
 
   return (
-    <div className="customTable mb-4 hidden h-auto w-full flex-col items-start gap-5 rounded-md bg-gray-100 p-2 lg:flex xl:w-8/12 dark:bg-slate-800">
+    <div className="customTable mb-4 hidden h-auto w-full flex-col items-start gap-5 rounded-md bg-gray-100 p-2 lg:flex dark:bg-slate-800">
       <div className="mx-auto w-full">
         <div className="mb-4 hidden">
           <input
@@ -94,6 +92,11 @@ const LastOrders = () => {
         <h2 className="mb-5 text-2xl font-bold text-black dark:text-white">
           Last 5 Pending Orders
         </h2>
+        {!orders.length > 0 && (
+          <div className="block w-full">
+            <ListSkeleton />
+          </div>
+        )}
 
         <div className="customTable w-full rounded-md">
           <table className="w-full overflow-x-scroll text-sm">
@@ -109,7 +112,7 @@ const LastOrders = () => {
                   Phone
                 </th>
                 <th className="p-3 text-left font-medium text-black dark:text-white">
-                  Payment Status
+                  Payment Method
                 </th>
                 <th className="p-3 text-left font-medium text-black dark:text-white">
                   Delivery Status
@@ -120,28 +123,19 @@ const LastOrders = () => {
                 </th>
               </tr>
             </thead>
+
             <tbody className="">
-              {/* {orders?.slice(0, 4).map((item, index) => (
+              {orders?.slice(0, 4).map((item, index) => (
                 <tr className="border-t border-gray-200" key={item._id}>
                   <td className="p-3 text-black dark:text-white">{item._id}</td>
                   <td className="p-3 text-black dark:text-white">
-                    {item.name}
+                    {item?.userId?.name}
                   </td>
                   <td className="p-3 text-black dark:text-white">
                     {item.phone}
                   </td>
                   <td className="p-3 text-black dark:text-white">
-                    {item.paymentStatus == "paid" ? (
-                      <div className="flex items-center justify-center gap-2 rounded-full bg-[#18c964] py-1.5 text-[0.9rem] font-[500] text-white">
-                        <MdDone className="rounded-full bg-[#18c964] p-0.5 text-[1.4rem] text-[#fff]" />
-                        Paid
-                      </div>
-                    ) : (
-                      <div className="flex items-center justify-center gap-2 rounded-full bg-red-500 py-1.5 text-[0.9rem] font-[500] text-white">
-                        <FaTimes className="rounded-full bg-red-500 p-0.5 text-[1.4rem] text-[#fff]" />
-                        Unpaid
-                      </div>
-                    )}
+                    {item.paymentMethod}
                   </td>
                   <td className="p-3 text-black dark:text-white">
                     {item.deliveryStatus == "delivered" ? (
@@ -187,7 +181,7 @@ const LastOrders = () => {
                   </td>
                 </tr>
               ))}
-              {sortedData.map((item, index) => (
+              {/* {sortedData.map((item, index) => (
                 <tr
                   key={item.id}
                   className="hidden border-t border-gray-200 hover:bg-gray-50"

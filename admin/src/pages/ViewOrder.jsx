@@ -139,10 +139,10 @@ const ViewOrder = () => {
                   {data.quantity}
                 </td>
                 <td className="px-6 py-4 font-medium text-gray-900">
-                  ৳ {data.product.discountPrice} BDT
+                  ৳ {data?.product?.discountPrice} BDT
                 </td>
                 <td className="px-6 py-4 font-medium text-gray-900">
-                  ৳ {data.quantity * data.product.discountPrice} BDT
+                  ৳ {data.quantity * data?.product?.discountPrice} BDT
                 </td>
               </tr>
             ))}

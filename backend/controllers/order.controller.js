@@ -28,11 +28,25 @@ const getAllOrders = async (req, res) => {
       .send({ success: false, message: "Unauthorized User" });
   }
   try {
-    let allOrders = await findAllOrders();
+    let {
+      orders,
+      totalOrders,
+      totalRevenue,
+      ordersByPayment,
+      ordersByStatus,
+      dailyRevenue,
+      monthlyRevenue,
+    } = await findAllOrders();
     res.status(201).send({
       success: true,
       message: "Order Fetched Success",
-      data: allOrders,
+      data: orders,
+      totalOrders,
+      totalRevenue,
+      ordersByPayment,
+      ordersByStatus,
+      dailyRevenue,
+      monthlyRevenue,
     });
   } catch (error) {
     res.status(500).send({
