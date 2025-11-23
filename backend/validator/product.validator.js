@@ -6,6 +6,12 @@ const productSegmentSchema = z.object({
       message: "Status must be 'all', 'featured', 'hot_sell'",
     })
     .default(""),
+
+  limit: z.coerce.number().int().positive().optional().default(10),
+  // .refine((val) => val >= 0, { message: "Limit must be a positive number" }),
+
+  offset: z.coerce.number().int().positive().optional().default(1),
+  // .refine((val) => val >= 0, { message: "Offset must be a positive number" }),
 });
 
 const newProductValidationSchema = z.object({

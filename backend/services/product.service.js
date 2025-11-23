@@ -3,26 +3,34 @@ const productModel = require("../model/product.model");
 const reviewModel = require("../model/review.model");
 const deleteFile = require("../utils/fileDelete");
 
-const findAllProducts = async (param) => {
+const findAllProducts = async (param, limit = 10, offset = 0) => {
   try {
+    let totalCount = await productModel.countDocuments();
+
     if (param === "featured") {
       let featuredProducts = await productModel
         .find({ featured: true })
         .populate("category")
-        .populate("reviews");
-      return featuredProducts;
+        .populate("reviews")
+        .limit(limit || 0)
+        .skip(offset || 0);
+      return { totalCount, products: featuredProducts };
     } else if (param === "hot_sell") {
       let hotSellProducts = await productModel
         .find({ hotSell: true })
         .populate("category")
-        .populate("reviews");
-      return hotSellProducts;
+        .populate("reviews")
+        .limit(limit || 0)
+        .skip(offset || 0);
+      return { totalCount, products: hotSellProducts };
     } else {
       let allProduct = await productModel
         .find({})
         .populate("category")
-        .populate("reviews");
-      return allProduct;
+        .populate("reviews")
+        .limit(limit || 0)
+        .skip(offset || 0);
+      return { totalCount, products: allProduct };
     }
   } catch (error) {
     console.log("Error fetching products: ", error);

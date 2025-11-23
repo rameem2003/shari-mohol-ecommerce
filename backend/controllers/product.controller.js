@@ -24,12 +24,23 @@ const allProducts = async (req, res) => {
       .status(400)
       .send({ success: false, message: JSON.parse(error.message)[0].message });
   }
+
+  const { segment, limit, offset } = data;
   try {
-    let allProduct = await findAllProducts(data.segment);
+    let { totalCount, products } = await findAllProducts(
+      segment,
+      limit,
+      (offset - 1) * 10
+    );
+
+    const totalPages = Math.ceil(totalCount / 10);
+
     res.status(200).send({
       success: true,
       message: "All Products Fetched Success",
-      data: allProduct,
+      currentPage: offset,
+      totalPages,
+      data: products,
     });
   } catch (error) {
     console.log(error);
