@@ -4,13 +4,14 @@ import Flex from "../components/common/Flex";
 import EditProduct from "../components/screens/productScreen/EditProduct";
 import ProductListSkeleton from "../components/screens/productsScreen/ProductListSkeleton";
 import ProductFIlter from "../components/screens/productsScreen/ProductFIlter";
+import Pagination from "../components/common/Pagination";
 import { fetchAllProductsRequest, updateProductRequest } from "../api/product";
 import { toast } from "react-toastify";
 import { useNavigate, useSearchParams } from "react-router";
 
 const AllProducts = () => {
-  const [allProducts, setAllProducts] = useState([]);
   const navigate = useNavigate();
+  const [allProducts, setAllProducts] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [price, setPrice] = useState(searchParams.get("price") || "");
   const [category, setCategory] = useState(searchParams.get("category") || "");
@@ -18,6 +19,7 @@ const AllProducts = () => {
   const [offset, setOffset] = useState(
     parseInt(searchParams.get("offset")) || 1,
   );
+  const [paginationData, setPaginationData] = useState(null);
   const [openActionMenuId, setOpenActionMenuId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null); // set the target product
@@ -35,8 +37,11 @@ const AllProducts = () => {
     new Promise((resolve) => {
       setTimeout(async () => {
         let res = await fetchAllProductsRequest(params);
+        // console.log(res);
+
         setAllProducts(res.data);
         setIsLoading(false);
+        setPaginationData(res);
       }, 1000);
     });
   };
@@ -132,7 +137,6 @@ const AllProducts = () => {
     if (price) params.set("price", price);
     if (offset) params.set("offset", offset.toString());
     if (segment) params.set("segment", segment);
-    // console.log(params);
 
     navigate(`/all-products?${params.toString()}`);
     fetchAllProducts();
@@ -143,6 +147,7 @@ const AllProducts = () => {
       <h2 className="mb-10 text-2xl font-semibold text-black dark:text-white">
         All Products
       </h2>
+      {/* Product Filter */}
       <ProductFIlter
         setPrice={setPrice}
         setCategory={setCategory}
@@ -150,9 +155,8 @@ const AllProducts = () => {
       />
 
       {isLoading && <ProductListSkeleton />}
-      {/* Product List Pagination */}
       <section className="mt-10">
-        <Flex className="flex-wrap justify-between">
+        <Flex className="flex-wrap justify-start gap-4">
           {/* Product List Display */}
           {!isLoading &&
             allProducts.map((p, index) => (
@@ -175,6 +179,9 @@ const AllProducts = () => {
         onUpdate={fetchAllProducts}
         handleUpdate={handleUpdate}
       />
+
+      {/* Product List Pagination */}
+      <Pagination paginationData={paginationData} setOffset={setOffset} />
     </main>
   );
 };

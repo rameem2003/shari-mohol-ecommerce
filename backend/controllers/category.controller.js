@@ -5,19 +5,38 @@ const {
   updateExistingCategory,
   deleteExistingCategory,
 } = require("../services/category.service");
-const categoryUploadValidator = require("../validator/category.validator");
+const {
+  categoryUploadValidator,
+  categorySegmentSchema,
+} = require("../validator/category.validator");
 const deleteFile = require("../utils/fileDelete");
 
 /**
  * Get all category
  */
 const allCategory = async (req, res) => {
+  const { data, error } = categorySegmentSchema.safeParse(req.query);
+  if (error) {
+    return res
+      .status(400)
+      .send({ success: false, message: JSON.parse(error.message)[0].message });
+  }
+
+  const { limit, offset } = data;
+
   try {
-    let allCategory = await getAllCategories();
+    let { totalCount, categories } = await getAllCategories(
+      limit,
+      (offset - 1) * 10
+    );
+    const totalPages = Math.ceil(totalCount / 10);
     res.status(200).send({
       success: true,
       message: "All Category Fetched Success",
-      data: allCategory,
+      data: categories,
+      totalCount,
+      totalPages,
+      currentPage: offset,
     });
   } catch (error) {
     res.status(500).send({

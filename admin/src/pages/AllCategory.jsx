@@ -1,30 +1,39 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import EditCategory from "../components/screens/categoryScreen/EditCategory";
+import ListSkeleton from "../components/common/ListSkeleton";
+import CategoryTable from "../components/screens/categoryScreen/CategoryTable";
+import Pagination from "../components/common/Pagination";
+import { useNavigate, useSearchParams } from "react-router";
+import { toast } from "react-toastify";
 import {
   deleteCategoryRequest,
   fetchAllCategoriesRequest,
 } from "../api/category";
-import { toast } from "react-toastify";
-import ListCategory from "../components/screens/categoryScreen/ListCategory";
-import CategoryTable from "../components/screens/categoryScreen/CategoryTable";
-import Flex from "../components/common/Flex";
-import Loader from "../components/common/Loader";
-import ListSkeleton from "../components/common/ListSkeleton";
 
 const AllCategory = () => {
+  const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [openActionMenuId, setOpenActionMenuId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null); // set the target category
   const [isLoading, setIsLoading] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [offset, setOffset] = useState(
+    parseInt(searchParams.get("offset")) || 1,
+  );
+  const [paginationData, setPaginationData] = useState(null);
 
   // Fetch categories
   const fetchCategories = async () => {
+    const params = new URLSearchParams({
+      offset,
+    });
     setIsLoading(true);
     new Promise((resolve) => {
       setTimeout(async () => {
-        let res = await fetchAllCategoriesRequest();
+        let res = await fetchAllCategoriesRequest(params);
         setCategories(res.data);
+        setPaginationData(res);
         setIsLoading(false);
       }, 5000);
     });
@@ -82,13 +91,19 @@ const AllCategory = () => {
   }, []);
 
   useEffect(() => {
+    const params = new URLSearchParams();
+    if (offset) params.set("offset", offset.toString());
+    navigate(`/all-categories?${params.toString()}`);
     fetchCategories();
-  }, []);
+  }, [offset]);
+
   return (
     <main className="w-full overflow-y-scroll border-l-[1px] border-black bg-white p-2 dark:border-white dark:bg-slate-900">
       <h2 className="mb-10 text-2xl font-semibold text-black dark:text-white">
         All Categories
       </h2>
+
+      <Pagination paginationData={paginationData} setOffset={setOffset} />
 
       {isLoading && <ListSkeleton />}
       {!isLoading && (

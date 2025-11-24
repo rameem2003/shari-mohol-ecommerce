@@ -23,8 +23,8 @@ const findAllProducts = async (
       .populate("category")
       .populate("reviews")
       .sort({ sellingPrice: price === "asc" || price === "" ? 1 : -1 })
-      .limit(limit || 0)
-      .skip(offset || 0);
+      .limit(limit)
+      .skip(offset);
     return { totalCount, products: categoryProducts };
 
     // if (param === "featured") {

@@ -1,8 +1,8 @@
 import axiosInstance from "../../config/axois.config";
 
-export const fetchAllCategoriesRequest = async () => {
+export const fetchAllCategoriesRequest = async (params) => {
   try {
-    let res = await axiosInstance.get(`/category/all`, {
+    let res = await axiosInstance.get(`/category/all?limit=10&${params}`, {
       withCredentials: true,
       headers: { "Content-Type": "application/json" },
     });

@@ -1,9 +1,9 @@
 import axiosInstance from "../../config/axois.config";
 
 // fetch all orders
-export const fetchAllOrdersRequest = async () => {
+export const fetchAllOrdersRequest = async (params) => {
   try {
-    let res = await axiosInstance.get(`/order/all`, {
+    let res = await axiosInstance.get(`/order/all?${params}`, {
       withCredentials: true,
       headers: { "Content-Type": "application/json" },
     });

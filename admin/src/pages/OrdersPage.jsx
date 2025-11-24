@@ -3,9 +3,13 @@ import Flex from "../components/common/Flex";
 import useOrder from "../hooks/useOrder";
 import Loader from "../components/common/Loader";
 import OrderList from "../components/common/OrderList";
+import ListSkeleton from "../components/common/ListSkeleton";
+import Pagination from "../components/common/Pagination";
+import OrderFilter from "../components/screens/orderScreen/OrderFilter";
 
 const OrdersPage = () => {
-  const { orders, loading } = useOrder();
+  const { orders, loading, paginationData, setOffset, setMethod, setStatus } =
+    useOrder();
   const [searchTerm, setSearchTerm] = useState("");
   const [openActionMenuId, setOpenActionMenuId] = useState(null);
 
@@ -39,14 +43,6 @@ const OrdersPage = () => {
     return () => document.removeEventListener("click", handleCLick);
   }, []);
 
-  if (loading) {
-    return (
-      <div className="fixed left-0 top-0 z-50 flex h-screen w-full items-center justify-center bg-white/70 dark:bg-slate-900/70">
-        <Loader />
-      </div>
-    );
-  }
-
   return (
     <main className="w-full overflow-y-scroll border-l-[1px] border-black bg-white p-2 dark:border-white dark:bg-slate-900">
       <Flex className="items-center justify-between">
@@ -63,13 +59,19 @@ const OrdersPage = () => {
         </div>
       </Flex>
 
-      {/* Order's Table */}
+      <OrderFilter setStatus={setStatus} setMethod={setMethod} />
 
-      <OrderList
-        filteredOrder={filteredOrder}
-        toggleActionMenu={toggleActionMenu}
-        openActionMenuId={openActionMenuId}
-      />
+      {/* Order's Table */}
+      {loading && <ListSkeleton />}
+      {!loading && (
+        <OrderList
+          filteredOrder={filteredOrder}
+          toggleActionMenu={toggleActionMenu}
+          openActionMenuId={openActionMenuId}
+        />
+      )}
+      {/* Pagination */}
+      <Pagination paginationData={paginationData} setOffset={setOffset} />
     </main>
   );
 };

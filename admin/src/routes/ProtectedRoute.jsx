@@ -7,13 +7,6 @@ const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (user?.role !== "admin") {
-      navigate("/login", { replace: true });
-      return;
-    }
-  }, [user]);
-
   if (loading) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
@@ -22,6 +15,10 @@ const ProtectedRoute = ({ children }) => {
     );
   }
 
+  if (user?.role !== "admin") {
+    navigate("/login", { replace: true });
+    return;
+  }
   return <>{children}</>;
 };
 

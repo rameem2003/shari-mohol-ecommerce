@@ -1,4 +1,14 @@
 const { default: z } = require("zod");
+
+const orderSegmentValidatorSchema = z.object({
+  offset: z.coerce.number().int().positive().optional().default(1),
+  method: z.enum(["", "COD", "online"]).optional().default(""),
+  status: z
+    .enum(["", "pending", "processing", "shipped", "delivered", "cancelled"])
+    .optional()
+    .default(""),
+});
+
 const orderValidatorSchema = z.object({
   userId: z.string({ message: "User ID is required" }),
   address: z.string({ message: "Address is required" }),
@@ -28,4 +38,8 @@ const orderStatus = z.enum(
   }
 );
 
-module.exports = { orderValidatorSchema, orderStatus };
+module.exports = {
+  orderValidatorSchema,
+  orderStatus,
+  orderSegmentValidatorSchema,
+};

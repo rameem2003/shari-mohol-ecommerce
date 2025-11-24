@@ -16,6 +16,7 @@ const sendPurchaseConfirmationEmail = require("../utils/sendPurchaseConfirmation
 const {
   orderValidatorSchema,
   orderStatus,
+  orderSegmentValidatorSchema,
 } = require("../validator/order.validator");
 
 /**
@@ -27,9 +28,20 @@ const getAllOrders = async (req, res) => {
       .status(404)
       .send({ success: false, message: "Unauthorized User" });
   }
+
+  const { data, error } = orderSegmentValidatorSchema.safeParse(req.query);
+  if (error) {
+    return res
+      .status(400)
+      .send({ success: false, message: JSON.parse(error.message)[0].message });
+  }
+
+  const { offset, method, status } = data;
+
   try {
     let {
       orders,
+      totalCount,
       pendingOrders,
       totalOrders,
       totalRevenue,
@@ -37,11 +49,16 @@ const getAllOrders = async (req, res) => {
       ordersByStatus,
       dailyRevenue,
       monthlyRevenue,
-    } = await findAllOrders();
+    } = await findAllOrders((offset - 1) * 10, method, status);
+
+    const totalPages = Math.ceil(totalCount / 10);
     res.status(201).send({
       success: true,
       message: "Order Fetched Success",
       data: orders,
+      currentPage: offset,
+      totalPages,
+      totalCount,
       pendingOrders,
       totalOrders,
       totalRevenue,

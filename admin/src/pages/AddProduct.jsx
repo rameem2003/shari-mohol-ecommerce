@@ -176,7 +176,7 @@ const AddProduct = () => {
             <div className="w-full">
               <label
                 htmlFor="name"
-                className="text-[15px] font-[400] text-black text-text dark:text-white"
+                className="text-[15px] font-[400] text-text dark:text-white"
               >
                 Product Name <span className="text-red-500">*</span>
               </label>
@@ -198,7 +198,7 @@ const AddProduct = () => {
             <div className="w-full">
               <label
                 htmlFor="description"
-                className="text-[15px] font-[400] text-black text-text dark:text-white"
+                className="text-[15px] font-[400] text-text dark:text-white"
               >
                 Product Description <span className="text-red-500">*</span>
               </label>
@@ -223,7 +223,7 @@ const AddProduct = () => {
             <div className="w-full">
               <label
                 htmlFor="selling"
-                className="text-[15px] font-[400] text-black text-text dark:text-white"
+                className="text-[15px] font-[400] text-text dark:text-white"
               >
                 Selling Price <span className="text-red-500">*</span>
               </label>
@@ -248,7 +248,7 @@ const AddProduct = () => {
             <div className="w-full">
               <label
                 htmlFor="discount"
-                className="text-[15px] font-[400] text-black text-text dark:text-white"
+                className="text-[15px] font-[400] text-text dark:text-white"
               >
                 Discount Price
               </label>
@@ -275,7 +275,7 @@ const AddProduct = () => {
             <div className="w-full">
               <label
                 htmlFor="colors"
-                className="text-[15px] font-[400] text-black text-text dark:text-white"
+                className="text-[15px] font-[400] text-text dark:text-white"
               >
                 Colors (Input Comma Separated)
                 <span className="text-red-500">*</span>
@@ -298,7 +298,7 @@ const AddProduct = () => {
             <div className="w-full">
               <label
                 htmlFor="size"
-                className="text-[15px] font-[400] text-black text-text dark:text-white"
+                className="text-[15px] font-[400] text-text dark:text-white"
               >
                 Size (Input Comma Separated)
               </label>
@@ -322,7 +322,7 @@ const AddProduct = () => {
             <div className="mb-4 flex w-full flex-col justify-start gap-5">
               <label
                 htmlFor="name"
-                className="text-[15px] font-[400] text-black text-text dark:text-white"
+                className="text-[15px] font-[400] text-text dark:text-white"
               >
                 Select Category
                 <span className="text-red-500">*</span>
@@ -368,7 +368,7 @@ const AddProduct = () => {
             <div className="mb-4 flex w-full flex-col justify-start gap-5">
               <label
                 htmlFor="name"
-                className="text-[15px] font-[400] text-black text-text dark:text-white"
+                className="text-[15px] font-[400] text-text dark:text-white"
               >
                 Select Sub Category
                 <span className="text-red-500">*</span>
@@ -414,7 +414,7 @@ const AddProduct = () => {
             <div className="w-full">
               <label
                 htmlFor="stock"
-                className="text-[15px] font-[400] text-black text-text dark:text-white"
+                className="text-[15px] font-[400] text-text dark:text-white"
               >
                 Stock
               </label>

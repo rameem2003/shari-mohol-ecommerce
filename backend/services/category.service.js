@@ -1,6 +1,23 @@
 const categoryModel = require("../model/category.model");
 const deleteFile = require("../utils/fileDelete");
 
+const getAllCategories = async (limit = 0, offset) => {
+  try {
+    let totalCount = await categoryModel
+      .countDocuments()
+      .limit(limit)
+      .skip(offset);
+    let res = await categoryModel
+      .find()
+      .populate("products")
+      .limit(limit)
+      .skip(offset);
+    return { totalCount, categories: res };
+  } catch (error) {
+    console.log("Error fetching categories: ", error);
+    throw new Error("Error fetching categories: " + error.message);
+  }
+};
 const findCategoryById = async (id) => {
   try {
     let res = await categoryModel.findById(id).populate("products");
@@ -9,16 +26,6 @@ const findCategoryById = async (id) => {
   } catch (error) {
     console.log("Error finding category: ", error);
     throw new Error("Error finding category: " + error.message);
-  }
-};
-
-const getAllCategories = async () => {
-  try {
-    let res = await categoryModel.find().populate("products");
-    return res;
-  } catch (error) {
-    console.log("Error fetching categories: ", error);
-    throw new Error("Error fetching categories: " + error.message);
   }
 };
 

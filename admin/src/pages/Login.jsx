@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-
-import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
-import { MdErrorOutline } from "react-icons/md";
 import useAuth from "../hooks/useAuth";
 import { Link } from "react-router";
+import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
+import { MdErrorOutline } from "react-icons/md";
 
 const Login = () => {
   const { loading, login, msg } = useAuth();
@@ -14,17 +13,19 @@ const Login = () => {
   // function for handle submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     await login(email, password);
   };
 
   return (
     <main className="flex h-screen w-full items-center justify-center bg-gray-100 p-2 dark:bg-slate-900">
       <div className="w-[500px] max-w-[500px] rounded-md bg-white p-3 shadow-lg dark:bg-slate-600">
-        <h2 className="text-2xl font-semibold text-black dark:text-white">
+        <h1 className="mb-2 text-center text-5xl font-semibold text-black dark:text-white">
+          Shari Mohol
+        </h1>
+        <h2 className="text-center text-xl font-semibold text-black dark:text-white">
           Welcome Admin
         </h2>
-        <h2 className="text-xl font-semibold text-black dark:text-white">
+        <h2 className="text-center text-xl font-semibold text-black dark:text-white">
           Login Here
         </h2>
 
@@ -106,11 +107,10 @@ const Login = () => {
       <p className="fixed bottom-2 right-2 font-semibold italic text-black dark:text-white">
         Developed by:{" "}
         <a
-          href="https://www.facebook.com/rolstudiobangladesh"
+          href="https://rolstudiobangladesh.vercel.app/"
           target="_blank"
           rel="noopener noreferrer"
         >
-          {" "}
           ROL Studio Bangladesh || Mahmood Hassan Rameem
         </a>
       </p>

@@ -1,9 +1,12 @@
 const orderModel = require("../model/order.model");
 
-const findAllOrders = async () => {
+const findAllOrders = async (offset = 1, method = "", status = "") => {
   try {
     let orders = await orderModel
-      .find()
+      .find({
+        ...(method && { paymentMethod: method }),
+        ...(status && { deliveryStatus: status }),
+      })
       .populate({
         path: "cartItems",
         populate: {
@@ -11,12 +14,14 @@ const findAllOrders = async () => {
         },
       })
       .populate("userId")
+      .limit(10)
+      .skip(offset)
       .sort({ createdAt: -1 });
 
     let pendingOrders = orders.filter(
       (order) => order.deliveryStatus === "Pending"
     );
-    console.log("Pending Orders:", pendingOrders);
+    // console.log("Pending Orders:", pendingOrders);
 
     let totalOrders = await orderModel.countDocuments();
     let totalRevenue = await orderModel.aggregate([
@@ -118,6 +123,7 @@ const findAllOrders = async () => {
       orders,
       pendingOrders,
       totalOrders,
+      totalCount: totalOrders,
       totalRevenue: totalRevenue[0]?.total || 0,
       ordersByPayment: allOrdersByPaymentStatus,
       ordersByStatus,

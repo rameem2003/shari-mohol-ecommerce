@@ -1,5 +1,10 @@
 const { default: z } = require("zod");
 
+const categorySegmentSchema = z.object({
+  limit: z.coerce.number().int().positive().optional().default(10),
+  offset: z.coerce.number().int().positive().optional().default(1),
+});
+
 const categoryUploadValidator = z.object({
   name: z
     .string({ message: "Name is required" })
@@ -16,4 +21,4 @@ const categoryUploadValidator = z.object({
     .min(5, { message: "Subcategories must be at least 5 characters long" }),
 });
 
-module.exports = categoryUploadValidator;
+module.exports = { categoryUploadValidator, categorySegmentSchema };

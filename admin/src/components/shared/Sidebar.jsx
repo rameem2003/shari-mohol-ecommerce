@@ -41,9 +41,9 @@ const ResponsiveSidebar = () => {
           {isCollapse1 ? (
             <div className="flex items-center justify-between">
               <img
-                src="https://i.ibb.co/ZHYQ04D/footer-logo.png"
+                src="/fav.png"
                 alt="logo"
-                className="w-[130px] cursor-pointer"
+                className="w-[50px] cursor-pointer"
               />
               <div className="group relative">
                 <GoSidebarCollapse
@@ -63,7 +63,7 @@ const ResponsiveSidebar = () => {
             </div>
           ) : (
             <img
-              src="https://i.ibb.co/0BZfPq6/darklogo.png"
+              src="/fav.png"
               alt="logo"
               className="mx-auto w-[50px] cursor-pointer"
               onClick={() => setIsCollapse1(!isCollapse1)}
