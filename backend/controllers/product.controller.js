@@ -25,10 +25,12 @@ const allProducts = async (req, res) => {
       .send({ success: false, message: JSON.parse(error.message)[0].message });
   }
 
-  const { segment, limit, offset } = data;
+  const { segment, category, price, limit, offset } = data;
   try {
     let { totalCount, products } = await findAllProducts(
       segment,
+      category,
+      price,
       limit,
       (offset - 1) * 10
     );
@@ -56,12 +58,30 @@ const allProducts = async (req, res) => {
  * Get Products by Category
  */
 const getProductByCategory = async (req, res) => {
-  const { category } = req.params;
+  // const { category } = req.params;
+  const { data, error } = productSegmentSchema.safeParse(req.query);
+  if (error) {
+    return res
+      .status(400)
+      .send({ success: false, message: JSON.parse(error.message)[0].message });
+  }
+
+  const { segment, category, price, limit, offset } = data;
   try {
-    let products = await findProductsByCategory(category);
+    let { totalCount, products } = await findProductsByCategory(
+      segment,
+      category,
+      price,
+      limit,
+      (offset - 1) * 10
+    );
+
+    const totalPages = Math.ceil(totalCount / 10);
     res.status(200).send({
       success: true,
       message: `${category} Products Fetched Success`,
+      currentPage: offset,
+      totalPages,
       data: products,
     });
   } catch (error) {

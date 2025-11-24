@@ -3,48 +3,84 @@ const productModel = require("../model/product.model");
 const reviewModel = require("../model/review.model");
 const deleteFile = require("../utils/fileDelete");
 
-const findAllProducts = async (param, limit = 10, offset = 0) => {
+const findAllProducts = async (
+  param,
+  category = "",
+  price = "asc",
+  limit = 10,
+  offset = 0
+) => {
   try {
     let totalCount = await productModel.countDocuments();
 
-    if (param === "featured") {
-      let featuredProducts = await productModel
-        .find({ featured: true })
-        .populate("category")
-        .populate("reviews")
-        .limit(limit || 0)
-        .skip(offset || 0);
-      return { totalCount, products: featuredProducts };
-    } else if (param === "hot_sell") {
-      let hotSellProducts = await productModel
-        .find({ hotSell: true })
-        .populate("category")
-        .populate("reviews")
-        .limit(limit || 0)
-        .skip(offset || 0);
-      return { totalCount, products: hotSellProducts };
-    } else {
-      let allProduct = await productModel
-        .find({})
-        .populate("category")
-        .populate("reviews")
-        .limit(limit || 0)
-        .skip(offset || 0);
-      return { totalCount, products: allProduct };
-    }
+    let categoryProducts = await productModel
+      .find({
+        ...(category && { category }),
+        ...(param && {
+          [param === "featured" ? "featured" : "hotSell"]: true,
+        }),
+      })
+      .populate("category")
+      .populate("reviews")
+      .sort({ sellingPrice: price === "asc" || price === "" ? 1 : -1 })
+      .limit(limit || 0)
+      .skip(offset || 0);
+    return { totalCount, products: categoryProducts };
+
+    // if (param === "featured") {
+    //   let featuredProducts = await productModel
+    //     .find({ featured: true })
+    //     .populate("category")
+    //     .populate("reviews")
+    //     .limit(limit || 0)
+    //     .skip(offset || 0);
+    //   return { totalCount, products: featuredProducts };
+    // } else if (param === "hot_sell") {
+    //   let hotSellProducts = await productModel
+    //     .find({ hotSell: true })
+    //     .populate("category")
+    //     .populate("reviews")
+    //     .limit(limit || 0)
+    //     .skip(offset || 0);
+    //   return { totalCount, products: hotSellProducts };
+    // }
+    // else {
+    //   let allProduct = await productModel
+    //     .find({})
+    //     .populate("category")
+    //     .populate("reviews")
+    //     .limit(limit || 0)
+    //     .skip(offset || 0);
+    //   return { totalCount, products: allProduct };
+    // }
   } catch (error) {
     console.log("Error fetching products: ", error);
     throw new Error("Error fetching products: " + error.message);
   }
 };
 
-const findProductsByCategory = async (category) => {
+const findProductsByCategory = async (
+  param,
+  category = "",
+  price = "asc",
+  limit = 10,
+  offset = 0
+) => {
   try {
+    let totalCount = await productModel.countDocuments({ category });
     let products = await productModel
-      .find({ category })
+      .find({
+        category,
+        ...(param && {
+          [param === "featured" ? "featured" : "hotSell"]: true,
+        }),
+      })
       .populate("category")
-      .populate("reviews");
-    return products;
+      .populate("reviews")
+      .sort({ sellingPrice: price === "asc" || price === "" ? 1 : -1 })
+      .limit(limit || 0)
+      .skip(offset || 0);
+    return { totalCount, products };
   } catch (error) {
     console.log("Error fetching products by category: ", error);
     throw new Error("Error fetching products by category: " + error.message);

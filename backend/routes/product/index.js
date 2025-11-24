@@ -26,9 +26,9 @@ router.get("/products", allProducts);
 
 /**
  * Get products by category
- * http://localhost:5000/api/v1/product/category/:category
+ * http://localhost:5000/api/v1/product/category/
  */
-router.get("/product/category/:category", getProductByCategory);
+router.get("/product/category/", getProductByCategory);
 
 /**
  * Get products by sub category

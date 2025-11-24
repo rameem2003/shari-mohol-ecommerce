@@ -1,17 +1,16 @@
-const { default: z } = require("zod");
+const { default: z, string } = require("zod");
 
 const productSegmentSchema = z.object({
   segment: z
-    .enum(["", "all", "featured", "hot_sell"], {
-      message: "Status must be 'all', 'featured', 'hot_sell'",
+    .enum(["", "featured", "hotSell"], {
+      message: "Status must be 'all', 'featured', 'hotSell'",
     })
     .default(""),
 
+  category: z.string().optional().default(""),
+  price: z.enum(["", "asc", "desc"]).optional().default("asc"),
   limit: z.coerce.number().int().positive().optional().default(10),
-  // .refine((val) => val >= 0, { message: "Limit must be a positive number" }),
-
   offset: z.coerce.number().int().positive().optional().default(1),
-  // .refine((val) => val >= 0, { message: "Offset must be a positive number" }),
 });
 
 const newProductValidationSchema = z.object({

@@ -3,11 +3,21 @@ import ProductCard from "../components/common/ProductCard";
 import Flex from "../components/common/Flex";
 import EditProduct from "../components/screens/productScreen/EditProduct";
 import ProductListSkeleton from "../components/screens/productsScreen/ProductListSkeleton";
+import ProductFIlter from "../components/screens/productsScreen/ProductFIlter";
 import { fetchAllProductsRequest, updateProductRequest } from "../api/product";
 import { toast } from "react-toastify";
+import { useNavigate, useSearchParams } from "react-router";
 
 const AllProducts = () => {
   const [allProducts, setAllProducts] = useState([]);
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [price, setPrice] = useState(searchParams.get("price") || "");
+  const [category, setCategory] = useState(searchParams.get("category") || "");
+  const [segment, setSegment] = useState(searchParams.get("segment") || "");
+  const [offset, setOffset] = useState(
+    parseInt(searchParams.get("offset")) || 1,
+  );
   const [openActionMenuId, setOpenActionMenuId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null); // set the target product
@@ -15,10 +25,16 @@ const AllProducts = () => {
 
   // fetch all products
   const fetchAllProducts = async () => {
+    const params = new URLSearchParams({
+      category,
+      price,
+      segment,
+      offset,
+    });
     setIsLoading(true);
     new Promise((resolve) => {
       setTimeout(async () => {
-        let res = await fetchAllProductsRequest();
+        let res = await fetchAllProductsRequest(params);
         setAllProducts(res.data);
         setIsLoading(false);
       }, 1000);
@@ -110,14 +126,28 @@ const AllProducts = () => {
   };
 
   useEffect(() => {
+    const params = new URLSearchParams();
+
+    if (category) params.set("category", category);
+    if (price) params.set("price", price);
+    if (offset) params.set("offset", offset.toString());
+    if (segment) params.set("segment", segment);
+    // console.log(params);
+
+    navigate(`/all-products?${params.toString()}`);
     fetchAllProducts();
-  }, []);
+  }, [price, category, segment, offset]);
 
   return (
     <main className="w-full overflow-y-scroll border-l-[1px] border-black bg-white p-2 dark:border-white dark:bg-slate-900">
       <h2 className="mb-10 text-2xl font-semibold text-black dark:text-white">
         All Products
       </h2>
+      <ProductFIlter
+        setPrice={setPrice}
+        setCategory={setCategory}
+        setSegment={setSegment}
+      />
 
       {isLoading && <ProductListSkeleton />}
       {/* Product List Pagination */}

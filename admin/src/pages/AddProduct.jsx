@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
 import Flex from "../components/common/Flex";
-import axios from "axios";
-import Cookies from "js-cookie";
-import Swal from "sweetalert2";
 import Loader from "../components/common/Loader";
+import {
+  createNewProductRequest,
+  fetchProductSubCategoriesRequest,
+} from "../api/product";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 // react icons
 import { IoChevronDown } from "react-icons/io5";
 import { IoCloudUploadOutline } from "react-icons/io5";
+import { fetchAllCategoriesRequest } from "../api/category";
 
 const AddProduct = () => {
-  const accessToken = Cookies.get("accessToken"); // access token
-  const sessionToken = Cookies.get("sessionToken"); // access token
+  const navigate = useNavigate();
   const [isActive, setIsActive] = useState(false);
   const [isActive1, setIsActive1] = useState(false);
   const [mainCategory, setMainCategory] = useState("Select Option");
@@ -55,17 +58,17 @@ const AddProduct = () => {
 
   // Fetch categories
   const fetchCategories = async () => {
-    let res = await axios.get(`${import.meta.env.VITE_API}/category/all`);
-    setCategories(res.data.data);
+    let res = await fetchAllCategoriesRequest();
+    setCategories(res.data);
   };
 
   //  Fetch sub Categories
   const fetchSubCategories = async (id) => {
-    let res = await axios.get(
-      `${import.meta.env.VITE_API}/category/single/${id}`,
-    );
+    let res = await fetchProductSubCategoriesRequest(id);
 
-    setSubCategories(res.data.data.subCategories);
+    console.log(res);
+
+    setSubCategories(res.data.subCategories);
   };
 
   // Handle file selection when dropped or clicked
@@ -114,7 +117,7 @@ const AddProduct = () => {
   };
 
   useEffect(() => {
-    // fetchCategories();
+    fetchCategories();
   }, []);
 
   // Product upload
@@ -139,6 +142,20 @@ const AddProduct = () => {
         data.append("images", product.images[i]);
       }
     }
+
+    try {
+      let res = await createNewProductRequest(data);
+      setIsLoading(false);
+      if (!res.success) {
+        toast.error(res.response.data.message);
+        return;
+      }
+      toast.success(res.message);
+      navigate("/all-products");
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }
   };
 
   return (
@@ -159,7 +176,7 @@ const AddProduct = () => {
             <div className="w-full">
               <label
                 htmlFor="name"
-                className="text-text text-[15px] font-[400] text-black dark:text-white"
+                className="text-[15px] font-[400] text-black text-text dark:text-white"
               >
                 Product Name <span className="text-red-500">*</span>
               </label>
@@ -173,7 +190,7 @@ const AddProduct = () => {
                 name="name"
                 id="name"
                 placeholder="Product name"
-                className="border-border focus:border-primary mt-1 w-full rounded-md border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 dark:bg-transparent dark:text-white"
+                className="mt-1 w-full rounded-md border border-border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 focus:border-primary dark:bg-transparent dark:text-white"
               />
             </div>
           </div>
@@ -181,7 +198,7 @@ const AddProduct = () => {
             <div className="w-full">
               <label
                 htmlFor="description"
-                className="text-text text-[15px] font-[400] text-black dark:text-white"
+                className="text-[15px] font-[400] text-black text-text dark:text-white"
               >
                 Product Description <span className="text-red-500">*</span>
               </label>
@@ -195,7 +212,7 @@ const AddProduct = () => {
                 name="description"
                 id="description"
                 placeholder="Product Description"
-                className="border-border focus:border-primary mt-1 w-full rounded-md border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 dark:bg-transparent dark:text-white"
+                className="mt-1 w-full rounded-md border border-border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 focus:border-primary dark:bg-transparent dark:text-white"
               />
             </div>
           </div>
@@ -206,7 +223,7 @@ const AddProduct = () => {
             <div className="w-full">
               <label
                 htmlFor="selling"
-                className="text-text text-[15px] font-[400] text-black dark:text-white"
+                className="text-[15px] font-[400] text-black text-text dark:text-white"
               >
                 Selling Price <span className="text-red-500">*</span>
               </label>
@@ -223,7 +240,7 @@ const AddProduct = () => {
                 name="selling"
                 id="selling"
                 placeholder="Selling Price"
-                className="border-border focus:border-primary mt-1 w-full rounded-md border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 dark:bg-transparent dark:text-white"
+                className="mt-1 w-full rounded-md border border-border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 focus:border-primary dark:bg-transparent dark:text-white"
               />
             </div>
           </div>
@@ -231,7 +248,7 @@ const AddProduct = () => {
             <div className="w-full">
               <label
                 htmlFor="discount"
-                className="text-text text-[15px] font-[400] text-black dark:text-white"
+                className="text-[15px] font-[400] text-black text-text dark:text-white"
               >
                 Discount Price
               </label>
@@ -247,7 +264,7 @@ const AddProduct = () => {
                 name="discount"
                 id="discount"
                 placeholder="Discount Price"
-                className="border-border focus:border-primary mt-1 w-full rounded-md border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 dark:bg-transparent dark:text-white"
+                className="mt-1 w-full rounded-md border border-border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 focus:border-primary dark:bg-transparent dark:text-white"
               />
             </div>
           </div>
@@ -258,7 +275,7 @@ const AddProduct = () => {
             <div className="w-full">
               <label
                 htmlFor="colors"
-                className="text-text text-[15px] font-[400] text-black dark:text-white"
+                className="text-[15px] font-[400] text-black text-text dark:text-white"
               >
                 Colors (Input Comma Separated)
                 <span className="text-red-500">*</span>
@@ -273,7 +290,7 @@ const AddProduct = () => {
                 name="colors"
                 id="colors"
                 placeholder="Colors (Input Comma Separated)"
-                className="border-border focus:border-primary mt-1 w-full rounded-md border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 dark:bg-transparent dark:text-white"
+                className="mt-1 w-full rounded-md border border-border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 focus:border-primary dark:bg-transparent dark:text-white"
               />
             </div>
           </div>
@@ -281,7 +298,7 @@ const AddProduct = () => {
             <div className="w-full">
               <label
                 htmlFor="size"
-                className="text-text text-[15px] font-[400] text-black dark:text-white"
+                className="text-[15px] font-[400] text-black text-text dark:text-white"
               >
                 Size (Input Comma Separated)
               </label>
@@ -294,7 +311,7 @@ const AddProduct = () => {
                 name="size"
                 id="size"
                 placeholder="Size (Input Comma Separated)"
-                className="border-border focus:border-primary mt-1 w-full rounded-md border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 dark:bg-transparent dark:text-white"
+                className="mt-1 w-full rounded-md border border-border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 focus:border-primary dark:bg-transparent dark:text-white"
               />
             </div>
           </div>
@@ -305,7 +322,7 @@ const AddProduct = () => {
             <div className="mb-4 flex w-full flex-col justify-start gap-5">
               <label
                 htmlFor="name"
-                className="text-text text-[15px] font-[400] text-black dark:text-white"
+                className="text-[15px] font-[400] text-black text-text dark:text-white"
               >
                 Select Category
                 <span className="text-red-500">*</span>
@@ -351,7 +368,7 @@ const AddProduct = () => {
             <div className="mb-4 flex w-full flex-col justify-start gap-5">
               <label
                 htmlFor="name"
-                className="text-text text-[15px] font-[400] text-black dark:text-white"
+                className="text-[15px] font-[400] text-black text-text dark:text-white"
               >
                 Select Sub Category
                 <span className="text-red-500">*</span>
@@ -397,7 +414,7 @@ const AddProduct = () => {
             <div className="w-full">
               <label
                 htmlFor="stock"
-                className="text-text text-[15px] font-[400] text-black dark:text-white"
+                className="text-[15px] font-[400] text-black text-text dark:text-white"
               >
                 Stock
               </label>
@@ -411,7 +428,7 @@ const AddProduct = () => {
                 name="stock"
                 id="stock"
                 placeholder="Stock"
-                className="border-border focus:border-primary mt-1 w-full rounded-md border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 dark:bg-transparent dark:text-white"
+                className="mt-1 w-full rounded-md border border-border bg-white px-4 py-3 text-black outline-none transition-colors duration-300 focus:border-primary dark:bg-transparent dark:text-white"
               />
             </div>
           </div>
@@ -488,7 +505,7 @@ const AddProduct = () => {
 
         <button
           type="submit"
-          className="hover:bg-secondary w-full rounded border border-[#3B9DF8] bg-blue-500 px-6 py-2 text-[#fff] transition duration-300"
+          className="w-full rounded border border-[#3B9DF8] bg-blue-500 px-6 py-2 text-[#fff] transition duration-300 hover:bg-secondary"
         >
           Add
         </button>
