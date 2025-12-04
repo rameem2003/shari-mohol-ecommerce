@@ -1,0 +1,26 @@
+"use server";
+export const getProducts = async (
+  segment: "hotSell" | "featured" | "" = "",
+  offset?: number | null,
+  limit?: number | null,
+  category?: string | null,
+  price: "asc" | "desc" | null = "asc"
+) => {
+  try {
+    let res = await fetch(
+      `${
+        process.env.NEXT_PUBLIC_API_URL
+      }/products${`?offset=${offset}&limit=${limit}&category=${category}&price=${price}&segment=${segment}`}`,
+      {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return res.json();
+  } catch (error) {
+    throw new Error("Failed to fetch cart");
+  }
+};
