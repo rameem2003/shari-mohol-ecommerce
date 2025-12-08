@@ -1,69 +1,80 @@
 "use client";
 import React, { useState } from "react";
-import Link from "next/link";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AlertCircleIcon, Eye, EyeOff } from "lucide-react";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { LoginUserData, loginUserSchema } from "../auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { RegisterUserData, registerUserSchema } from "../auth.schema";
+import { Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
-const LoginForm = () => {
-  const { login, loading, msg } = useAuth();
+const RegisterForm = () => {
+  const { registerUser, loading } = useAuth();
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(loginUserSchema),
+    resolver: zodResolver(registerUserSchema),
   });
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const onSubmit = async (data: LoginUserData) => {
+  const onSubmit = async (data: RegisterUserData) => {
     // console.log(errors);
 
     try {
-      const result = await login(data);
+      const result = await registerUser(data);
       console.log(result);
-
       //   if (result.status === "SUCCESS") toast.success(result.message);
       //   else toast.error(result.message);
     } catch (error) {
       console.log(error);
     }
   };
-
   return (
     <div className=" min-h-[900px] flex items-center justify-center flex-col">
       <h3 className=" text-[30px] font-bold text-cd-primary text-center">
-        Welcome Back!
+        Welcome to Shari Mohol!
       </h3>
 
       <h2 className=" text-[36px] font-extrabold text-cd-primary text-center">
-        Log in to your account
+        Create your account
       </h2>
-
-      <p className=" text-[20px] text-cd-primary text-center mt-4">
-        Log in with your email and password
-      </p>
 
       <section className=" mt-10 max-w-[550px] w-full p-4 rounded-lg shadow-xl">
         <div className=" mb-5">
-          {msg && (
-            <Alert variant="destructive">
-              <AlertCircleIcon />
-              <AlertTitle>{msg}</AlertTitle>
-            </Alert>
-          )}
+          {/* {msg && (
+                <Alert variant="destructive">
+                  <AlertCircleIcon />
+                  <AlertTitle>{msg}</AlertTitle>
+                </Alert>
+              )} */}
         </div>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className=" flex flex-col w-full "
         >
+          <div className="grid w-full items-center gap-3">
+            <Label
+              className=" text-cd-primary font-cd-bangla text-[20px] font-semibold"
+              htmlFor="name"
+            >
+              Your Name
+            </Label>
+            <Input
+              {...register("name")}
+              className=" font-cd-poppins font-medium w-full block"
+              type="text"
+              id="name"
+              placeholder="Name"
+            />
+            {errors.name && (
+              <p className="text-sm text-destructive">{errors.name.message}</p>
+            )}
+          </div>
           <div className="grid w-full items-center gap-3">
             <Label
               className=" text-cd-primary font-cd-bangla text-[20px] font-semibold"
@@ -121,21 +132,40 @@ const LoginForm = () => {
             )}
           </div>
 
+          <div className="grid w-full items-center gap-3">
+            <Label
+              className=" text-cd-primary font-cd-bangla text-[20px] font-semibold"
+              htmlFor="phone"
+            >
+              Your Phone
+            </Label>
+            <Input
+              {...register("phone")}
+              className=" font-cd-poppins font-medium w-full block"
+              type="text"
+              id="phone"
+              placeholder="Phone"
+            />
+            {errors.phone && (
+              <p className="text-sm text-destructive">{errors.phone.message}</p>
+            )}
+          </div>
+
           <Button
             disabled={loading}
             type="submit"
             className="bg-shari-mohol-primary cursor-pointer mt-8"
           >
-            {loading ? "Logging In..." : "Log In"}
+            {loading ? "Creating Account..." : "Create An Account"}
           </Button>
         </form>
 
         <div className=" mt-5 flex items-center justify-between">
           <Link
             className=" text-cd-primary font-cd-bangla text-base font-semibold"
-            href="/register"
+            href="/login"
           >
-            Create a new account
+            Already have an account? Log In
           </Link>
 
           <Link
@@ -150,4 +180,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default RegisterForm;

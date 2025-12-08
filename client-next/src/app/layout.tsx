@@ -3,6 +3,8 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/common/Navigation";
 import Footer from "@/components/common/Footer";
+import { AuthProvider } from "@/hooks/useAuth";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -31,11 +33,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable}  antialiased font-inter`}>
-        <Navigation />
-        {children}
-        <Footer />
-      </body>
+      <AuthProvider>
+        <body className={`${inter.variable}  antialiased font-inter`}>
+          <Navigation />
+          {children}
+          <Footer />
+          <Toaster richColors position="top-right" />
+        </body>
+      </AuthProvider>
     </html>
   );
 }

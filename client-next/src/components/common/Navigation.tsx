@@ -1,11 +1,15 @@
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
 import Container from "./Container";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import NavRightSideComponent from "./NavRightSideComponent";
 import SearchComponent from "./SearchComponent";
+import { useAuth } from "@/hooks/useAuth";
 
 const Navigation = () => {
+  const { user, loading, getUser } = useAuth();
+
   return (
     <nav className=" bg-shari-mohol-primary py-4">
       <Container>
@@ -45,7 +49,7 @@ const Navigation = () => {
             <SearchComponent />
           </div>
           <div className=" w-4/12 lg:w-2/12">
-            <NavRightSideComponent />
+            <NavRightSideComponent data={user!} />
           </div>
         </div>
 

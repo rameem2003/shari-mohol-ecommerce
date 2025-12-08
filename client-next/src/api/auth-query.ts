@@ -3,13 +3,11 @@
 import { cookies } from "next/headers";
 
 export const userRequest = async () => {
-  const cookieStore = await cookies();
-  let accessToken = cookieStore.get("access_token")?.value;
-  let refreshToken = cookieStore.get("refresh_token")?.value;
+  console.log("run");
 
-  if (!accessToken || !refreshToken) {
-    return { success: false, message: "No tokens found" };
-  }
+  const cookieStore = await cookies();
+  let accessToken = cookieStore.get("access_token")?.value || "";
+  let refreshToken = cookieStore.get("refresh_token")?.value || "";
 
   try {
     let res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/user`, {
@@ -18,6 +16,7 @@ export const userRequest = async () => {
       headers: {
         Cookie: `access_token=${accessToken}; refresh_token=${refreshToken}`,
       },
+      cache: "no-cache",
     });
 
     return res.json();

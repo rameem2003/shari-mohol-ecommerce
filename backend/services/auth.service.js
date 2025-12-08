@@ -188,6 +188,8 @@ const createRefreshToken = (sessionId) => {
 };
 
 const refreshTokens = async (refreshToken) => {
+  console.log("ok");
+
   try {
     const decodedToken = verifyJWTToken(refreshToken);
 
@@ -277,7 +279,7 @@ const createResetPasswordTokenLink = async (userID) => {
 
     let tokenLink =
       process.env.SYSTEM_ENV == "development"
-        ? `http://localhost:5173/reset-password?token=${token}`
+        ? `http://localhost:3000/reset-password?token=${token}`
         : `https://nubian-admin-v2.netlify.app/reset-password?token=${token}`;
 
     return tokenLink;

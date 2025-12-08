@@ -1,14 +1,12 @@
 import React from "react";
+import RegisterForm from "./RegisterForm";
 import Container from "@/components/common/Container";
-import LoginForm from "./LoginForm";
-import { redirect } from "next/navigation";
-import { userRequest } from "@/api/auth-query";
 
 const page = async () => {
   return (
     <>
       <Container>
-        <LoginForm />
+        <RegisterForm />
       </Container>
     </>
   );

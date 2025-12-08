@@ -11,6 +11,7 @@ const {
 const checkUserMiddleware = async (req, res, next) => {
   const accessToken = req.cookies.access_token;
   const refreshToken = req.cookies.refresh_token;
+  console.log(accessToken, refreshToken);
 
   req.user = null;
 
@@ -19,6 +20,8 @@ const checkUserMiddleware = async (req, res, next) => {
   }
 
   if (accessToken) {
+    console.log("Ok Access token");
+
     const decodedToken = verifyJWTToken(accessToken);
     req.user = decodedToken;
     return next();
@@ -32,7 +35,11 @@ const checkUserMiddleware = async (req, res, next) => {
 
       req.user = user;
 
+      console.log("New", newAccessToken, "ref:", newRefreshToken);
+
       // const baseConfig = { httpOnly: true, secure: true };
+
+      // console.log(user);
 
       res.cookie("access_token", newAccessToken, {
         ...base_config,
