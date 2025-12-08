@@ -22,10 +22,11 @@ const LoginForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const onSubmit = async (data: LoginUserData) => {
-    console.log(errors);
+    // console.log(errors);
 
     try {
       const result = await loginRequest(data);
+      console.log(result);
 
       //   if (result.status === "SUCCESS") toast.success(result.message);
       //   else toast.error(result.message);
