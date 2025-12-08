@@ -2,6 +2,7 @@ const { verifyJWTToken, refreshTokens } = require("../services/auth.service");
 const {
   ACCESS_TOKEN_EXPIRY,
   REFRESH_TOKEN_EXPIRY,
+  base_config,
 } = require("../constant/constant");
 
 const checkAdminMiddleware = async (req, res, next) => {
@@ -36,15 +37,15 @@ const checkAdminMiddleware = async (req, res, next) => {
 
       req.user = user;
 
-      const baseConfig = { httpOnly: true, secure: true };
+      // const baseConfig = { httpOnly: true, secure: true };
 
       res.cookie("access_token", newAccessToken, {
-        ...baseConfig,
+        ...base_config,
         maxAge: ACCESS_TOKEN_EXPIRY,
       });
 
       res.cookie("refresh_token", newRefreshToken, {
-        ...baseConfig,
+        ...base_config,
         maxAge: REFRESH_TOKEN_EXPIRY,
       });
 

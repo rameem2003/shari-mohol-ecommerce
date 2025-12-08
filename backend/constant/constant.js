@@ -26,6 +26,13 @@ const REFRESH_TOKEN_EXPIRY =
 
 const OAUTH_EXCHANGE_EXPIRY = 10 * SECONDS_PER_MINUTE * MILLISECONDS_PER_SECOND;
 
+const base_config = {
+  httpOnly: true,
+  secure: process.env.SYSTEM_ENV == "development" ? false : true, // set to true if using HTTPS (local false)
+  sameSite: process.env.SYSTEM_ENV == "development" ? "lax" : "none", // set to 'none' if using HTTPS (local 'lax')
+  path: "/", // cookie is accessible throughout the site
+};
+
 module.exports = {
   welcomeNote,
   MILLISECONDS_PER_SECOND,
@@ -37,4 +44,5 @@ module.exports = {
   ACCESS_TOKEN_EXPIRY,
   REFRESH_TOKEN_EXPIRY,
   OAUTH_EXCHANGE_EXPIRY,
+  base_config,
 };

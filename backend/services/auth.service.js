@@ -5,6 +5,7 @@ const {
   ACCESS_TOKEN_EXPIRY,
   REFRESH_TOKEN_EXPIRY,
   MILLISECONDS_PER_SECOND,
+  base_config,
 } = require("../constant/constant");
 const emailVerifyTokenModel = require("../model/emailVerifyToken.model");
 const resetPasswordTokenModel = require("../model/resetPasswordToken.model");
@@ -120,15 +121,15 @@ const authenticateUser = async ({ req, res, user }) => {
 
   const refreshToken = createRefreshToken(session._id);
 
-  const baseConfig = { httpOnly: true, secure: true };
+  // const baseConfig = { httpOnly: true, secure: true };
 
   res.cookie("access_token", accessToken, {
-    ...baseConfig,
+    ...base_config,
     maxAge: ACCESS_TOKEN_EXPIRY,
   });
 
   res.cookie("refresh_token", refreshToken, {
-    ...baseConfig,
+    ...base_config,
     maxAge: REFRESH_TOKEN_EXPIRY,
   });
 
