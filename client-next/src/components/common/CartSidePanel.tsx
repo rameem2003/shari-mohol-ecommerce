@@ -3,12 +3,14 @@ import {
   Sheet,
   SheetContent,
   SheetDescription,
+  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { ShoppingCart } from "lucide-react";
+import CartCard from "./CartCard";
 
 const CartSidePanel = () => {
   return (
@@ -21,14 +23,21 @@ const CartSidePanel = () => {
           <ShoppingCart size={35} className=" text-5xl text-white" />
         </div>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className=" overflow-y-scroll">
         <SheetHeader>
-          <SheetTitle>Are you absolutely sure?</SheetTitle>
-          <SheetDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </SheetDescription>
+          <SheetTitle className=" text-shari-mohol-primary font-bold mb-4">
+            Your Shopping Cart
+          </SheetTitle>
+
+          <CartCard />
         </SheetHeader>
+
+        <SheetFooter className=" bg-shari-mohol-primary p-3">
+          <h4 className=" text-4xl mb-2 text-white font-bold">Total: $100</h4>
+          <button className=" w-full bg-white text-shari-mohol-primary font-bold py-3 rounded-md cursor-pointer">
+            Proceed to Checkout
+          </button>
+        </SheetFooter>
       </SheetContent>
     </Sheet>
   );

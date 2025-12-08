@@ -24,3 +24,21 @@ export const getProducts = async (
     throw new Error("Failed to fetch cart");
   }
 };
+
+export const getProductById = async (id: string) => {
+  try {
+    let res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/product/single/${id}`,
+      {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return res.json();
+  } catch (error) {
+    throw new Error("Failed to fetch cart");
+  }
+};
