@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@/hooks/useAuth";
 
 const LoginForm = () => {
-  const { login, loading, msg } = useAuth();
+  const { login, loading, msg, user } = useAuth();
   const {
     register,
     handleSubmit,
@@ -36,6 +36,12 @@ const LoginForm = () => {
       console.log(error);
     }
   };
+
+  //   useEffect(() => {
+  // if(user.data.id){
+  //   router
+  // }
+  //   }, []);
 
   return (
     <div className=" min-h-[900px] flex items-center justify-center flex-col">

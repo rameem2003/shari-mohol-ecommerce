@@ -24,7 +24,7 @@ router.post("/cart/add/:item", checkAdminMiddleware, addToCart);
  * Decrement Cart Quantity Route
  * http://localhost:5000/api/v1/cart/decrement/:id
  */
-router.put("/cart/decrement/:id", checkAdminMiddleware, decrementCartQuantity);
+router.post("/cart/decrement/:id", checkAdminMiddleware, decrementCartQuantity);
 
 /**
  * Remove Item from Cart Route

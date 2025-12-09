@@ -55,6 +55,11 @@ router.patch(
 );
 
 /**
+ * Order success COD
+ * http://localhost:5000/api/v1/order/success/:orderId
+ */
+router.get("/order/success/cod/:orderId", paymentSuccess);
+/**
  * Order success
  * http://localhost:5000/api/v1/order/success/:orderId
  */

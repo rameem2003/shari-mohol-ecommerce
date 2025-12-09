@@ -30,7 +30,7 @@ const page = async ({ params }: PageProps) => {
   let id = (await params).id;
 
   const { data } = await getProductById(id);
-  console.log(data);
+  // console.log(data);
 
   return (
     <main>

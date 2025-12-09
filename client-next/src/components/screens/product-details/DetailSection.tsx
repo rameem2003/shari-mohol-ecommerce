@@ -3,8 +3,10 @@ import React, { useState } from "react";
 import { Product } from "@/types/product";
 import { BadgeCheck, ExternalLink, Store, Truck } from "lucide-react";
 import Link from "next/link";
+import { useCart } from "@/hooks/useCart";
 
 const DetailSection = ({ data }: { data: Product }) => {
+  const { addCart, loading } = useCart();
   const [selectedColor, setSelectedColor] = useState("black");
   const [selectedStorage, setSelectedStorage] = useState("1TB");
   const [isFavorite, setIsFavorite] = useState(false);
@@ -77,8 +79,12 @@ const DetailSection = ({ data }: { data: Product }) => {
                                 Add to Wishlist
                             </div>
                         </button> */}
-          <button className="flex-1 py-3 px-4 rounded-lg cursor-pointer bg-shari-mohol-primary text-white hover:bg-shari-mohol-primary/90">
-            Add to Cart
+          <button
+            disabled={loading}
+            onClick={() => addCart(data._id)}
+            className="flex-1 py-3 px-4 rounded-lg cursor-pointer bg-shari-mohol-primary text-white hover:bg-shari-mohol-primary/90"
+          >
+            {loading ? "Adding to Cart..." : "Add to Cart"}
           </button>
         </div>
 

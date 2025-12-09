@@ -14,10 +14,10 @@ const NavRightSideComponent = ({ data }: { data: User }) => {
           <div className=" hidden lg:block">
             <Link
               href="/login"
-              className=" flex items-center justify-center gap-2 bg-white rounded-lg px-2 xl:px-4 py-2"
+              className=" flex items-center justify-center gap-2 bg-white rounded-lg px-2 py-2"
             >
               <CircleUserRound />
-              <span className=" font-bold">Sign UP</span>
+              {/* <span className=" font-bold">Sign UP</span> */}
             </Link>
           </div>
         )}

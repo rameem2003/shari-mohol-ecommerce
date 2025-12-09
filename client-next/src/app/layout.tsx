@@ -5,6 +5,7 @@ import Navigation from "@/components/common/Navigation";
 import Footer from "@/components/common/Footer";
 import { AuthProvider } from "@/hooks/useAuth";
 import { Toaster } from "@/components/ui/sonner";
+import { CartProvider } from "@/hooks/useCart";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -34,12 +35,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <AuthProvider>
-        <body className={`${inter.variable}  antialiased font-inter`}>
-          <Navigation />
-          {children}
-          <Footer />
-          <Toaster richColors position="top-right" />
-        </body>
+        <CartProvider>
+          <body className={`${inter.variable}  antialiased font-inter`}>
+            <Navigation />
+            {children}
+            <Footer />
+            <Toaster richColors position="top-right" />
+          </body>
+        </CartProvider>
       </AuthProvider>
     </html>
   );

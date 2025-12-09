@@ -204,11 +204,18 @@ const placeOrder = async (req, res) => {
       await removeCartItemById(cartItem._id);
     });
     if (data.paymentMethod === "COD") {
-      return res
-        .status(302)
-        .redirect(
-          `${req.protocol}://${req.host}${process.env.BASE_URL}/order/success/${newOrder._id}`
-        );
+      let redirectUrl = `${req.protocol}://${req.host}${process.env.BASE_URL}/order/success/cod/${newOrder._id}`;
+      return res.status(201).send({
+        success: true,
+        message: "Order Successful",
+        // data: newOrder,
+        url: redirectUrl,
+      });
+      // return res
+      //   .status(302)
+      //   .redirect(
+      //     `${req.protocol}://${req.host}${process.env.BASE_URL}/order/success/${newOrder._id}`
+      //   );
     } else if (data.paymentMethod === "online") {
       const object = {
         total_amount: grandTotal,

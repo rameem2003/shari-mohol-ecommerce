@@ -52,6 +52,8 @@ const page = () => {
         data.newPassword,
         data.confirmPassword
       );
+      console.log(result);
+
       // console.log(result);
 
       //   if (result.status === "SUCCESS") toast.success(result.message);
@@ -126,6 +128,11 @@ const page = () => {
                   id="password"
                   placeholder="নতুন পাসওয়ার্ড"
                 />
+                {errors.newPassword && (
+                  <p className="text-sm text-destructive">
+                    {errors.newPassword.message}
+                  </p>
+                )}
               </div>
               <div className="grid w-full items-center gap-3 mb-5">
                 <Label
@@ -141,6 +148,11 @@ const page = () => {
                   id="confirm-password"
                   placeholder="কনফার্ম নতুন পাসওয়ার্ড"
                 />
+                {errors.confirmPassword && (
+                  <p className="text-sm text-destructive">
+                    {errors.confirmPassword.message}
+                  </p>
+                )}
               </div>
 
               <Button
