@@ -7,12 +7,16 @@ import {
   registerRequest,
   resetPasswordRequest,
   resetPasswordTokenVerifyRequest,
+  userPasswordUpdateRequest,
   userRequest,
+  userUpdateRequest,
 } from "@/api/auth-api";
 import {
+  ChangePasswordData,
   EmailValidatorType,
   LoginUserData,
   RegisterUserData,
+  UserProfileData,
 } from "@/app/(auth)/auth.schema";
 import { User } from "@/types/User";
 import { usePathname, useRouter } from "next/navigation";
@@ -66,6 +70,49 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error) {
       toast.error("Failed to register");
       setMsg("Failed to register");
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
+  // update user
+  const updateUser = async (data: UserProfileData) => {
+    try {
+      setLoading(true);
+      let res = await userUpdateRequest(data);
+      if (!res.success) {
+        setMsg(res.message);
+        setLoading(false);
+        toast.error(res.message);
+        return;
+      }
+      toast.success(res.message);
+      setMsg(res.message);
+      setLoading(false);
+      await getUser();
+    } catch (error) {
+      setMsg("Failed to update user");
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
+  const updatePassword = async (data: ChangePasswordData) => {
+    try {
+      setLoading(true);
+      let res = await userPasswordUpdateRequest(data);
+      if (!res.success) {
+        setMsg(res.message);
+        setLoading(false);
+        toast.error(res.message);
+        return;
+      }
+      toast.success(res.message);
+      setMsg(res.message);
+      setLoading(false);
+      await getUser();
+    } catch (error) {
+      setMsg("Failed to update user");
       setLoading(false);
       console.log(error);
     }
@@ -159,7 +206,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       } else {
         setUser(undefined);
         setLoading(false);
-        if (pathName == "/checkout") {
+        if (pathName == "/checkout" || pathName.startsWith("/account")) {
           router.push("/login");
         }
       }
@@ -195,8 +242,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         login,
         registerUser,
         getUser,
-        // updateUser,
-        // updatePassword,
+        updateUser,
+        updatePassword,
         // verifyEmail,
         forgotPassword,
         verifyResetPasswordToken,

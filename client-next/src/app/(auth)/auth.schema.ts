@@ -10,6 +10,27 @@ export const email = z.object({
 
 export type EmailValidatorType = z.infer<typeof email>;
 
+export const userProfileSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(2, "Name must be at least 2 char long")
+    .max(255, "Name must not exceed 255 characters"),
+  phone: z
+    .string()
+    .trim()
+    .min(11, "Phone must be at least 11 char long")
+    .max(11, "Phone must be at most 11 char long"),
+
+  address: z
+    .string()
+    .trim()
+    .min(5, "Address must be at least 5 char long")
+    .max(50, "Address must not exceed 50 characters"),
+});
+
+export type UserProfileData = z.infer<typeof userProfileSchema>;
+
 export const registerUserSchema = z.object({
   name: z
     .string()
@@ -90,3 +111,34 @@ export const resetPasswordSchema = z
   });
 
 export type ResetPasswordData = z.infer<typeof resetPasswordSchema>;
+
+export const changePasswordSchema = z
+  .object({
+    oldPassword: z
+      .string()
+      .min(6, "Password must be at least 6 characters long")
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+        "Password must contain at least one lowercase letter, one uppercase letter, and one number"
+      ),
+    newPassword: z
+      .string()
+      .min(6, "Password must be at least 6 characters long")
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+        "Password must contain at least one lowercase letter, one uppercase letter, and one number"
+      ),
+    confirmPassword: z
+      .string()
+      .min(6, "Password must be at least 6 characters long")
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+        "Password must contain at least one lowercase letter, one uppercase letter, and one number"
+      ),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+export type ChangePasswordData = z.infer<typeof changePasswordSchema>;

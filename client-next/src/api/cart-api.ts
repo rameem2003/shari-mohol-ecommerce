@@ -84,3 +84,18 @@ export const placeOrderRequest = async (orderData: any) => {
     throw new Error("Failed to place order: " + error.message);
   }
 };
+
+export const userOrderRequest = async () => {
+  try {
+    let res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/order`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return res.json();
+  } catch (error: any) {
+    throw new Error("Failed to get user order: " + error.message);
+  }
+};

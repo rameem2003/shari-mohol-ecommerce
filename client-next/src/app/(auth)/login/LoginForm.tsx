@@ -45,15 +45,15 @@ const LoginForm = () => {
 
   return (
     <div className=" min-h-[900px] flex items-center justify-center flex-col">
-      <h3 className=" text-[30px] font-bold text-cd-primary text-center">
+      <h3 className=" text-[30px] font-bold text-shari-mohol-primary text-center">
         Welcome Back!
       </h3>
 
-      <h2 className=" text-[36px] font-extrabold text-cd-primary text-center">
+      <h2 className=" text-[36px] font-extrabold text-shari-mohol-primary text-center">
         Log in to your account
       </h2>
 
-      <p className=" text-[20px] text-cd-primary text-center mt-4">
+      <p className=" text-[20px] text-shari-mohol-primary text-center mt-4">
         Log in with your email and password
       </p>
 
@@ -70,9 +70,9 @@ const LoginForm = () => {
           onSubmit={handleSubmit(onSubmit)}
           className=" flex flex-col w-full "
         >
-          <div className="grid w-full items-center gap-3">
+          <div className="grid w-full items-center gap-1.5">
             <Label
-              className=" text-cd-primary font-cd-bangla text-[20px] font-semibold"
+              className=" text-shari-mohol-primary font-cd-bangla text-[20px] font-semibold"
               htmlFor="email"
             >
               Your Email
@@ -89,9 +89,9 @@ const LoginForm = () => {
             )}
           </div>
 
-          <div className="grid w-full items-center gap-3 mt-5 ">
+          <div className="grid w-full items-center gap-1.5 mt-5 ">
             <Label
-              className=" text-cd-primary font-cd-bangla text-[20px] font-semibold"
+              className=" text-shari-mohol-primary font-cd-bangla text-[20px] font-semibold"
               htmlFor="password"
             >
               Your Password
@@ -138,14 +138,14 @@ const LoginForm = () => {
 
         <div className=" mt-5 flex items-center justify-between">
           <Link
-            className=" text-cd-primary font-cd-bangla text-base font-semibold"
+            className=" text-shari-mohol-primary font-cd-bangla text-base font-semibold"
             href="/register"
           >
             Create a new account
           </Link>
 
           <Link
-            className=" text-cd-primary font-cd-bangla text-base font-semibold"
+            className=" text-shari-mohol-primary font-cd-bangla text-base font-semibold"
             href="/forgot-password"
           >
             Forgot your password?

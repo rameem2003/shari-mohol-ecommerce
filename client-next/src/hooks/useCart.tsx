@@ -8,9 +8,10 @@ import {
   getCart,
   placeOrderRequest,
   removeFromCart,
+  userOrderRequest,
 } from "@/api/cart-api";
 import { toast } from "sonner";
-import { CartType } from "@/types/Cart";
+import { CartType, OrderType } from "@/types/Cart";
 
 const CartContext = createContext<any>(null);
 
@@ -18,16 +19,32 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();
   const router = useRouter();
   const [cart, setCart] = useState<CartType>({} as CartType);
+  const [orders, setOrders] = useState<OrderType[]>([]);
   const [msg, setMsg] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   const fetchCart = async () => {
     try {
       let res = await getCart();
-      console.log(res);
+      // console.log(res);
 
       setCart(res);
     } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchUserOrders = async () => {
+    setLoading(true);
+    try {
+      let res = await userOrderRequest();
+      // console.log(res);
+
+      // setCart(res);
+      setOrders(res);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -173,6 +190,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     fetchCart();
+    fetchUserOrders();
   }, [user]);
 
   // return { fetchCart, addCart, applyCoupon, cart, msg, loading };
@@ -181,11 +199,13 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     <CartContext.Provider
       value={{
         fetchCart,
+        fetchUserOrders,
         addCart,
         decrementCart,
         deleteCart,
         confirmOrder,
         cart,
+        orders,
         msg,
         loading,
       }}

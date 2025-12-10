@@ -1,7 +1,9 @@
 import {
+  ChangePasswordData,
   EmailValidatorType,
   LoginUserData,
   RegisterUserData,
+  UserProfileData,
 } from "@/app/(auth)/auth.schema";
 
 export const loginRequest = async (data: LoginUserData) => {
@@ -56,6 +58,43 @@ export const userRequest = async () => {
     console.log(JSON.stringify(error));
 
     throw new Error("Failed to get user: " + error?.message);
+  }
+};
+
+export const userUpdateRequest = async (data: UserProfileData) => {
+  try {
+    let res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/update`, {
+      method: "PATCH",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify(data),
+    });
+    return res.json();
+  } catch (error: any) {
+    throw new Error("Failed to update user: " + error.message);
+  }
+};
+
+export const userPasswordUpdateRequest = async (data: ChangePasswordData) => {
+  try {
+    let res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/changepassword`,
+      {
+        method: "PATCH",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify(data),
+      }
+    );
+    return res.json();
+  } catch (error: any) {
+    throw new Error("Failed to update password: " + error.message);
   }
 };
 

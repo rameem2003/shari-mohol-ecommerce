@@ -1,17 +1,23 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Product } from "@/types/product";
 
 const DisplayProductImage = ({ data }: { data: Product }) => {
-  const images = data.images;
+  let images = data?.images;
   const [selectedImage, setSelectedImage] = useState<number>(0);
+
+  useEffect(() => {
+    // setSelectedImage(0);
+    images = data?.images;
+  }, [data]);
+
   return (
     <>
       {/* Left side - Image gallery */}
       <div className="flex flex-col-reverse gap-[15px] md:gap-0 md:flex-row">
         {/* Thumbnails */}
         <div className="w-full md:w-[20%] flex flex-row md:flex-col md:gap-4 max-h-[600px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 md:pr-2">
-          {data.images.map((image, index) => (
+          {data?.images?.map((image, index) => (
             <button
               key={index}
               onClick={() => setSelectedImage(index)}

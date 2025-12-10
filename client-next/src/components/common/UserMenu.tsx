@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { userRequest } from "@/api/auth-query";
 import { useAuth } from "@/hooks/useAuth";
+import Link from "next/link";
 
 const UserMenu = () => {
   const { user, logout } = useAuth();
@@ -35,11 +36,13 @@ const UserMenu = () => {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="start">
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
-          <DropdownMenuGroup>
-            <DropdownMenuItem>
-              Profile
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-            </DropdownMenuItem>
+          <DropdownMenuGroup className=" cursor-pointer">
+            <Link href="/account/profile" className="w-full cursor-pointer">
+              <DropdownMenuItem>
+                Profile
+                <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+              </DropdownMenuItem>
+            </Link>
             {/* <DropdownMenuItem>
               Billing
               <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
