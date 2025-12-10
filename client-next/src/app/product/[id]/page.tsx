@@ -21,7 +21,7 @@ export async function generateMetadata(
   //   console.log(product);
 
   return {
-    title: `${product?.data?.name} || Shari Mohol`,
+    title: `${product?.data?.name || "404 Not Found"} || Shari Mohol`,
     description: product?.data?.description,
   };
 }
@@ -31,6 +31,14 @@ const page = async ({ params }: PageProps) => {
 
   const { data } = await getProductById(id);
   // console.log(data);
+
+  if (!data) {
+    return (
+      <div className=" py-20 text-center text-2xl font-semibold">
+        Product not found!
+      </div>
+    );
+  }
 
   return (
     <main>
