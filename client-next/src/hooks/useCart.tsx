@@ -83,6 +83,11 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   const deleteCart = async (id: string) => {
     try {
+      if (!user.data.id) {
+        setLoading(false);
+        router.push("/login");
+        return;
+      }
       let res = await removeFromCart(id);
 
       if (!res.success) {
@@ -100,6 +105,11 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   const confirmOrder = async (data: any) => {
     try {
+      if (!user.data.id) {
+        setLoading(false);
+        router.push("/login");
+        return;
+      }
       let res = await placeOrderRequest(data);
       console.log(res);
 

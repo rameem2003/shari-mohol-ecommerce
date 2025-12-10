@@ -130,7 +130,7 @@ const LoginForm = () => {
           <Button
             disabled={loading}
             type="submit"
-            className="bg-shari-mohol-primary cursor-pointer mt-8"
+            className="bg-shari-mohol-primary cursor-pointer mt-8 hover:bg-shari-mohol-primary/90"
           >
             {loading ? "Logging In..." : "Log In"}
           </Button>
