@@ -1,5 +1,11 @@
 import { Category } from "./category";
 
+export interface ProductResponse {
+  success: boolean;
+  message: string;
+  data: Product[];
+}
+
 export interface Product {
   _id: string;
   name: string;

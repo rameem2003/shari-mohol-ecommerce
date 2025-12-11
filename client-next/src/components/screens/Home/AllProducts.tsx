@@ -5,7 +5,7 @@ import ProductListHome from "./ProductListHome";
 
 const AllProducts = async () => {
   let { data } = await getProducts("", 1, 10, "", "asc");
-  console.log(data);
+  // console.log(data);
 
   return (
     <section className=" my-10">

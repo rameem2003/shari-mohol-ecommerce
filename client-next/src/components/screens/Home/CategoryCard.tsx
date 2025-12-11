@@ -5,7 +5,7 @@ import React from "react";
 const CategoryCard = ({ data }: { data: Category }) => {
   return (
     <Link
-      href={`/category/${data._id}`}
+      href={`/shop?category=${data._id}`}
       className=" text-center  mx-2 p-4 rounded-md shadow-md flex flex-col items-center"
     >
       <div className=" h-40 w-40 rounded-full border-2 border-shari-mohol-primary">

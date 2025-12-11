@@ -119,6 +119,20 @@ const findSingleProductById = async (id) => {
     throw new Error("Error fetching product by id: " + error.message);
   }
 };
+const findProductsBySearchQuery = async (searchQuery) => {
+  try {
+    let products = await productModel
+      .find({ name: { $regex: searchQuery, $options: "i" } })
+      .populate("category")
+      .populate("reviews");
+    return products;
+  } catch (error) {
+    console.log("Error fetching products by search query: ", error);
+    throw new Error(
+      "Error fetching products by search query: " + error.message
+    );
+  }
+};
 
 const addNewProduct = async (productData) => {
   try {
@@ -207,6 +221,7 @@ module.exports = {
   findProductsByCategory,
   findProductsBySubCategory,
   findSingleProductById,
+  findProductsBySearchQuery,
   addNewProduct,
   updateExistingProduct,
   deleteExistingProduct,

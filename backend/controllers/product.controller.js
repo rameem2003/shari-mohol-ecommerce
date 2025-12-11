@@ -12,6 +12,7 @@ const {
   updateExistingProduct,
   deleteExistingProduct,
   reviewTheProduct,
+  findProductsBySearchQuery,
 } = require("../services/product.service");
 
 /**
@@ -124,6 +125,32 @@ const singleProduct = async (req, res) => {
     res.status(200).send({
       success: true,
       message: "Product Fetched Success",
+      data: product,
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Internal Server Error",
+      error,
+    });
+  }
+};
+
+/**
+ * Search Products by Query
+ */
+const getProductsBySearchQuery = async (req, res) => {
+  if (!req.query.s) {
+    return res
+      .status(400)
+      .send({ success: false, message: "Search Query is Required" });
+  }
+
+  try {
+    let product = await findProductsBySearchQuery(req.query.s);
+    res.status(200).send({
+      success: true,
+      message: "Products Fetched Success",
       data: product,
     });
   } catch (error) {
@@ -328,6 +355,7 @@ module.exports = {
   getProductByCategory,
   getProductBySubCategory,
   singleProduct,
+  getProductsBySearchQuery,
   createNewProduct,
   updateProduct,
   deleteProduct,

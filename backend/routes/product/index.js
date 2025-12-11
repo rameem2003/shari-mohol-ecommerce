@@ -9,6 +9,7 @@ const {
   getProductBySubCategory,
   getProductByCategory,
   sendReview,
+  getProductsBySearchQuery,
 } = require("../../controllers/product.controller");
 const checkAdminMiddleware = require("../../middlewares/checkAdminMiddleware");
 const checkUserMiddleware = require("../../middlewares/checkUserMiddleware");
@@ -41,6 +42,12 @@ router.get("/product/subcategory", getProductBySubCategory);
  * http://localhost:5000/api/v1/product/single/:id
  */
 router.get("/product/single/:id", singleProduct);
+
+/**
+ * Get products by search query
+ * http://localhost:5000/api/v1/product/search?s=
+ */
+router.get("/product/search", getProductsBySearchQuery);
 
 /**
  * Create new product
