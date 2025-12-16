@@ -280,7 +280,7 @@ const createResetPasswordTokenLink = async (userID) => {
     let tokenLink =
       process.env.SYSTEM_ENV == "development"
         ? `http://localhost:3000/reset-password?token=${token}`
-        : `https://nubian-admin-v2.netlify.app/reset-password?token=${token}`;
+        : `https://shari-mohol-v2.vercel.app/reset-password?token=${token}`;
 
     return tokenLink;
   } catch (error) {
