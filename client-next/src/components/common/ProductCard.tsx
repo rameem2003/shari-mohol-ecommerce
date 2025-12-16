@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Product } from "@/types/product";
 import { ShoppingCart } from "lucide-react";
+import { useCart } from "@/hooks/useCart";
 
 const ProductCard = ({
   data,
@@ -12,6 +13,9 @@ const ProductCard = ({
   data: Product;
   className?: string;
 }) => {
+  // console.log(data);
+
+  const { addCart, loading } = useCart();
   return (
     <div
       className={`relative rounded-md overflow-hidden mb-5 shadow-lg p-2 hover:shadow-2xl border-2 border-transparent  hover:border-shari-mohol-primary duration-300 ${className}`}
@@ -50,6 +54,8 @@ const ProductCard = ({
         </p>
 
         <Button
+          disabled={loading}
+          onClick={() => addCart(data?._id)}
           className="w-full mt-3 bg-shari-mohol-primary hover:bg-purple-800 text-white cursor-pointer"
           asChild
         >

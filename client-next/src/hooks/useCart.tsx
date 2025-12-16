@@ -52,7 +52,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const addCart = async (id: string) => {
     setLoading(true);
     try {
-      if (!user.data.id) {
+      if (!user?.data?.id) {
         setLoading(false);
         router.push("/login");
         return;
