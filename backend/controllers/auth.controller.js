@@ -28,6 +28,7 @@ const {
   clearResetPasswordToken,
   getAllUsers,
 } = require("../services/auth.service");
+const { base_config } = require("../constant/constant");
 
 /**
  * All Users
@@ -286,8 +287,8 @@ const logoutUser = async (req, res) => {
 
   try {
     await clearSession(req.user.session);
-    res.clearCookie("access_token");
-    res.clearCookie("refresh_token");
+    res.clearCookie("access_token", base_config);
+    res.clearCookie("refresh_token", base_config);
     return res
       .status(200)
       .json({ success: true, message: "User logged out successfully" });
