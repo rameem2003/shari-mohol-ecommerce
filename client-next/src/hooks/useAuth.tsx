@@ -173,8 +173,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // logout
   const logout = async () => {
+    console.log("Click Log out");
+
     try {
       let res = await logoutRequest();
+      console.log(res);
+
       setUser(undefined);
       setMsg(null);
       router.push("/");
