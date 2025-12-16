@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Container from "@/components/common/Container";
 import DisplayProductsSection from "./DisplayProductsSection";
 
@@ -14,8 +14,9 @@ const page = () => {
     <main>
       <Container>
         <section className=" py-20">
-          shop
-          <DisplayProductsSection />
+          <Suspense fallback={<div>Loading products...</div>}>
+            <DisplayProductsSection />
+          </Suspense>
         </section>
       </Container>
     </main>

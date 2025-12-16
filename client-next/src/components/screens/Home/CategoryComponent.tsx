@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import CategoryCard from "./CategoryCard";
 import { Category } from "@/types/category";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const CategoryComponent = ({ data }: { data: Category[] }) => {
   const [slide, setSlide] = useState<number>(0);

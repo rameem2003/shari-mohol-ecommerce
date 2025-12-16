@@ -5,6 +5,9 @@ import { getProducts } from "@/api/product-api";
 import ProductsList from "./ProductsList";
 import { ProductResponse } from "@/types/product";
 import Pagination from "./Pagination";
+import SegmentFilter from "./SegmentFilter";
+import PriceRangeFilter from "./PriceRangeFilter";
+import CategoryFilter from "./CategoryFilter";
 
 const DisplayProductsSection = () => {
   const [products, setProducts] = useState<ProductResponse | null>(null);
@@ -58,7 +61,11 @@ const DisplayProductsSection = () => {
   return (
     <section className=" flex items-start justify-between gap-5">
       {/* <button onClick={() => setPrice("desc")}>DESC</button> */}
-      <div className=" w-2/12"></div>
+      <div className=" w-2/12">
+        <CategoryFilter onChangeCategory={setCategory} />
+        <SegmentFilter onChangeSegment={setSegment} />
+        <PriceRangeFilter onChangePrice={setPrice} />
+      </div>
       <div className=" w-10/12">
         <ProductsList data={products} />
         <Pagination paginationData={products} setOffset={setOffset} />
