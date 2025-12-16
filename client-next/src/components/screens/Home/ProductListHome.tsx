@@ -7,7 +7,11 @@ const ProductListHome = ({ data }: { data: Product[] }) => {
     <section className=" mt-10">
       <div className=" flex items-center justify-between flex-wrap ">
         {data?.map((item, i) => (
-          <ProductCard key={i} data={item} />
+          <ProductCard
+            className="w-[48%] md:w-[30%] lg:w-[24%]"
+            key={i}
+            data={item}
+          />
         ))}
       </div>
     </section>

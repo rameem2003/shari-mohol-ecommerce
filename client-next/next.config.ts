@@ -8,6 +8,9 @@ const nextConfig: NextConfig = {
       {
         hostname: "shari-mohol-ecommerce-server.onrender.com",
       },
+      {
+        hostname: "localhost",
+      },
     ],
   },
 };

@@ -5,9 +5,17 @@ import { Button } from "@/components/ui/button";
 import { Product } from "@/types/product";
 import { ShoppingCart } from "lucide-react";
 
-const ProductCard = ({ data }: { data: Product }) => {
+const ProductCard = ({
+  data,
+  className,
+}: {
+  data: Product;
+  className?: string;
+}) => {
   return (
-    <div className="w-[48%] md:w-[30%] lg:w-[24%] relative rounded-md overflow-hidden mb-5 shadow-lg p-2 hover:shadow-2xl border-2 border-transparent  hover:border-shari-mohol-primary duration-300">
+    <div
+      className={`relative rounded-md overflow-hidden mb-5 shadow-lg p-2 hover:shadow-2xl border-2 border-transparent  hover:border-shari-mohol-primary duration-300 ${className}`}
+    >
       {/* badge */}
 
       <span className="bg-red-500 rounded-sm px-3 py-1 text-[0.9rem] text-white absolute top-3 left-3">

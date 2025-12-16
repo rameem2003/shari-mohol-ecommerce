@@ -3,6 +3,8 @@ import { Category } from "./category";
 export interface ProductResponse {
   success: boolean;
   message: string;
+  currentPage?: number;
+  totalPages?: number;
   data: Product[];
 }
 

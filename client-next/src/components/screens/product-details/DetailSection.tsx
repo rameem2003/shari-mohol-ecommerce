@@ -17,7 +17,7 @@ const DetailSection = ({ data }: { data: Product }) => {
       <div className="flex flex-col gap-6">
         <div>
           <Link
-            href={`/category/${data.category._id}`}
+            href={`/shop?category=${data.category._id}`}
             className=" mb-2 flex items-center gap-2 text-gray-500 capitalize "
           >
             {data.category.name}{" "}

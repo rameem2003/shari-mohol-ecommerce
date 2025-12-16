@@ -2,8 +2,12 @@
 import React, { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { getProducts } from "@/api/product-api";
+import ProductsList from "./ProductsList";
+import { ProductResponse } from "@/types/product";
+import Pagination from "./Pagination";
 
 const DisplayProductsSection = () => {
+  const [products, setProducts] = useState<ProductResponse | null>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -39,18 +43,28 @@ const DisplayProductsSection = () => {
     let res = await getProducts(
       segment,
       offset,
-      10,
+      6,
       category,
       price as "asc" | "desc" | null
     );
     console.log(res);
+    setProducts(res);
   };
 
   useEffect(() => {
     updateQuery();
     fetchProducts();
   }, [category, price, page, segment, offset]);
-  return <div></div>;
+  return (
+    <section className=" flex items-start justify-between gap-5">
+      {/* <button onClick={() => setPrice("desc")}>DESC</button> */}
+      <div className=" w-2/12"></div>
+      <div className=" w-10/12">
+        <ProductsList data={products} />
+        <Pagination paginationData={products} setOffset={setOffset} />
+      </div>
+    </section>
+  );
 };
 
 export default DisplayProductsSection;
