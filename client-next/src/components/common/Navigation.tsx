@@ -1,12 +1,12 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import Container from "./Container";
-import { Menu } from "lucide-react";
 import Link from "next/link";
 import NavRightSideComponent from "./NavRightSideComponent";
 import SearchComponent from "./SearchComponent";
-import { useAuth } from "@/hooks/useAuth";
 import MobileBottomNav from "./MobileBottomNav";
+import { useAuth } from "@/hooks/useAuth";
+import { Store } from "lucide-react";
 
 const Navigation = () => {
   const { user, loading, getUser } = useAuth();
@@ -36,9 +36,9 @@ const Navigation = () => {
           </div>
           <div className=" flex items-center justify-between">
             <div className=" block lg:hidden w-4/12">
-              <button>
-                <Menu className=" text-2xl text-white" />
-              </button>
+              <Link href="/shop" className=" block text-center">
+                <Store className=" text-2xl text-white" />
+              </Link>
             </div>
             <div className=" w-4/12 lg:w-2/12">
               <Link

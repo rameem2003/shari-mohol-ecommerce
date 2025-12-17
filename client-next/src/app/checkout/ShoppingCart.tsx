@@ -1,8 +1,8 @@
 "use client";
+import React from "react";
 import CartCard from "@/components/common/CartCard";
 import { useCart } from "@/hooks/useCart";
 import { CartItemType } from "@/types/Cart";
-import React from "react";
 
 const ShoppingCart = () => {
   const { cart } = useCart();

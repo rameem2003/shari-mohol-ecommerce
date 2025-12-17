@@ -16,9 +16,8 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { userRequest } from "@/api/auth-query";
-import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth";
 
 const UserMenu = () => {
   const { user, logout } = useAuth();

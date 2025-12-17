@@ -1,10 +1,10 @@
 import React from "react";
-import { getProductById } from "@/api/product-api";
-import Container from "@/components/common/Container";
 import { Metadata, ResolvingMetadata } from "next";
-import { PageProps } from "./../../../types/Params";
-import DisplayProductImage from "@/components/screens/product-details/DisplayProductImage";
+import Container from "@/components/common/Container";
 import DetailSection from "@/components/screens/product-details/DetailSection";
+import DisplayProductImage from "@/components/screens/product-details/DisplayProductImage";
+import { getProductById } from "@/api/product-api";
+import { PageProps } from "./../../../types/Params";
 
 type MetaProps = {
   params: Promise<{ id: string }>;

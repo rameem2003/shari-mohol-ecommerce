@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
-import "./globals.css";
 import Navigation from "@/components/common/Navigation";
 import Footer from "@/components/common/Footer";
+import { Inter } from "next/font/google";
+import "./globals.css";
 import { AuthProvider } from "@/hooks/useAuth";
 import { Toaster } from "@/components/ui/sonner";
 import { CartProvider } from "@/hooks/useCart";
@@ -12,19 +12,37 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
-
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
-
 export const metadata: Metadata = {
   title: "Shari Mohol || by ROL Studio Bangladesh",
   description: "A Concept E-commerce Website",
+  keywords: [
+    "Best web development company in Dhaka",
+    "Best web development company in Bangladesh",
+    "react js development",
+    "Mahmood Hassan Rameem",
+    "MERN stack development",
+    "web development",
+    "web design",
+    "Bangladesh",
+    "ROL Studio Bangladesh",
+    "Next.js",
+  ],
+  openGraph: {
+    title: "ROL Studio Bangladesh",
+    description:
+      "Leading web and software development and design studio in Bangladesh.",
+    url: "https://shari-mohol-next.onrender.com/",
+    siteName: "ROL Studio Bangladesh",
+    images: [
+      {
+        url: "https://shari-mohol-next.onrender.com/logo.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

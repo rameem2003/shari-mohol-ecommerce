@@ -1,5 +1,5 @@
-import Container from "@/components/common/Container";
 import React from "react";
+import Container from "@/components/common/Container";
 import ShoppingCart from "./ShoppingCart";
 import CheckoutForm from "./CheckoutForm";
 

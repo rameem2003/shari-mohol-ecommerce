@@ -1,6 +1,5 @@
 import Container from "@/components/common/Container";
 import { Metadata } from "next";
-import Link from "next/link";
 import AccountNav from "./AccountNav";
 
 export const metadata: Metadata = {

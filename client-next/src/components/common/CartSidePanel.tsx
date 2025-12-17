@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import {
   Sheet,
   SheetContent,
@@ -9,11 +10,10 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart } from "lucide-react";
 import CartCard from "./CartCard";
 import { useCart } from "@/hooks/useCart";
 import { CartItemType } from "@/types/Cart";
-import Link from "next/link";
+import { ShoppingCart } from "lucide-react";
 
 const CartSidePanel = () => {
   const { cart } = useCart();

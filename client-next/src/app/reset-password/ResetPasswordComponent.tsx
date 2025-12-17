@@ -1,13 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Container from "@/components/common/Container";
-import { useAuth } from "@/hooks/useAuth";
 import { notFound, useSearchParams } from "next/navigation";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuth } from "@/hooks/useAuth";
 import { ResetPasswordData, resetPasswordSchema } from "../(auth)/auth.schema";
 const ResetPasswordComponent = () => {
   const { loading, passwordReset, verifyResetPasswordToken } = useAuth();

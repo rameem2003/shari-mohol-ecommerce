@@ -4,7 +4,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Image from "next/image";
 interface BannerData {
   _id: number;
   banner: string;

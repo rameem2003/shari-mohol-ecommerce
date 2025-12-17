@@ -1,6 +1,6 @@
-import { OrderItemType } from "@/types/Cart";
-import Link from "next/link";
 import React from "react";
+import Link from "next/link";
+import { OrderItemType } from "@/types/Cart";
 
 const OrderCard = ({ data }: { data: OrderItemType }) => {
   return (

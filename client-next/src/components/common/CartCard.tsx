@@ -1,10 +1,10 @@
 "use client";
-import { CartItemType } from "@/types/Cart";
-import Link from "next/link";
 import React from "react";
+import Link from "next/link";
 import { Button } from "../ui/button";
-import { Minus, Plus, Trash } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
+import { CartItemType } from "@/types/Cart";
+import { Minus, Plus, Trash } from "lucide-react";
 
 const CartCard = ({ data }: { data: CartItemType }) => {
   const { addCart, decrementCart, deleteCart } = useCart();

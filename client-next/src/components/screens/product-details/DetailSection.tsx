@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
-import { Product } from "@/types/product";
-import { BadgeCheck, ExternalLink, Store, Truck } from "lucide-react";
 import Link from "next/link";
 import { useCart } from "@/hooks/useCart";
+import { BadgeCheck, ExternalLink, Store, Truck } from "lucide-react";
+import { Product } from "@/types/product";
 
 const DetailSection = ({ data }: { data: Product }) => {
   const { addCart, loading } = useCart();

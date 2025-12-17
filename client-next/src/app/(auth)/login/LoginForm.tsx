@@ -5,11 +5,11 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AlertCircleIcon, Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { LoginUserData, loginUserSchema } from "../auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@/hooks/useAuth";
+import { AlertCircleIcon, Eye, EyeOff } from "lucide-react";
 
 const LoginForm = () => {
   const { login, loading, msg, user } = useAuth();

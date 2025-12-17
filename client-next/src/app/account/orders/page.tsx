@@ -1,7 +1,7 @@
 "use client";
+import OrderCard from "./OrderCard";
 import { useCart } from "@/hooks/useCart";
 import { OrderItemType, OrderType } from "@/types/Cart";
-import OrderCard from "./OrderCard";
 
 const page = () => {
   const { orders, loading } = useCart();

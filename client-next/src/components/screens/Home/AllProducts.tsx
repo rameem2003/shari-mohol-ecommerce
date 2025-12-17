@@ -1,7 +1,7 @@
-import { getProducts } from "@/api/product-api";
-import Container from "@/components/common/Container";
 import React from "react";
+import Container from "@/components/common/Container";
 import ProductListHome from "./ProductListHome";
+import { getProducts } from "@/api/product-api";
 
 const AllProducts = async () => {
   let { data } = await getProducts("", 1, 10, "", "asc");

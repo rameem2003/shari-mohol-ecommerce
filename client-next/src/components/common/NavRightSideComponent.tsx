@@ -1,8 +1,8 @@
-import { CircleUserRound } from "lucide-react";
 import Link from "next/link";
 import CartSidePanel from "./CartSidePanel";
-import { User } from "@/types/User";
 import UserMenu from "./UserMenu";
+import { User } from "@/types/User";
+import { CircleUserRound } from "lucide-react";
 
 const NavRightSideComponent = ({ data }: { data: User }) => {
   return (

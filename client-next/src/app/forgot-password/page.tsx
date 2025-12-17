@@ -1,11 +1,11 @@
 "use client";
+import React from "react";
 import Container from "@/components/common/Container";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
 import { useForm } from "react-hook-form";
 import { email, EmailValidatorType } from "../(auth)/auth.schema";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";

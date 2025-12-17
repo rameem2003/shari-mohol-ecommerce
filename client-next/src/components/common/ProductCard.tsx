@@ -2,9 +2,9 @@
 import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/hooks/useCart";
 import { Product } from "@/types/product";
 import { ShoppingCart } from "lucide-react";
-import { useCart } from "@/hooks/useCart";
 
 const ProductCard = ({
   data,

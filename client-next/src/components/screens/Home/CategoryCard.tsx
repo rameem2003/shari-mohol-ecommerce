@@ -1,6 +1,6 @@
-import { Category } from "@/types/category";
-import Link from "next/link";
 import React from "react";
+import Link from "next/link";
+import { Category } from "@/types/category";
 
 const CategoryCard = ({ data }: { data: Category }) => {
   return (

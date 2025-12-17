@@ -5,8 +5,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { UserProfileData, userProfileSchema } from "@/app/(auth)/auth.schema";
 import { useAuth } from "@/hooks/useAuth";
+import { UserProfileData, userProfileSchema } from "@/app/(auth)/auth.schema";
 
 const page = () => {
   const { user, updateUser, loading } = useAuth();

@@ -18,7 +18,7 @@ const MobileBottomNav = () => {
   const { user } = useAuth();
   const { cart } = useCart();
   return (
-    <section className=" block lg:hidden z-1000 fixed bottom-0 w-full left-0 bg-shari-mohol-primary">
+    <section className=" block lg:hidden z-10 fixed bottom-0 w-full left-0 bg-shari-mohol-primary">
       <Container>
         <div className=" flex items-center justify-center gap-2">
           <Link
