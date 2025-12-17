@@ -31,7 +31,7 @@ const ProductCard = ({
         <img
           alt="product/image"
           src={`${process.env.NEXT_PUBLIC_MEDIA}${data?.images[0]}`}
-          className="w-full h-[400px] object-cover rounded-md hover:scale-105 duration-300"
+          className="w-full h-[150px] lg:h-[400px] object-cover rounded-md hover:scale-105 duration-300"
         />
       </div>
 

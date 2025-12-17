@@ -59,14 +59,14 @@ const DisplayProductsSection = () => {
     fetchProducts();
   }, [category, price, page, segment, offset]);
   return (
-    <section className=" flex items-start justify-between gap-5">
+    <section className=" flex flex-col lg:flex-row items-start justify-between gap-5">
       {/* <button onClick={() => setPrice("desc")}>DESC</button> */}
-      <div className=" w-2/12">
+      <div className=" w-full lg:w-2/12">
         <CategoryFilter onChangeCategory={setCategory} />
         <SegmentFilter onChangeSegment={setSegment} />
         <PriceRangeFilter onChangePrice={setPrice} />
       </div>
-      <div className=" w-10/12">
+      <div className=" w-full lg:w-10/12">
         <ProductsList data={products} />
         <Pagination paginationData={products} setOffset={setOffset} />
       </div>

@@ -7,7 +7,7 @@ const page = () => {
   return (
     <main className="">
       <Container>
-        <section className=" flex items-start justify-between py-20 gap-8">
+        <section className=" flex flex-col lg:flex-row items-start justify-between py-20 gap-8">
           <div className=" w-full lg:w-7/12">
             <h2 className=" text-3xl font-semibold text-shari-mohol-primary mb-8">
               Your Shipping Address

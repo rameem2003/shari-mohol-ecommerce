@@ -10,7 +10,7 @@ const AllProducts = async () => {
   return (
     <section className=" my-10">
       <Container>
-        <div className="p-3">
+        <div className="p-0 lg:p-3">
           <h2 className=" text-3xl text-shari-mohol-primary font-semibold">
             All Products
           </h2>

@@ -21,8 +21,8 @@ const PriceRangeFilter = ({
       </h4>
 
       <Select onValueChange={(value: "asc" | "desc") => onChangePrice(value)}>
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Select segment" />
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder="Select Price Level" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>

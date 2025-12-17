@@ -75,18 +75,18 @@ const SliderComponent = ({ data }: { data: BannerData[] }) => {
       {!data && <Skeleton className="w-full h-[600px] rounded-md" />}
       <Slider {...settings}>
         {data?.map((item) => (
-          <Image
-            onLoad={() => <Skeleton className="w-full h-[600px] rounded-md" />}
-            onError={() => {
-              return <Skeleton className="w-full h-[600px] rounded-md" />;
-              // console.log("Fail");
-            }}
-            loading="lazy"
+          <img
+            // onLoad={() => <Skeleton className="w-full h-[600px] rounded-md" />}
+            // onError={() => {
+            //   return <Skeleton className="w-full h-[600px] rounded-md" />;
+            //   // console.log("Fail");
+            // }}
+            // loading="lazy"
             key={item._id}
-            height={1200}
-            width={1200}
+            // height={1200}
+            // width={1200}
             src={`${process.env.NEXT_PUBLIC_MEDIA}${item.banner}`}
-            className="w-full h-auto md:h-[400px] xl:h-[600px] rounded-md"
+            className="w-full h-[200px] md:h-[400px] xl:h-[600px] rounded-md"
             alt="Banner Image"
           />
         ))}

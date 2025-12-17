@@ -12,6 +12,8 @@ const CategoryComponent = ({ data }: { data: Category[] }) => {
   const settings = {
     dots: false,
     infinite: true,
+    autoplay: true,
+    autoplaySpeed: 2000,
     speed: 500,
     slidesToShow: 6,
     slidesToScroll: 6,

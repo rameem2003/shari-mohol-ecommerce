@@ -36,7 +36,7 @@ const CategoryFilter = ({
       </h4>
 
       <Select onValueChange={(value: string) => onChangeCategory(value)}>
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="Choose category" />
         </SelectTrigger>
         <SelectContent>

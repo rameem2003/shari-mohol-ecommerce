@@ -9,7 +9,7 @@ const OrderCard = ({ data }: { data: OrderItemType }) => {
         <div className="bg-white rounded-xl border border-gray-300 overflow-hidden p-6">
           <div className="flex flex-wrap justify-between gap-6">
             <div className="max-w-96">
-              <div className="flex items-center gap-4">
+              <div className="flex flex-wrap items-center gap-4">
                 <span className="text-[15px] font-semibold text-slate-600">
                   Order #{data._id}
                 </span>
@@ -69,7 +69,7 @@ const OrderCard = ({ data }: { data: OrderItemType }) => {
               </div>
             ))}
           </div>
-          <div className="mt-8 hidden flex flex-wrap gap-4">
+          <div className="mt-8 hidden flex-wrap gap-4">
             <button className="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm text-slate-900 font-medium cursor-pointer hover:bg-gray-50 transition flex items-center gap-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

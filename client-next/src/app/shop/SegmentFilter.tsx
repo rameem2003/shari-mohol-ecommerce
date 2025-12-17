@@ -25,7 +25,7 @@ const SegmentFilter = ({
           onChangeSegment(value)
         }
       >
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="Select segment" />
         </SelectTrigger>
         <SelectContent>

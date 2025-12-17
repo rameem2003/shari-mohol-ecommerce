@@ -64,12 +64,12 @@ const SearchComponent = () => {
                 className=" mb-4 flex items-start justify-start gap-3"
               >
                 <div>
-                  <Image
+                  <img
                     className=" w-10 h-10 rounded-full"
                     src={process.env.NEXT_PUBLIC_MEDIA + product.images[0]}
                     alt={product.name}
-                    width={200}
-                    height={200}
+                    // width={200}
+                    // height={200}
                   />
                 </div>
 
