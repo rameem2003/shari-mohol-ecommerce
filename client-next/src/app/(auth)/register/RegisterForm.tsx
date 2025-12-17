@@ -1,17 +1,18 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@/hooks/useAuth";
-import { Eye, EyeOff } from "lucide-react";
+import { AlertCircleIcon, Eye, EyeOff } from "lucide-react";
 import { RegisterUserData, registerUserSchema } from "../auth.schema";
 
 const RegisterForm = () => {
-  const { registerUser, loading } = useAuth();
+  const { registerUser, loading, msg } = useAuth();
   const {
     register,
     handleSubmit,
@@ -46,12 +47,12 @@ const RegisterForm = () => {
 
       <section className=" mt-10 max-w-[550px] w-full p-4 rounded-lg shadow-xl">
         <div className=" mb-5">
-          {/* {msg && (
-                <Alert variant="destructive">
-                  <AlertCircleIcon />
-                  <AlertTitle>{msg}</AlertTitle>
-                </Alert>
-              )} */}
+          {msg && (
+            <Alert variant="destructive">
+              <AlertCircleIcon />
+              <AlertTitle>{msg}</AlertTitle>
+            </Alert>
+          )}
         </div>
         <form
           onSubmit={handleSubmit(onSubmit)}
