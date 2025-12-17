@@ -28,11 +28,10 @@ export const metadata: Metadata = {
     "Next.js",
   ],
   openGraph: {
-    title: "ROL Studio Bangladesh",
-    description:
-      "Leading web and software development and design studio in Bangladesh.",
+    title: "SHari Mohol || by ROL Studio Banglades",
+    description: "A Concept E-commerce Website for Traditional Ladies Clothes",
     url: "https://shari-mohol-next.onrender.com/",
-    siteName: "ROL Studio Bangladesh",
+    siteName: "Shari Mohol",
     images: [
       {
         url: "https://shari-mohol-next.onrender.com/logo.png",
