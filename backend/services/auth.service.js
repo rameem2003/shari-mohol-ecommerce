@@ -280,7 +280,7 @@ const createResetPasswordTokenLink = async (userID) => {
     let tokenLink =
       process.env.SYSTEM_ENV == "development"
         ? `http://localhost:3000/reset-password?token=${token}`
-        : `https://shari-mohol-v2.vercel.app/reset-password?token=${token}`;
+        : `https://shari-mohol-next.onrender.com/reset-password?token=${token}`;
 
     return tokenLink;
   } catch (error) {
@@ -310,7 +310,7 @@ const createEmailLink = (email, token) => {
   const url = new URL(
     process.env.SYSTEM_ENV == "development"
       ? `http://localhost:5000/api/v1/auth/verify-email`
-      : `https://code-duniya.onrender.com/api/v1/auth/verify-email`
+      : `https://shari-mohol-api-v2.onrender.com/api/v1/auth/verify-email`
   );
 
   url.searchParams.append("token", token);
