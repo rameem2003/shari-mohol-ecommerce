@@ -1,4 +1,4 @@
 #!/bin/bash
-cd client-next && npm run dev &
+cd admin && npm run admin &
 cd .. & cd backend && npm start &
 wait

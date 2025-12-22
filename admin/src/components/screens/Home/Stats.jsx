@@ -8,7 +8,7 @@ const Stats = () => {
   // fetch orders
   const fetchOrders = async () => {
     let res = await fetchAllOrdersRequest();
-    console.log(res);
+    // console.log(res);
 
     setOrders(res);
   };
@@ -49,6 +49,19 @@ const Stats = () => {
         </div>
         <div className="mb-2 w-full rounded-md bg-gray-100 shadow-lg md:w-[48%] lg:w-[24%] dark:bg-slate-800">
           <div className="flex w-full flex-col items-center justify-center p-6">
+            <h2 className="text-xl font-[600] text-[#3B9DF8] xl:text-[1.5rem]">
+              Today's Order
+            </h2>
+
+            <div className="mt-6 flex gap-1">
+              <h2 className="text-2xl font-[800] leading-[4rem] text-black xl:text-3xl 2xl:text-[4rem] dark:text-white">
+                {filterForToday?.length || 0}
+              </h2>
+            </div>
+          </div>
+        </div>
+        <div className="mb-2 w-full rounded-md bg-gray-100 shadow-lg md:w-[48%] lg:w-[24%] dark:bg-slate-800">
+          <div className="flex w-full flex-col items-center justify-center p-6">
             <h2 className="xl:ext-[1.5rem] text-xl font-[600] text-[#3B9DF8]">
               Total Sell
             </h2>
@@ -63,19 +76,7 @@ const Stats = () => {
             </div>
           </div>
         </div>
-        <div className="mb-2 w-full rounded-md bg-gray-100 shadow-lg md:w-[48%] lg:w-[24%] dark:bg-slate-800">
-          <div className="flex w-full flex-col items-center justify-center p-6">
-            <h2 className="text-xl font-[600] text-[#3B9DF8] xl:text-[1.5rem]">
-              Today's Order
-            </h2>
 
-            <div className="mt-6 flex gap-1">
-              <h2 className="text-2xl font-[800] leading-[4rem] text-black xl:text-3xl 2xl:text-[4rem] dark:text-white">
-                {filterForToday?.length || 0}
-              </h2>
-            </div>
-          </div>
-        </div>
         <div className="mb-2 w-full rounded-md bg-gray-100 shadow-lg md:w-[48%] lg:w-[24%] dark:bg-slate-800">
           <div className="flex w-full flex-col items-center justify-center p-6">
             <h2 className="xl:ext-[1.5rem] text-xl font-[600] text-[#3B9DF8]">

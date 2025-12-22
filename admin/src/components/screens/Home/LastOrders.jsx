@@ -11,6 +11,8 @@ const LastOrders = () => {
   // fetch orders
   const fetchOrders = async () => {
     let res = await fetchAllOrdersRequest();
+    console.log(res);
+
     setOrders(res?.pendingOrders);
   };
 

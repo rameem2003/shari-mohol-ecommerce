@@ -19,7 +19,7 @@ const findAllOrders = async (offset = 1, method = "", status = "") => {
       .sort({ createdAt: -1 });
 
     let pendingOrders = orders.filter(
-      (order) => order.deliveryStatus === "Pending"
+      (order) => order.deliveryStatus === "pending"
     );
     // console.log("Pending Orders:", pendingOrders);
 
@@ -105,7 +105,7 @@ const findAllOrders = async (offset = 1, method = "", status = "") => {
     });
 
     // Force include both methods (even if no data)
-    const paymentMethods = ["online", "cod"];
+    const paymentMethods = ["online", "COD"];
 
     const allOrdersByPaymentStatus = paymentMethods.map((method) => {
       const found = ordersByPayment.find((r) => r._id === method);

@@ -25,6 +25,7 @@ app.use(
       "http://localhost:3000",
       "https://shari-mohol.vercel.app",
       "https://shari-mohol-next.onrender.com",
+      "https://admin-shari-mohol.onrender.com",
       "https://innovationheaven.com",
     ],
     credentials: true,
