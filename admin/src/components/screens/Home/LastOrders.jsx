@@ -52,7 +52,7 @@ const LastOrders = () => {
         </div>
 
         <h2 className="mb-5 text-2xl font-bold text-black dark:text-white">
-          Last 5 Pending Orders
+          Last Pending Orders
         </h2>
         {!orders && (
           <div className="block w-full">

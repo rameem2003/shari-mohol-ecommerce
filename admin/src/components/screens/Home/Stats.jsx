@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Flex from "./../../common/Flex";
 import { fetchAllOrdersRequest } from "../../../api/order";
+import { FaSackDollar } from "react-icons/fa6";
+import { HiCurrencyDollar } from "react-icons/hi";
+import { TbShoppingCartCopy } from "react-icons/tb";
+import { FaCartShopping } from "react-icons/fa6";
 
 const Stats = () => {
   const [orders, setOrders] = useState([]); // set the initial state of orders
@@ -8,8 +12,6 @@ const Stats = () => {
   // fetch orders
   const fetchOrders = async () => {
     let res = await fetchAllOrdersRequest();
-    // console.log(res);
-
     setOrders(res);
   };
 
@@ -32,7 +34,7 @@ const Stats = () => {
     <section>
       <Flex className="flex-col flex-wrap items-center justify-between gap-5 md:flex-row md:gap-0">
         <div className="mb-2 w-full rounded-md bg-gray-100 shadow-lg md:w-[48%] lg:w-[24%] dark:bg-slate-800">
-          <div className="flex w-full flex-col items-center justify-center p-6">
+          <div className="relative flex w-full flex-col items-start justify-center p-6">
             <h2 className="text-xl font-[600] text-[#3B9DF8] xl:text-[1.5rem]">
               Today's Sell
             </h2>
@@ -45,10 +47,12 @@ const Stats = () => {
                 BDT
               </span>
             </div>
+
+            <FaSackDollar className="absolute bottom-4 right-4 text-[3rem] text-[#3B9DF8] opacity-50" />
           </div>
         </div>
         <div className="mb-2 w-full rounded-md bg-gray-100 shadow-lg md:w-[48%] lg:w-[24%] dark:bg-slate-800">
-          <div className="flex w-full flex-col items-center justify-center p-6">
+          <div className="relative flex w-full flex-col items-start justify-center p-6">
             <h2 className="text-xl font-[600] text-[#3B9DF8] xl:text-[1.5rem]">
               Today's Order
             </h2>
@@ -58,11 +62,12 @@ const Stats = () => {
                 {filterForToday?.length || 0}
               </h2>
             </div>
+            <TbShoppingCartCopy className="absolute bottom-4 right-4 text-[3rem] text-[#3B9DF8] opacity-50" />
           </div>
         </div>
         <div className="mb-2 w-full rounded-md bg-gray-100 shadow-lg md:w-[48%] lg:w-[24%] dark:bg-slate-800">
-          <div className="flex w-full flex-col items-center justify-center p-6">
-            <h2 className="xl:ext-[1.5rem] text-xl font-[600] text-[#3B9DF8]">
+          <div className="relative flex w-full flex-col items-start justify-center p-6">
+            <h2 className="text-xl font-[600] text-[#3B9DF8] xl:text-[1.5rem]">
               Total Sell
             </h2>
 
@@ -74,12 +79,13 @@ const Stats = () => {
                 BDT
               </span>
             </div>
+            <HiCurrencyDollar className="absolute bottom-4 right-4 text-[3rem] text-[#3B9DF8] opacity-50" />
           </div>
         </div>
 
         <div className="mb-2 w-full rounded-md bg-gray-100 shadow-lg md:w-[48%] lg:w-[24%] dark:bg-slate-800">
-          <div className="flex w-full flex-col items-center justify-center p-6">
-            <h2 className="xl:ext-[1.5rem] text-xl font-[600] text-[#3B9DF8]">
+          <div className="relative flex w-full flex-col items-start justify-center p-6">
+            <h2 className="text-xl font-[600] text-[#3B9DF8] xl:text-[1.5rem]">
               Total Order
             </h2>
 
@@ -88,6 +94,7 @@ const Stats = () => {
                 {orders?.totalOrders || 0}
               </h2>
             </div>
+            <FaCartShopping className="absolute bottom-4 right-4 text-[3rem] text-[#3B9DF8] opacity-50" />
           </div>
         </div>
       </Flex>
