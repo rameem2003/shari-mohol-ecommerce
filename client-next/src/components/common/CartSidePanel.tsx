@@ -9,6 +9,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
 import CartCard from "./CartCard";
 import { useCart } from "@/hooks/useCart";
@@ -21,14 +26,27 @@ const CartSidePanel = () => {
   return (
     <Sheet>
       <SheetTrigger className=" cursor-pointer">
-        <div className=" relative">
-          <Badge className=" bg-white absolute -top-2 -right-2" asChild>
-            <span className=" font-bold text-shari-mohol-primary">
-              {cart?.data?.length || 0}
-            </span>
-          </Badge>
-          <ShoppingCart size={35} className=" text-5xl text-white" />
-        </div>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className=" relative ">
+              <Badge
+                className=" bg-white border-2 border-shari-mohol-primary absolute -top-3 -right-2"
+                asChild
+              >
+                <span className=" font-bold text-shari-mohol-primary">
+                  {cart?.data?.length || 0}
+                </span>
+              </Badge>
+              <ShoppingCart
+                // size={35}
+                className=" size-8 mt-2 text-shari-mohol-primary"
+              />
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Go to Cart</p>
+          </TooltipContent>
+        </Tooltip>
       </SheetTrigger>
       <SheetContent className=" overflow-y-scroll">
         <SheetHeader>

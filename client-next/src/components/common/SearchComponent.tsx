@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { searchProductsRequest } from "@/api/product-api";
 import { ProductResponse } from "@/types/product";
+import { Button } from "../ui/button";
+import { Search } from "lucide-react";
 
 const SearchComponent = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -41,14 +43,20 @@ const SearchComponent = () => {
   return (
     <div className=" w-full">
       <div className="w-full h-10 lg:h-[50px] bg-white rounded-sm relative">
-        <input
-          onChange={(e) => setQuery(e.target.value)}
-          className=" w-full h-full px-5 rounded-sm text-shari-mohol-primary outline-none font-medium text-base lg:text-lg placeholder:text-shari-mohol-primary"
-          placeholder="Search Your Product....."
-          type="text"
-          name=""
-          id=""
-        />
+        <div className=" h-full w-full relative">
+          <input
+            onChange={(e) => setQuery(e.target.value)}
+            className=" w-full h-full px-5 rounded-sm border-2 border-shari-mohol-primary text-shari-mohol-primary outline-none font-medium text-base lg:text-lg placeholder:text-shari-mohol-primary"
+            placeholder="Search Your Product....."
+            type="text"
+            name=""
+            id=""
+          />
+
+          <Button className=" absolute right-0 top-0 h-full w-[55px] rounded-sm bg-shari-mohol-primary hover:bg-shari-mohol-primary/90 cursor-pointer p-0">
+            <Search className=" size-5 text-white" />
+          </Button>
+        </div>
         {(loading || results) && (
           <div className=" absolute w-full p-2 z-1000 bg-gray-100 top-[70px] rounded-md left-0">
             {loading && (
