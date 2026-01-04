@@ -13,6 +13,7 @@ const {
   deleteExistingProduct,
   reviewTheProduct,
   findProductsBySearchQuery,
+  mostSellAndViewedProducts,
 } = require("../services/product.service");
 
 /**
@@ -37,6 +38,8 @@ const allProducts = async (req, res) => {
     );
 
     const totalPages = Math.ceil(totalCount / 10);
+    const { mostSellingProducts, mostViewedProducts } =
+      await mostSellAndViewedProducts();
 
     res.status(200).send({
       success: true,
@@ -44,6 +47,8 @@ const allProducts = async (req, res) => {
       currentPage: offset,
       totalPages,
       data: products,
+      mostSellingProducts,
+      mostViewedProducts,
     });
   } catch (error) {
     console.log(error);

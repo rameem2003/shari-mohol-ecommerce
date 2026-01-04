@@ -4,6 +4,7 @@ import Flex from "../components/common/Flex";
 import LastOrders from "../components/screens/Home/LastOrders";
 import BarChartMonthlyRevenue from "../components/screens/Home/BarChartMonthlyRevenue";
 import BarChartStatsByPaymentStatus from "../components/screens/Home/BarChartStatsByPaymentStatus";
+import MostViewSellProduct from "../components/screens/Home/MostViewSellProduct";
 
 const Home = () => {
   return (
@@ -13,6 +14,7 @@ const Home = () => {
         <BarChartMonthlyRevenue />
         <BarChartStatsByPaymentStatus />
       </Flex>
+      <MostViewSellProduct />
       <LastOrders />
     </main>
   );

@@ -11,6 +11,7 @@ const connectDB = require("./config/db.config");
 // const YAML = require("yamljs");
 // const swaggerDocument = YAML.load("./api.yaml");
 const router = require("./routes");
+const { welcomeNote } = require("./constant/constant");
 const app = express();
 
 connectDB(); // mongodb connect
@@ -62,12 +63,7 @@ app.use(router);
  * Welcome Route
  */
 app.get("/", (req, res) => {
-  res.status(200).send({
-    title: "Shari Mohol API",
-    Owner: "Maksudur Rahman Rasel",
-    developer: "ROL Studio Bangladesh",
-    author: "Mahmood Hassan Rameem",
-  });
+  res.status(200).send(welcomeNote);
 });
 
 /**

@@ -216,6 +216,29 @@ const reviewTheProduct = async (data) => {
   }
 };
 
+const mostSellAndViewedProducts = async () => {
+  try {
+    const mostSellingProducts = await productModel
+      .find({})
+      .populate("category")
+      .populate("reviews")
+      .sort({ sellCount: -1 })
+      .limit(5);
+
+    const mostViewedProducts = await productModel
+      .find({})
+      .populate("category")
+      .populate("reviews")
+      .sort({ viewCount: -1 })
+      .limit(5);
+
+    return { mostSellingProducts, mostViewedProducts };
+  } catch (error) {
+    console.log("Error fetching products: ", error);
+    throw new Error("Error fetching products: " + error.message);
+  }
+};
+
 module.exports = {
   findAllProducts,
   findProductsByCategory,
@@ -226,4 +249,5 @@ module.exports = {
   updateExistingProduct,
   deleteExistingProduct,
   reviewTheProduct,
+  mostSellAndViewedProducts,
 };

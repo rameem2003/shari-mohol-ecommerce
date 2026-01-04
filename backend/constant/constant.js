@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const welcomeNote = {
-  title: "Code Duniya API",
+  title: "Shari Mohol Backend Server",
   Owner: "Mahmood Hassan Rameem",
   developer: "ROL Studio Bangladesh",
   author: "Mahmood Hassan Rameem",
