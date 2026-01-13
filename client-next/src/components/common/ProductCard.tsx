@@ -56,7 +56,7 @@ const ProductCard = ({
         <Button
           disabled={loading}
           onClick={() => addCart(data?._id)}
-          className="w-full mt-3 bg-shari-mohol-primary hover:bg-purple-800 text-white cursor-pointer"
+          className="w-full mt-3 bg-shari-mohol-primary rounded-sm hover:bg-purple-800 text-white cursor-pointer"
           asChild
         >
           <span>

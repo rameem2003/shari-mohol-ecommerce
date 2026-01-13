@@ -9,9 +9,13 @@ const TopCategories = async () => {
   return (
     <section className=" my-10">
       <Container>
-        <div className=" bg-shari-mohol-primary p-3 rounded-md">
-          <h2 className=" text-3xl text-white font-semibold">All Categories</h2>
-          <div className=" w-full mt-3 h-0.5 bg-white"></div>
+        <div className="">
+          <div className=" bg-shari-mohol-primary p-4 rounded-sm">
+            <h2 className=" text-3xl text-white font-semibold">
+              All Categories
+            </h2>
+            <div className=" w-full mt-3 h-0.5 bg-white"></div>
+          </div>
 
           <div className=" mt-10 w-full">
             <CategoryComponent data={data} />

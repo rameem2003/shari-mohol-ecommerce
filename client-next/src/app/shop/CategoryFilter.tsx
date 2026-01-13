@@ -18,11 +18,16 @@ const CategoryFilter = ({
   onChangeCategory: (category: string) => void;
 }) => {
   const [category, setCategory] = useState<Category[] | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   const fetchCategories = async () => {
     let { data } = await getCategories();
-    console.log(data);
     setCategory(data);
+  };
+
+  const handleSelectChange = (value: string) => {
+    onChangeCategory(value);
+    setSelectedCategory(value);
   };
 
   useEffect(() => {
@@ -30,12 +35,12 @@ const CategoryFilter = ({
   }, []);
 
   return (
-    <div className=" w-full mb-5">
-      <h4 className=" text-xl text-shari-mohol-primary font-semibold mb-4">
+    <div className=" w-full mb-5 border-2 border-shari-mohol-primary rounded-sm">
+      <h4 className=" text-xl text-white  font-semibold bg-shari-mohol-primary p-2 mb-4">
         Choose Category
       </h4>
 
-      <Select onValueChange={(value: string) => onChangeCategory(value)}>
+      {/* <Select onValueChange={(value: string) => onChangeCategory(value)}>
         <SelectTrigger className="w-full">
           <SelectValue placeholder="Choose category" />
         </SelectTrigger>
@@ -49,7 +54,23 @@ const CategoryFilter = ({
             ))}
           </SelectGroup>
         </SelectContent>
-      </Select>
+      </Select> */}
+
+      <ul className=" px-2">
+        {category?.map((cat) => (
+          <li
+            key={cat._id}
+            onClick={() => handleSelectChange(cat._id)}
+            className={`${
+              selectedCategory === cat._id
+                ? "bg-shari-mohol-primary text-white"
+                : "bg-gray-100"
+            } cursor-pointer p-2 mb-2 hover:bg-shari-mohol-primary hover:text-white rounded-sm`}
+          >
+            {cat.name}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

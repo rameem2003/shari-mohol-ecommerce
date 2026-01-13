@@ -6,6 +6,7 @@ import "./globals.css";
 import { AuthProvider } from "@/hooks/useAuth";
 import { Toaster } from "@/components/ui/sonner";
 import { CartProvider } from "@/hooks/useCart";
+import CategoryList from "@/components/common/CategoryList";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -55,6 +56,7 @@ export default function RootLayout({
         <CartProvider>
           <body className={`${inter.variable}  antialiased font-inter`}>
             <Navigation />
+            <CategoryList />
             {children}
             <Footer />
             <Toaster richColors position="top-right" />

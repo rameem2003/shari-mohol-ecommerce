@@ -9,14 +9,14 @@ import { useAuth } from "@/hooks/useAuth";
 import { Store } from "lucide-react";
 
 const Navigation = () => {
-  const { user, loading, getUser } = useAuth();
+  const { user } = useAuth();
 
   return (
     <>
       <nav className="">
         <div className=" bg-shari-mohol-primary py-1">
           <Container>
-            <div className="slider-container mb-4 w-full flex-nowrap relative overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]">
+            <div className="slider-container mb-4 w-full flex-nowrap relative overflow-hidden mask-[linear-gradient(to_right,transparent_0,black_128px,black_calc(100%-128px),transparent_100%)]">
               <div className="marqueeSliderLeft flex items-center gap-5 ">
                 <p className=" whitespace-nowrap text-white font-medium">
                   Lorem ipsum dolor, sit amet consectetur adipisicing elit.
