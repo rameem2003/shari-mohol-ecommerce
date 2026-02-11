@@ -8,6 +8,8 @@ import { Toaster } from "@/components/ui/sonner";
 import { CartProvider } from "@/hooks/useCart";
 import CategoryList from "@/components/common/CategoryList";
 
+export const dynamic = "force-dynamic";
+
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
