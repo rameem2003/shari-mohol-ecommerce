@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import Container from "@/components/common/Container";
 import DisplayProductsSection from "./DisplayProductsSection";
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
   return {

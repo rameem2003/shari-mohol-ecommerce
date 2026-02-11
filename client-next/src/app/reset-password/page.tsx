@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import Container from "@/components/common/Container";
 import ResetPasswordComponent from "./ResetPasswordComponent";
+export const dynamic = "force-dynamic";
 
 const page = () => {
   return (

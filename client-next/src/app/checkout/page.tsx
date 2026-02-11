@@ -2,6 +2,7 @@ import React from "react";
 import Container from "@/components/common/Container";
 import ShoppingCart from "./ShoppingCart";
 import CheckoutForm from "./CheckoutForm";
+export const dynamic = "force-dynamic";
 
 const page = () => {
   return (

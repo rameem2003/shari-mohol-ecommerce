@@ -5,6 +5,7 @@ import DetailSection from "@/components/screens/product-details/DetailSection";
 import DisplayProductImage from "@/components/screens/product-details/DisplayProductImage";
 import { getProductById } from "@/api/product-api";
 import { PageProps } from "./../../../types/Params";
+export const dynamic = "force-dynamic";
 
 type MetaProps = {
   params: Promise<{ id: string }>;
@@ -13,7 +14,7 @@ type MetaProps = {
 
 export async function generateMetadata(
   { params, searchParams }: MetaProps,
-  parent: ResolvingMetadata
+  parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const id = (await params).id;
   // fetch post information
