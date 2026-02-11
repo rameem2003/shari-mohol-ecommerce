@@ -2,8 +2,7 @@ const nodemailer = require("nodemailer");
 const { TransactionalEmailsApi, SendSmtpEmail } = require("@getbrevo/brevo");
 
 let emailAPI = new TransactionalEmailsApi();
-emailAPI.authentications.apiKey.apiKey =
-  "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";
+emailAPI.authentications.apiKey.apiKey = process.env.EMAIL_API_KEY;
 
 // Create a test account or replace with real credentials.
 // const transporter = nodemailer.createTransport({
