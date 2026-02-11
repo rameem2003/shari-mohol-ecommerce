@@ -1,0 +1,30 @@
+[{
+  "_id": {
+    "$oid": "67f348b4d728b9289457d2e2"
+  },
+  "banner": "banner-1743997108364-449127069.jpg",
+  "description": "Woman's Exotic Collections",
+  "advertisementLink": "https://shari-mohol.vercel.app/product/67e419283ab2056d3f683371",
+  "createdAt": {
+    "$date": "2025-04-07T03:38:28.367Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-07T03:38:28.367Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f34905d728b9289457d2ef"
+  },
+  "banner": "banner-1743997189911-944232444.jpg",
+  "description": "Womans Festive Collections",
+  "advertisementLink": "https://shari-mohol.vercel.app/product/67e41e4b3ab2056d3f6833ca",
+  "createdAt": {
+    "$date": "2025-04-07T03:39:49.916Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-07T03:39:49.916Z"
+  },
+  "__v": 0
+}]

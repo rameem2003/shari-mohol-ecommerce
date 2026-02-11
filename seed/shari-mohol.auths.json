@@ -1,0 +1,304 @@
+[{
+  "_id": {
+    "$oid": "67cfb60b159cddcaa1bc95af"
+  },
+  "name": "M H Rameem",
+  "email": "rameem2019@gmail.com",
+  "password": "$2b$10$VhGg8ivDOC8dYNyUwVUHv.9wJU2kjIIBAdHQ9Ap2sk4A1TpRWLNP6",
+  "role": "admin",
+  "otp": 194229,
+  "isVarify": true,
+  "createdAt": {
+    "$date": "2025-03-11T04:03:23.657Z"
+  },
+  "updatedAt": {
+    "$date": "2025-12-16T15:13:09.186Z"
+  },
+  "__v": 0,
+  "sessionToken": null,
+  "address": "Mirpur 10, Dhaka, Bangladesh",
+  "phone": "01409029641",
+  "photo": "photo-1743914314877-619242568.jpg",
+  "isVerified": true
+},
+{
+  "_id": {
+    "$oid": "67e378c2ed428a996fcbc3ab"
+  },
+  "name": "ROL",
+  "email": "info.rolstudio.bd@gmail.com",
+  "password": "$2b$10$W/3/89js35jjNH.tKc/Sl.IWjY.rkPEr84C0/zq.wDGPa8OYW3Po.",
+  "role": "user",
+  "otp": 442679,
+  "isVarify": true,
+  "createdAt": {
+    "$date": "2025-03-26T03:47:14.950Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-24T14:35:00.708Z"
+  },
+  "__v": 0,
+  "sessionToken": null,
+  "address": "House 03, Lane 21, Block A, Section 10, Mirpur, Dhaka",
+  "phone": "01409029641",
+  "photo": "photo-1743567029092-417027227.jpg"
+},
+{
+  "_id": {
+    "$oid": "67f3d02fa4580610e38bf625"
+  },
+  "name": "Dipto Roy Opu",
+  "email": "diptoray292@gmail.com",
+  "password": "$2b$10$jF68d2Hw3sO/8cUKpSc1YOcAzbc5i96lNHVT7Cag/QS5GlVkvNqCC",
+  "role": "user",
+  "otp": 696020,
+  "isVarify": true,
+  "createdAt": {
+    "$date": "2025-04-07T13:16:31.355Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-24T14:36:55.921Z"
+  },
+  "__v": 0,
+  "sessionToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRpcHRvcmF5MjkyQGdtYWlsLmNvbSIsImlhdCI6MTc0NDAzMTg0OSwiZXhwIjoxNzQ0NjM2NjQ5fQ.n0CwY8fObag_uEqDdAgR2ndlNvGzNkDFyf3Ue4CHEz4"
+},
+{
+  "_id": {
+    "$oid": "68974edbc77158701bf4c4d0"
+  },
+  "name": "NUB",
+  "email": "rameem_42240201548@nub.ac.bd",
+  "password": "$2b$10$eN4imC6OHabFZZfQim/Uf.y9f3LQgIAOKbzifWEAKU5RLt6zMK4Wi",
+  "role": "admin",
+  "isVarify": true,
+  "createdAt": {
+    "$date": "2025-08-09T13:36:27.543Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-11T09:23:05.361Z"
+  },
+  "__v": 0,
+  "address": "",
+  "phone": "01770191544",
+  "photo": "photo-1754747229409-969616712.jpeg"
+},
+{
+  "_id": {
+    "$oid": "689b45c4db9b2d6ddb787bde"
+  },
+  "name": "Likhon Ahmed",
+  "email": "likhonahmed.dm@gmail.com",
+  "password": "$2b$10$OZ.1oBDyMC9cDahfEd42belzYKzF1tI2iMh3HdPfXEi49E/HEliKa",
+  "role": "user",
+  "isVarify": true,
+  "createdAt": {
+    "$date": "2025-08-12T13:46:44.831Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-11T09:24:42.424Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "689e1bbea8ac9b758b4f623f"
+  },
+  "name": "Jeba Tarannum Takia",
+  "email": "ajeba094@gmail.com",
+  "password": "$2b$10$ynu/5y0lsAIlFOG1JkI88elhvutEJ6GwrtY6TUNka68s38KbuyRGm",
+  "role": "user",
+  "isVarify": true,
+  "createdAt": {
+    "$date": "2025-08-14T17:24:14.331Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-21T15:57:05.860Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68a0b3a40514818e4a858777"
+  },
+  "name": "Jahedul Islam Rasel",
+  "email": "rasel@gmail.com",
+  "password": 123456,
+  "role": "user"
+},
+{
+  "_id": {
+    "$oid": "68a0b4ee0514818e4a858779"
+  },
+  "name": "Rakib",
+  "email": "rakib@gmail.com",
+  "password": 123456,
+  "role": "user"
+},
+{
+  "_id": {
+    "$oid": "68a53aff7c3fb8f1bfea6b34"
+  },
+  "name": "Alice Smith",
+  "email": "alice.smith@example.com",
+  "password": "securepassword1",
+  "role": "user",
+  "isVarify": true
+},
+{
+  "_id": {
+    "$oid": "68a53aff7c3fb8f1bfea6b35"
+  },
+  "name": "Bob Johnson",
+  "email": "bob.johnson@example.com",
+  "password": "securepassword2",
+  "role": "user",
+  "isVarify": true,
+  "updatedAt": {
+    "$date": "2025-09-21T15:57:25.773Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68a53aff7c3fb8f1bfea6b36"
+  },
+  "name": "Charlie Brown",
+  "email": "charlie.brown@example.com",
+  "password": "securepassword3",
+  "role": "user",
+  "isVarify": false
+},
+{
+  "_id": {
+    "$oid": "68a53aff7c3fb8f1bfea6b37"
+  },
+  "name": "Diana Prince",
+  "email": "diana.prince@example.com",
+  "password": "securepassword4",
+  "role": "user",
+  "isVarify": true
+},
+{
+  "_id": {
+    "$oid": "68a53aff7c3fb8f1bfea6b38"
+  },
+  "name": "Ethan Hunt",
+  "email": "ethan.hunt@example.com",
+  "password": "securepassword5",
+  "role": "editor",
+  "isVarify": true
+},
+{
+  "_id": {
+    "$oid": "68a53aff7c3fb8f1bfea6b39"
+  },
+  "name": "Fiona Glenanne",
+  "email": "fiona.glenanne@example.com",
+  "password": "securepassword6",
+  "role": "user",
+  "isVarify": false
+},
+{
+  "_id": {
+    "$oid": "68a53aff7c3fb8f1bfea6b3a"
+  },
+  "name": "George Costanza",
+  "email": "george.costanza@example.com",
+  "password": "securepassword7",
+  "role": "user",
+  "isVarify": true
+},
+{
+  "_id": {
+    "$oid": "68a53aff7c3fb8f1bfea6b3b"
+  },
+  "name": "Hannah Abbott",
+  "email": "hannah.abbott@example.com",
+  "password": "securepassword8",
+  "role": "admin",
+  "isVarify": true
+},
+{
+  "_id": {
+    "$oid": "68a53aff7c3fb8f1bfea6b3c"
+  },
+  "name": "Ivan Drago",
+  "email": "ivan.drago@example.com",
+  "password": "securepassword9",
+  "role": "user",
+  "isVarify": false
+},
+{
+  "_id": {
+    "$oid": "68a53aff7c3fb8f1bfea6b3d"
+  },
+  "name": "Jessica Day",
+  "email": "jessica.day@example.com",
+  "password": "securepassword10",
+  "role": "editor",
+  "isVarify": true
+},
+{
+  "_id": {
+    "$oid": "68a53aff7c3fb8f1bfea6b3e"
+  },
+  "name": "Kyle Reese",
+  "email": "kyle.reese@example.com",
+  "password": "securepassword11",
+  "role": "user",
+  "isVarify": true
+},
+{
+  "_id": {
+    "$oid": "68d026989e3e40fc6c35aa0c"
+  },
+  "name": "A1 Technovation",
+  "email": "info.a1technovation@gmail.com",
+  "password": "$2b$10$4GbFZ6LXyAhiaT54y682Z.4yHByNThSAqE0MztWhBI3k2OqOVgQz6",
+  "role": "user",
+  "isVarify": true,
+  "createdAt": {
+    "$date": "2025-09-21T16:23:52.411Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-19T03:50:10.572Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6936eb152e4d5767b0940471"
+  },
+  "name": "Rameem",
+  "email": "rameem.me@gmail.com",
+  "password": "$2b$10$VXxBrVrMzrBkR3MAXQHuc.Y/SbcMz4nTPvLrOCEbhntN91easFWFm",
+  "role": "user",
+  "isVerified": false,
+  "phone": "01409029641",
+  "photo": "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+  "createdAt": {
+    "$date": "2025-12-08T15:13:25.103Z"
+  },
+  "updatedAt": {
+    "$date": "2025-12-08T15:13:25.103Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6942c024f826eab48e27d365"
+  },
+  "name": "ROL",
+  "email": "republicoflegends2022@gmail.com",
+  "password": "$2b$10$vUVmrIRFCrKZBTUyCep1ouHFBlr//pGBamch04fRjq32ZU6DT6TH.",
+  "role": "user",
+  "isVerified": false,
+  "phone": "01409029641",
+  "photo": "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+  "createdAt": {
+    "$date": "2025-12-17T14:37:24.269Z"
+  },
+  "updatedAt": {
+    "$date": "2025-12-17T14:39:23.066Z"
+  },
+  "__v": 0
+}]

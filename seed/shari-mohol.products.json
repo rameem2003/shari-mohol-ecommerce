@@ -1,0 +1,485 @@
+[{
+  "_id": {
+    "$oid": "67e4182c3ab2056d3f68334b"
+  },
+  "name": "Jamdani Sharee 101",
+  "description": "Jamdani Sharee 101",
+  "images": [
+    "images-1743001644034-14112645.jpg"
+  ],
+  "sellingPrice": 30000,
+  "discountPrice": 25000,
+  "colors": [
+    "red"
+  ],
+  "sizes": [
+    ""
+  ],
+  "stock": 100000,
+  "category": {
+    "$oid": "67e413553ab2056d3f68333a"
+  },
+  "subCategory": "jamdani",
+  "featured": true,
+  "hotSell": false,
+  "ratings": [],
+  "reviews": [
+    {
+      "$oid": "6885e5f4921fde9a40225740"
+    },
+    {
+      "$oid": "6885e6e68574f811bdaf6030"
+    },
+    {
+      "$oid": "6885e7f552e913db9d1d336d"
+    },
+    {
+      "$oid": "6885e8cfa61144931d00d853"
+    },
+    {
+      "$oid": "6885ecc466d6b6b32fec20e6"
+    },
+    {
+      "$oid": "6885ee67a404c514835f1c39"
+    },
+    {
+      "$oid": "688ecefe983a44fa31a80a1e"
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-03-26T15:07:24.048Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-13T16:18:14.884Z"
+  },
+  "__v": 0,
+  "ratingAverage": 4,
+  "viewCount": 500,
+  "sellCount": 300
+},
+{
+  "_id": {
+    "$oid": "67e418a83ab2056d3f68335c"
+  },
+  "name": "Jamdani Sharee 102",
+  "description": "Jamdani Sharee 102",
+  "images": [
+    "images-1743001768839-77194460.jpg"
+  ],
+  "sellingPrice": 40000,
+  "discountPrice": 33000,
+  "colors": [
+    "white"
+  ],
+  "sizes": [
+    ""
+  ],
+  "stock": 200,
+  "category": {
+    "$oid": "67e413553ab2056d3f68333a"
+  },
+  "subCategory": "jamdani",
+  "featured": false,
+  "hotSell": true,
+  "ratings": [],
+  "reviews": [],
+  "createdAt": {
+    "$date": "2025-03-26T15:09:28.841Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-13T16:17:45.994Z"
+  },
+  "__v": 0,
+  "viewCount": 400,
+  "sellCount": 200
+},
+{
+  "_id": {
+    "$oid": "67e419283ab2056d3f683371"
+  },
+  "name": "Katan Saree 101",
+  "description": "Katan Saree 101",
+  "images": [
+    "images-1743001896366-446562842.jpg"
+  ],
+  "sellingPrice": 25000,
+  "discountPrice": 24500,
+  "colors": [
+    "green"
+  ],
+  "sizes": [
+    ""
+  ],
+  "stock": 20000,
+  "category": {
+    "$oid": "67e413553ab2056d3f68333a"
+  },
+  "subCategory": "katan",
+  "featured": false,
+  "hotSell": false,
+  "ratings": [],
+  "reviews": [
+    {
+      "$oid": "689c979e2779a98617d7fddf"
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-03-26T15:11:36.370Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-13T15:43:35.494Z"
+  },
+  "__v": 0,
+  "ratingAverage": 5
+},
+{
+  "_id": {
+    "$oid": "67e4198e3ab2056d3f68337a"
+  },
+  "name": "Katan Saree 102",
+  "description": "Katan Saree 102",
+  "images": [
+    "images-1743001998800-623070618.jpg"
+  ],
+  "sellingPrice": 40000,
+  "discountPrice": 39000,
+  "colors": [
+    "red"
+  ],
+  "sizes": [
+    ""
+  ],
+  "stock": 200,
+  "category": {
+    "$oid": "67e413553ab2056d3f68333a"
+  },
+  "subCategory": "katan",
+  "featured": false,
+  "hotSell": true,
+  "ratings": [],
+  "reviews": [],
+  "createdAt": {
+    "$date": "2025-03-26T15:13:18.803Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-13T15:45:25.078Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e41c953ab2056d3f6833a7"
+  },
+  "name": "New Cotton Printed 3 Piece",
+  "description": "New Cotton Printed 3 Piece",
+  "images": [
+    "images-1743002773797-253718814.jpeg"
+  ],
+  "sellingPrice": 5000,
+  "discountPrice": 4900,
+  "colors": [
+    "red"
+  ],
+  "sizes": [
+    "m",
+    "l",
+    "xl"
+  ],
+  "stock": 200,
+  "category": {
+    "$oid": "67e4152d3ab2056d3f68333e"
+  },
+  "subCategory": "cotton",
+  "featured": true,
+  "hotSell": true,
+  "ratings": [],
+  "reviews": [
+    {
+      "$oid": "688ae3abda084ce3aead4f7a"
+    },
+    {
+      "$oid": "688ae457da084ce3aead4fcb"
+    },
+    {
+      "$oid": "688aece9da084ce3aead50a3"
+    },
+    {
+      "$oid": "688aed10da084ce3aead50a9"
+    },
+    {
+      "$oid": "688aef54da084ce3aead515f"
+    },
+    {
+      "$oid": "688aefb5da084ce3aead517c"
+    },
+    {
+      "$oid": "68d147cc555a09f897bca4c9"
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-03-26T15:26:13.801Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-22T12:57:48.304Z"
+  },
+  "__v": 0,
+  "ratingAverage": 3
+},
+{
+  "_id": {
+    "$oid": "67e41d883ab2056d3f6833ba"
+  },
+  "name": "Cotton Three Piece",
+  "description": "Cotton Three Piece",
+  "images": [
+    "images-1743003016373-375265449.jpg"
+  ],
+  "sellingPrice": 4000,
+  "discountPrice": 3900,
+  "colors": [
+    "pink"
+  ],
+  "sizes": [
+    "m",
+    "l",
+    "xl"
+  ],
+  "stock": 200,
+  "category": {
+    "$oid": "67e4152d3ab2056d3f68333e"
+  },
+  "subCategory": "cotton",
+  "featured": true,
+  "hotSell": true,
+  "ratings": [],
+  "reviews": [
+    {
+      "$oid": "689754adc77158701bf4c598"
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-03-26T15:30:16.377Z"
+  },
+  "updatedAt": {
+    "$date": "2025-12-30T08:32:14.681Z"
+  },
+  "__v": 0,
+  "ratingAverage": 5
+},
+{
+  "_id": {
+    "$oid": "67e41e4b3ab2056d3f6833ca"
+  },
+  "name": "Dola Silk Lehenga",
+  "description": "Dola Silk Lehenga",
+  "images": [
+    "images-1743003211555-256720588.jpg"
+  ],
+  "sellingPrice": 5000,
+  "discountPrice": 4000,
+  "colors": [
+    "pink"
+  ],
+  "sizes": [
+    "xl"
+  ],
+  "stock": 200,
+  "category": {
+    "$oid": "67e416853ab2056d3f683342"
+  },
+  "subCategory": "silk",
+  "featured": false,
+  "hotSell": true,
+  "ratings": [],
+  "reviews": [
+    {
+      "$oid": "689b52c28217adf4ec8c1dce"
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-03-26T15:33:31.558Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-12T14:42:10.318Z"
+  },
+  "__v": 0,
+  "ratingAverage": 5
+},
+{
+  "_id": {
+    "$oid": "67e41ec23ab2056d3f6833e2"
+  },
+  "name": "Tussor Silk Lehenga",
+  "description": "Tussor Silk Lehenga",
+  "images": [
+    "images-1743003330352-186681039.jpg"
+  ],
+  "sellingPrice": 5000,
+  "discountPrice": 4000,
+  "colors": [
+    "red"
+  ],
+  "sizes": [
+    "xl"
+  ],
+  "stock": 200,
+  "category": {
+    "$oid": "67e416853ab2056d3f683342"
+  },
+  "subCategory": "silk",
+  "featured": false,
+  "hotSell": false,
+  "ratings": [],
+  "reviews": [],
+  "createdAt": {
+    "$date": "2025-03-26T15:35:30.356Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-26T15:35:30.356Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6923de6a727e295afec70ea9"
+  },
+  "name": "ASRock Intel Arc A750 Challenger SE 8GB OC GDDR6 Graphics Card",
+  "description": "Model: Intel Arc A750 Challenger SE 8GB OCEngine Clock: 2200 MHzMemory Clock: 16 GbpsBus Standard: PCI Express 4.0 x16Output Ports: 3x DisplayPort 2.0, 1x HDMI 2.0b",
+  "images": [
+    "images-1763958378482-78161517.jpg",
+    "images-1763958378483-105279512.png",
+    "images-1763958378490-503658003.jpg"
+  ],
+  "sellingPrice": 50000,
+  "discountPrice": 40000,
+  "colors": [
+    "red"
+  ],
+  "sizes": [
+    "2xl"
+  ],
+  "stock": 500,
+  "category": {
+    "$oid": "67e416853ab2056d3f683342"
+  },
+  "subCategory": "velvet",
+  "featured": false,
+  "hotSell": false,
+  "ratings": [],
+  "reviews": [],
+  "ratingAverage": 0,
+  "createdAt": {
+    "$date": "2025-11-24T04:26:18.494Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-24T04:26:18.494Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6923dedb727e295afec70ec2"
+  },
+  "name": "Intel Core Ultra 7 265KF Arrow Lake Processor",
+  "description": "ewrgfer",
+  "images": [
+    "images-1763958491713-137977567.jpeg",
+    "images-1763958491713-366438269.jpg"
+  ],
+  "sellingPrice": 25000,
+  "discountPrice": 23000,
+  "colors": [
+    "green"
+  ],
+  "sizes": [
+    "xl"
+  ],
+  "stock": 500,
+  "category": {
+    "$oid": "67e413553ab2056d3f68333a"
+  },
+  "subCategory": "banarasi",
+  "featured": false,
+  "hotSell": false,
+  "ratings": [],
+  "reviews": [],
+  "ratingAverage": 0,
+  "createdAt": {
+    "$date": "2025-11-24T04:28:11.723Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-24T04:28:11.723Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6923df17727e295afec70edb"
+  },
+  "name": "Test",
+  "description": "Test 1",
+  "images": [
+    "images-1763958551282-178606787.jpg",
+    "images-1763958551282-823413329.jpg"
+  ],
+  "sellingPrice": 25000,
+  "discountPrice": 23000,
+  "colors": [
+    "green"
+  ],
+  "sizes": [
+    "2xl"
+  ],
+  "stock": 500,
+  "category": {
+    "$oid": "67e413553ab2056d3f68333a"
+  },
+  "subCategory": "banarasi",
+  "featured": false,
+  "hotSell": false,
+  "ratings": [],
+  "reviews": [],
+  "ratingAverage": 0,
+  "createdAt": {
+    "$date": "2025-11-24T04:29:11.284Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-24T04:29:11.284Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6948baff3d7c52c7346795ab"
+  },
+  "name": "Test",
+  "description": "Test 1",
+  "images": [
+    "images-1766374143770-166769539.jpeg"
+  ],
+  "sellingPrice": 50000,
+  "discountPrice": 40000,
+  "colors": [
+    "green"
+  ],
+  "sizes": [
+    "xl"
+  ],
+  "stock": 500,
+  "category": {
+    "$oid": "67e416853ab2056d3f683342"
+  },
+  "subCategory": "chiffon",
+  "featured": false,
+  "hotSell": false,
+  "ratings": [],
+  "reviews": [],
+  "ratingAverage": 0,
+  "createdAt": {
+    "$date": "2025-12-22T03:29:03.777Z"
+  },
+  "updatedAt": {
+    "$date": "2025-12-22T03:29:03.777Z"
+  },
+  "__v": 0
+}]

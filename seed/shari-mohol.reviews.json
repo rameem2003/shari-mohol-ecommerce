@@ -1,0 +1,340 @@
+[{
+  "_id": {
+    "$oid": "6885e5f4921fde9a40225740"
+  },
+  "user": {
+    "$oid": "67cfb60b159cddcaa1bc95af"
+  },
+  "product": {
+    "$oid": "67e4182c3ab2056d3f68334b"
+  },
+  "rating": 5,
+  "comment": "Awesome Product",
+  "createdAt": {
+    "$date": "2025-07-27T08:40:20.501Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-27T08:40:20.501Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6885e6e68574f811bdaf6030"
+  },
+  "user": {
+    "$oid": "67cfb60b159cddcaa1bc95af"
+  },
+  "product": {
+    "$oid": "67e4182c3ab2056d3f68334b"
+  },
+  "rating": 3,
+  "comment": "Nice Product",
+  "createdAt": {
+    "$date": "2025-07-27T08:44:22.418Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-27T08:44:22.418Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6885e7f552e913db9d1d336d"
+  },
+  "user": {
+    "$oid": "67cfb60b159cddcaa1bc95af"
+  },
+  "product": {
+    "$oid": "67e4182c3ab2056d3f68334b"
+  },
+  "rating": 3,
+  "comment": "Nice Product",
+  "createdAt": {
+    "$date": "2025-07-27T08:48:53.983Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-27T08:48:53.983Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6885e8cfa61144931d00d853"
+  },
+  "user": {
+    "$oid": "67cfb60b159cddcaa1bc95af"
+  },
+  "product": {
+    "$oid": "67e4182c3ab2056d3f68334b"
+  },
+  "rating": 4,
+  "comment": "WOW Product",
+  "createdAt": {
+    "$date": "2025-07-27T08:52:31.333Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-27T08:52:31.333Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6885ecc466d6b6b32fec20e6"
+  },
+  "user": {
+    "$oid": "67cfb60b159cddcaa1bc95af"
+  },
+  "product": {
+    "$oid": "67e4182c3ab2056d3f68334b"
+  },
+  "rating": 4,
+  "comment": "WOW",
+  "createdAt": {
+    "$date": "2025-07-27T09:09:24.781Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-27T09:09:24.781Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6885ee67a404c514835f1c39"
+  },
+  "user": {
+    "$oid": "67cfb60b159cddcaa1bc95af"
+  },
+  "product": {
+    "$oid": "67e4182c3ab2056d3f68334b"
+  },
+  "rating": 4,
+  "comment": "WOW",
+  "createdAt": {
+    "$date": "2025-07-27T09:16:23.777Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-27T09:16:23.777Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "688ae3abda084ce3aead4f7a"
+  },
+  "user": {
+    "$oid": "67cfb60b159cddcaa1bc95af"
+  },
+  "product": {
+    "$oid": "67e41c953ab2056d3f6833a7"
+  },
+  "rating": 5,
+  "comment": "Nice and beautiful",
+  "createdAt": {
+    "$date": "2025-07-31T03:31:55.486Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-31T03:31:55.486Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "688ae457da084ce3aead4fcb"
+  },
+  "user": {
+    "$oid": "67e378c2ed428a996fcbc3ab"
+  },
+  "product": {
+    "$oid": "67e41c953ab2056d3f6833a7"
+  },
+  "rating": 3,
+  "comment": "Good collection",
+  "createdAt": {
+    "$date": "2025-07-31T03:34:47.178Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-31T03:34:47.178Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "688aece9da084ce3aead50a3"
+  },
+  "user": {
+    "$oid": "67e378c2ed428a996fcbc3ab"
+  },
+  "product": {
+    "$oid": "67e41c953ab2056d3f6833a7"
+  },
+  "rating": 2,
+  "comment": "Good",
+  "createdAt": {
+    "$date": "2025-07-31T04:11:21.273Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-31T04:11:21.273Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "688aed10da084ce3aead50a9"
+  },
+  "user": {
+    "$oid": "67e378c2ed428a996fcbc3ab"
+  },
+  "product": {
+    "$oid": "67e41c953ab2056d3f6833a7"
+  },
+  "rating": 2,
+  "comment": "Good",
+  "createdAt": {
+    "$date": "2025-07-31T04:12:00.052Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-31T04:12:00.052Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "688aef54da084ce3aead515f"
+  },
+  "user": {
+    "$oid": "67e378c2ed428a996fcbc3ab"
+  },
+  "product": {
+    "$oid": "67e41c953ab2056d3f6833a7"
+  },
+  "rating": 3,
+  "comment": "wqefwef",
+  "createdAt": {
+    "$date": "2025-07-31T04:21:40.030Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-31T04:21:40.030Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "688aefb5da084ce3aead517c"
+  },
+  "user": {
+    "$oid": "67e378c2ed428a996fcbc3ab"
+  },
+  "product": {
+    "$oid": "67e41c953ab2056d3f6833a7"
+  },
+  "rating": 3,
+  "comment": "ok",
+  "createdAt": {
+    "$date": "2025-07-31T04:23:17.809Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-31T04:23:17.809Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "688ecefe983a44fa31a80a1e"
+  },
+  "user": {
+    "$oid": "67e378c2ed428a996fcbc3ab"
+  },
+  "product": {
+    "$oid": "67e4182c3ab2056d3f68334b"
+  },
+  "rating": 5,
+  "comment": "Check",
+  "createdAt": {
+    "$date": "2025-08-03T02:52:46.884Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-03T02:52:46.884Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "689754adc77158701bf4c598"
+  },
+  "user": {
+    "$oid": "68974edbc77158701bf4c4d0"
+  },
+  "product": {
+    "$oid": "67e41d883ab2056d3f6833ba"
+  },
+  "rating": 5,
+  "comment": "Recomended",
+  "createdAt": {
+    "$date": "2025-08-09T14:01:17.188Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-09T14:01:17.188Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "689b52c28217adf4ec8c1dce"
+  },
+  "user": {
+    "$oid": "67cfb60b159cddcaa1bc95af"
+  },
+  "product": {
+    "$oid": "67e41e4b3ab2056d3f6833ca"
+  },
+  "rating": 5,
+  "comment": "So lovely",
+  "createdAt": {
+    "$date": "2025-08-12T14:42:10.217Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-12T14:42:10.217Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "689c979e2779a98617d7fddf"
+  },
+  "user": {
+    "$oid": "68974edbc77158701bf4c4d0"
+  },
+  "product": {
+    "$oid": "67e419283ab2056d3f683371"
+  },
+  "rating": 5,
+  "comment": "Recommended",
+  "createdAt": {
+    "$date": "2025-08-13T13:48:14.205Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-13T13:48:14.205Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68d147cc555a09f897bca4c9"
+  },
+  "user": {
+    "$oid": "67cfb60b159cddcaa1bc95af"
+  },
+  "product": {
+    "$oid": "67e41c953ab2056d3f6833a7"
+  },
+  "rating": 3,
+  "comment": "Good",
+  "createdAt": {
+    "$date": "2025-09-22T12:57:48.175Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-22T12:57:48.175Z"
+  },
+  "__v": 0
+}]

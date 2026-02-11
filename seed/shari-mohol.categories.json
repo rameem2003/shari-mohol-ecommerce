@@ -1,0 +1,106 @@
+[{
+  "_id": {
+    "$oid": "67e413553ab2056d3f68333a"
+  },
+  "name": "Sharee",
+  "description": "Saree · Light Glass Aqua Printed Embroidered Muslin Saree · Turquoise/Aquamarine Printed Embroidered Muslin Saree · Turquoise/Green Brush Painted",
+  "subCategories": [
+    "jamdani",
+    "katan",
+    "banarasi",
+    "tangail"
+  ],
+  "thumb": "image-1743000405171-606997033.jpeg",
+  "products": [
+    {
+      "$oid": "67e4182c3ab2056d3f68334b"
+    },
+    {
+      "$oid": "67e418a83ab2056d3f68335c"
+    },
+    {
+      "$oid": "67e419283ab2056d3f683371"
+    },
+    {
+      "$oid": "67e4198e3ab2056d3f68337a"
+    },
+    {
+      "$oid": "6923dedb727e295afec70ec2"
+    },
+    {
+      "$oid": "6923df17727e295afec70edb"
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-03-26T14:46:45.191Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-24T04:29:11.348Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e4152d3ab2056d3f68333e"
+  },
+  "name": "Ladies 3 piece dress",
+  "description": "Crafted from fabrics like cotton, lawn, chiffon, silk, georgette, velvet, and organza.  Features prints, embroidery, lacework, zari, sequins, or embellishments for different occasions.",
+  "subCategories": [
+    "cotton",
+    "pakistani",
+    "katan",
+    "georgette"
+  ],
+  "thumb": "image-1743000877645-438960971.jpg",
+  "products": [
+    {
+      "$oid": "67e41c953ab2056d3f6833a7"
+    },
+    {
+      "$oid": "67e41d883ab2056d3f6833ba"
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-03-26T14:54:37.652Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-26T15:30:16.444Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e416853ab2056d3f683342"
+  },
+  "name": "Lehenga",
+  "description": "Discover elegant Bridal, Party Wear, and Designer Lehengas in silk, chiffon, velvet, and georgette with exquisite embroidery and modern cuts. Perfect for weddings, receptions, and festive occasions—shop the latest styles now!",
+  "subCategories": [
+    "silk",
+    "velvet",
+    "georgette",
+    "chiffon",
+    "net"
+  ],
+  "thumb": "image-1743001221030-4427423.jpg",
+  "products": [
+    {
+      "$oid": "67e41e4b3ab2056d3f6833ca"
+    },
+    {
+      "$oid": "67e41ec23ab2056d3f6833e2"
+    },
+    {
+      "$oid": "6923de6a727e295afec70ea9"
+    },
+    {
+      "$oid": "6948baff3d7c52c7346795ab"
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-03-26T15:00:21.034Z"
+  },
+  "updatedAt": {
+    "$date": "2025-12-22T03:29:03.828Z"
+  },
+  "__v": 0
+}]
